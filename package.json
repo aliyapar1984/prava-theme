@@ -1,0 +1,13 @@
+{
+  "name": "prava-theme",
+  "private": true,
+  "scripts": {
+    "dev": "shopify theme dev --path .",
+    "push": "shopify theme push --path .",
+    "login": "shopify auth login",
+    "shopify": "shopify"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.84.0"
+  }
+}

@@ -1,0 +1,46 @@
+<section id="intro-karaoke-section" class="prava-intro-split bg-white text-neutral-900" aria-label="Marka tanıtımı" style="--pis-pad-x: 40px;">
+  <div class="mx-auto max-w-[1680px] px-[var(--pis-pad-x)] py-24">
+    <div class="flex flex-col items-stretch gap-12 md:flex-row md:items-center md:justify-between md:gap-14 lg:gap-20">
+      <div class="prava-intro-split__copy md:min-w-0 flex-[1_1_80%]">
+        <div id="intro-karaoke-root" class="prava-intro-split__text intro-karaoke max-w-[800px] text-left text-[clamp(3rem,4.05vw+0.85rem,2.25rem)] font-normal leading-[1.25] tracking-tight text-neutral-800">
+          Yenilikçi yaklaşım ve modern şık tasarımlar geliştirilen PRAVA, ailelerin günlük hayatını kolaylaştıran pratik çözümler ve üstün konfor sunar.
+        </div>
+      </div>
+      <div class="prava-intro-split__figure-wrap prava-intro-split__figure-wrap--reveal md:flex-[1_1_45%] md:max-w-xl lg:max-w-2xl">
+        <figure class="prava-intro-split__figure m-0 flex w-full justify-center md:justify-end">
+          {% if section.settings.intro_illustration_image != blank %}
+            <img
+              src="{{ section.settings.intro_illustration_image | image_url: width: 1200 }}"
+              alt="Aile ve bebek arabası illüstrasyonu"
+              class="prava-intro-split__img h-auto w-full max-w-[min(100%,520px)] object-contain md:max-w-none"
+              width="800"
+              height="600"
+              loading="lazy"
+              decoding="async"
+            >
+          {% endif %}
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Intro — metin ve görsel",
+  "tag": "div",
+  "class": "landing-intro-split-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Intro"
+    },
+    {
+      "type": "image_picker",
+      "id": "intro_illustration_image",
+      "label": "Yan illüstrasyon"
+    }
+  ],
+  "presets": [{ "name": "Intro — metin ve görsel" }]
+}
+{% endschema %}

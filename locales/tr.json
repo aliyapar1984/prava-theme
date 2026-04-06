@@ -1,0 +1,39 @@
+{
+  "password": {
+    "title": "Bu mağaza şifre korumalı",
+    "password_label": "Şifre",
+    "password_placeholder": "Mağaza şifresi",
+    "enter": "Giriş"
+  },
+  "general": {
+    "accessibility": {
+      "skip_to_content": "İçeriğe atla"
+    },
+    "meta": {
+      "tags": "\"{{ tags }}\" etiketi",
+      "page": "Sayfa {{ page }}"
+    },
+    "pagination": {
+      "slide": "Slayt"
+    }
+  },
+  "footer": {
+    "aria_label": "Site alt bilgisi",
+    "newsletter_heading": "Bizden haberdar olun!",
+    "newsletter_email_label": "E-posta adresiniz",
+    "newsletter_placeholder": "E-posta adresiniz",
+    "newsletter_submit_aria": "Bültene abone ol",
+    "newsletter_description": "Yeniliklerden haberdar olmak için bültenimize abone olun.",
+    "social_aria": "Sosyal medya",
+    "social_facebook": "Facebook",
+    "social_instagram": "Instagram",
+    "social_x": "X",
+    "social_youtube": "YouTube",
+    "social_accounts_caption": "Sosyal medya hesaplarımız",
+    "tagline_since": "{{ year }}'den beri",
+    "copyright": "© {{ year }} {{ shop_name }} — Tüm Hakları Saklıdır.",
+    "legal_information_society": "Bilgi Toplumu Hizmetleri",
+    "legal_cookies": "Çerezler Politikası",
+    "legal_kvkk": "KVKK Aydınlatma Metni"
+  }
+}

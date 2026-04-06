@@ -1,0 +1,58 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Prava",
+    "theme_version": "1.0.0",
+    "theme_author": "Prava",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Marka görselleri",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Üst menü ve alt bilgi"
+      },
+      {
+        "type": "image_picker",
+        "id": "mega_menu_featured_image",
+        "label": "Mega menü — vitrin görseli",
+        "info": "Tüm kategori panellerinde sağdaki büyük görsel."
+      },
+      {
+        "type": "image_picker",
+        "id": "footer_watermark_image",
+        "label": "Footer — arka plan görseli",
+        "info": "Alt bilgi alanındaki dekoratif / filigran görseli."
+      }
+    ]
+  },
+  {
+    "name": "Footer menüleri",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Online mağaza → Gezinme üzerinden menü oluşturun. Başlık ve bağlantı metinleri menüde tanımlanır (çok dilli içerik için mağaza dilleri / menü çevirileri kullanın)."
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu_primary",
+        "label": "Menü sütunu 1",
+        "info": "Örn. Kurumsal"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu_secondary",
+        "label": "Menü sütunu 2",
+        "info": "Örn. Ürünler"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu_tertiary",
+        "label": "Menü sütunu 3",
+        "info": "Örn. Danışma / Destek"
+      }
+    ]
+  }
+]

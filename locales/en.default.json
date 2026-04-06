@@ -1,0 +1,39 @@
+{
+  "password": {
+    "title": "This shop is private",
+    "password_label": "Password",
+    "password_placeholder": "Enter password",
+    "enter": "Enter"
+  },
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content"
+    },
+    "meta": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "pagination": {
+      "slide": "Slide"
+    }
+  },
+  "footer": {
+    "aria_label": "Site footer",
+    "newsletter_heading": "Stay in the loop",
+    "newsletter_email_label": "Your email address",
+    "newsletter_placeholder": "Your email address",
+    "newsletter_submit_aria": "Subscribe to newsletter",
+    "newsletter_description": "Subscribe to our newsletter for news and offers.",
+    "social_aria": "Social media",
+    "social_facebook": "Facebook",
+    "social_instagram": "Instagram",
+    "social_x": "X",
+    "social_youtube": "YouTube",
+    "social_accounts_caption": "Follow us on social media",
+    "tagline_since": "Since {{ year }}",
+    "copyright": "© {{ year }} {{ shop_name }} — All rights reserved.",
+    "legal_information_society": "Information society services",
+    "legal_cookies": "Cookie policy",
+    "legal_kvkk": "Privacy notice (KVKK)"
+  }
+}

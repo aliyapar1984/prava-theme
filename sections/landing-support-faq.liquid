@@ -1,0 +1,71 @@
+<section class="prava-support-faq bg-white text-neutral-900 px-10 pt-44 pb-10" aria-label="Destek ve sıkça sorulan sorular">
+  <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-10 py-5">
+    {% if section.settings.support_texture_image != blank %}
+      <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:200px_center] bg-[length:230px_auto] opacity-20" style="background-image: url('{{ section.settings.support_texture_image | image_url: width: 800 }}');" aria-hidden="true"></div>
+    {% endif %}
+    <div class="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center gap-24">
+      <div class="prava-support-faq__intro relative z-[1] w-full shrink-0 lg:max-w-[min(100%,420px)] xl:max-w-[480px]">
+        <div class="pointer-events-none absolute -right-8 bottom-0 left-0 top-0 overflow-visible opacity-[0.12] lg:-right-4" aria-hidden="true"></div>
+        <h2 class="relative font-semibold text-neutral-800 text-[50px] leading-none">
+          <span class="block">Prava</span>
+          <span class="mt-1 block md:mt-2">Destek</span>
+        </h2>
+      </div>
+      <div class="prava-support-faq__list min-w-0 flex-1 [&>details:last-child]:border-b-0">
+        <details class="prava-support-faq__item border-b border-neutral-200/90">
+          <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 md:gap-4 md:text-lg md:leading-snug">
+            <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
+            <span>Prava’yı neden tercih etmelisiniz?</span>
+          </summary>
+          <div class="prava-support-faq__panel prava-support-faq__panel--inner">
+            <p class="pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
+              PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güvenli malzemeler ve günlük kullanımda pratik detaylarla öne çıkar. Uzun ömürlü bileşenler ve şeffaf yedek parça desteği ile ailelerin yanında olmayı hedefler.
+            </p>
+          </div>
+        </details>
+        <details class="prava-support-faq__item border-b border-neutral-200/90">
+          <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 md:gap-4 md:text-lg md:leading-snug">
+            <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
+            <span>Bebeğim için en güvenli seçimi nasıl yapabilirim?</span>
+          </summary>
+          <div class="prava-support-faq__panel prava-support-faq__panel--inner">
+            <p class="pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
+              Ürün yaşı ve kilo aralığına uygunluk, emniyet kemeri / Isofix kullanımı ve üretici talimatlarına uyum önemlidir. Satın almadan önce mağazada deneme, kapsül–puset uyumluluğu ve fren / katlanma mekanizmasını kontrol etmenizi öneririz.
+            </p>
+          </div>
+        </details>
+        <details class="prava-support-faq__item border-b border-neutral-200/90">
+          <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 md:gap-4 md:text-lg md:leading-snug">
+            <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
+            <span>Hangi bebek arabası kullanımım için en pratik olanıdır?</span>
+          </summary>
+          <div class="prava-support-faq__panel prava-support-faq__panel--inner">
+            <p class="pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
+              Şehir içi ve toplu taşıma için hafif baston veya kompakt modeller; uzun yürüyüşler ve farklı arazi için süspansiyonlu ve daha geniş tekerlekli modeller uygundur. Travel sistem ihtiyacınız varsa ana kucağı + puset uyumunu birlikte değerlendirin.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Destek / SSS",
+  "tag": "div",
+  "class": "landing-support-faq-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Destek / SSS"
+    },
+    {
+      "type": "image_picker",
+      "id": "support_texture_image",
+      "label": "Kutu arka plan dokusu"
+    }
+  ],
+  "presets": [{ "name": "Destek / SSS" }]
+}
+{% endschema %}

@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "landing_hero": {
+      "type": "landing-hero",
+      "settings": {}
+    },
+    "landing_category_rail": {
+      "type": "landing-category-rail",
+      "settings": {}
+    },
+    "landing_intro_split": {
+      "type": "landing-intro-split",
+      "settings": {}
+    },
+    "landing_popular_split": {
+      "type": "landing-popular-split",
+      "settings": {}
+    },
+    "landing_bestsellers": {
+      "type": "landing-bestsellers",
+      "settings": {}
+    },
+    "landing_blog_rail": {
+      "type": "landing-blog-rail",
+      "settings": {}
+    },
+    "landing_support_faq": {
+      "type": "landing-support-faq",
+      "settings": {}
+    }
+  },
+  "order": [
+    "landing_hero",
+    "landing_category_rail",
+    "landing_intro_split",
+    "landing_popular_split",
+    "landing_bestsellers",
+    "landing_blog_rail",
+    "landing_support_faq"
+  ]
+}

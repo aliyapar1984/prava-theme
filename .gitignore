@@ -5,6 +5,13 @@
 node_modules
 dist
 .env
+!.env.example
+
+# Shopify CLI
+.shopify
+
+# Büyük videolar tema assets içinde tutulmaz; URL tema ayarlarından verilir
+assets/*.mp4
 
 # Logs
 *.log

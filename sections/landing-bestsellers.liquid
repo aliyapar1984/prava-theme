@@ -1,0 +1,223 @@
+<section class="prava-bestsellers bg-white text-neutral-900" aria-label="En çok satılan ürünler" style="--pbs-pad-x: 40px;">
+  <div class="mx-auto max-w-[1680px] px-[var(--pbs-pad-x)] pt-44 pb-24">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <h2 class="font-medium tracking-tight text-neutral-900 text-[40px]">
+        En Çok Satılanlar
+      </h2>
+      <a href="#" class="shrink-0 text-left text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 sm:text-right">
+        Tüm Ürünleri Gör
+      </a>
+    </div>
+    <div class="prava-bestsellers__viewport mt-10 md:mt-14">
+      <div class="swiper prava-bestsellers__swiper w-full">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide !h-auto">
+            <article class="prava-bestsellers-card group flex h-full flex-col bg-[#f2f2f0]">
+              <div class="relative flex aspect-[1/1] w-full items-center justify-center overflow-hidden">
+                {% if section.settings.bestseller_1_image != blank %}
+                  <img
+                    src="{{ section.settings.bestseller_1_image | image_url: width: 1040 }}"
+                    alt=""
+                    class="h-full w-full object-contain transition-opacity duration-500 ease-out group-hover:opacity-0"
+                    width="520"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {% endif %}
+                {% if section.settings.bestseller_1_hover_image != blank %}
+                  <img
+                    src="{{ section.settings.bestseller_1_hover_image | image_url: width: 1040 }}"
+                    alt=""
+                    class="absolute inset-0 h-full w-full object-cover object-bottom opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+                    width="520"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {% endif %}
+              </div>
+              <div class="flex flex-1 flex-col px-[30px] py-[30px]">
+                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  Gold Chrome Travel Bebek Arabası
+                </h3>
+                <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Travel Sistem</p>
+                <div class="mt-6 flex items-center justify-between gap-4">
+                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#88acc8] ring-1 ring-black/5"></span>
+                  </div>
+                  <p class="shrink-0 text-right text-base leading-none md:text-lg">
+                    <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
+                    <span class="font-medium text-neutral-900">12.000 TL</span>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="swiper-slide !h-auto">
+            <article class="prava-bestsellers-card group flex h-full flex-col bg-[#f2f2f0]">
+              <div class="relative flex aspect-[1/1] w-full items-center justify-center overflow-hidden">
+                {% if section.settings.bestseller_2_image != blank %}
+                  <img
+                    src="{{ section.settings.bestseller_2_image | image_url: width: 1040 }}"
+                    alt=""
+                    class="h-full w-full object-contain transition-opacity duration-500 ease-out group-hover:opacity-0"
+                    width="520"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {% endif %}
+                {% if section.settings.bestseller_hover_video_url != blank %}
+                  <video
+                    class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+                    playsinline
+                    muted
+                    loop
+                    preload="none"
+                    data-bestseller-hover-video
+                  >
+                    <source src="{{ section.settings.bestseller_hover_video_url | escape }}" type="video/mp4">
+                  </video>
+                {% endif %}
+              </div>
+              <div class="flex flex-1 flex-col px-[30px] py-[30px]">
+                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  Gold Chrome Bebek Arabası
+                </h3>
+                <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Puset</p>
+                <div class="mt-6 flex items-center justify-between gap-4">
+                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5"></span>
+                  </div>
+                  <p class="shrink-0 text-right text-base leading-none md:text-lg">
+                    <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
+                    <span class="font-medium text-neutral-900">12.000 TL</span>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="swiper-slide !h-auto">
+            <article class="prava-bestsellers-card flex h-full flex-col bg-[#f2f2f0]">
+              <div class="flex aspect-[1/1] w-full items-center justify-center">
+                {% if section.settings.bestseller_3_image != blank %}
+                  <img
+                    src="{{ section.settings.bestseller_3_image | image_url: width: 1040 }}"
+                    alt=""
+                    class="h-full w-full object-contain"
+                    width="520"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {% endif %}
+              </div>
+              <div class="flex flex-1 flex-col px-[30px] py-[30px]">
+                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  Gold Chrome Bebek Arabası
+                </h3>
+                <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Puset</p>
+                <div class="mt-6 flex items-center justify-between gap-4">
+                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
+                  </div>
+                  <p class="shrink-0 text-right text-base leading-none md:text-lg">
+                    <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
+                    <span class="font-medium text-neutral-900">12.000 TL</span>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="swiper-slide !h-auto">
+            <article class="prava-bestsellers-card flex h-full flex-col bg-[#f2f2f0]">
+              <div class="flex aspect-[1/1] w-full items-center justify-center">
+                {% if section.settings.bestseller_4_image != blank %}
+                  <img
+                    src="{{ section.settings.bestseller_4_image | image_url: width: 1040 }}"
+                    alt=""
+                    class="h-full w-full object-contain"
+                    width="520"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {% endif %}
+              </div>
+              <div class="flex flex-1 flex-col px-[30px] py-[30px]">
+                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  Gold Chrome Travel Bebek Arabası
+                </h3>
+                <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Travel Sistem</p>
+                <div class="mt-6 flex items-center justify-between gap-4">
+                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5"></span>
+                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#88acc8] ring-1 ring-black/5"></span>
+                  </div>
+                  <p class="shrink-0 text-right text-base leading-none md:text-lg">
+                    <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
+                    <span class="font-medium text-neutral-900">12.000 TL</span>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Çok satanlar şeridi",
+  "tag": "div",
+  "class": "landing-bestsellers-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Çok satanlar"
+    },
+    {
+      "type": "image_picker",
+      "id": "bestseller_1_image",
+      "label": "Kart 1 — ana görsel"
+    },
+    {
+      "type": "image_picker",
+      "id": "bestseller_1_hover_image",
+      "label": "Kart 1 — üzerine gelince görsel"
+    },
+    {
+      "type": "url",
+      "id": "bestseller_hover_video_url",
+      "label": "Kart 2 — hover videosu (MP4 URL)"
+    },
+    {
+      "type": "image_picker",
+      "id": "bestseller_2_image",
+      "label": "Kart 2 — görsel"
+    },
+    {
+      "type": "image_picker",
+      "id": "bestseller_3_image",
+      "label": "Kart 3 — görsel"
+    },
+    {
+      "type": "image_picker",
+      "id": "bestseller_4_image",
+      "label": "Kart 4 — görsel"
+    }
+  ],
+  "presets": [{ "name": "Çok satanlar şeridi" }]
+}
+{% endschema %}
