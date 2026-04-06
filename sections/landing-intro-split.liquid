@@ -1,4 +1,4 @@
-<section id="intro-karaoke-section" class="prava-intro-split bg-white text-neutral-900" aria-label="Marka tanıtımı" style="--pis-pad-x: 40px;">
+<section id="intro-karaoke-section" class="prava-intro-split bg-white text-neutral-900" aria-label="{{ 'sections.intro.aria_label' | t }}" style="--pis-pad-x: 40px;">
   <div class="mx-auto max-w-[1680px] px-[var(--pis-pad-x)] py-24">
     <div class="flex flex-col items-stretch gap-12 md:flex-row md:items-center md:justify-between md:gap-14 lg:gap-20">
       <div class="prava-intro-split__copy md:min-w-0 flex-[1_1_80%]">
@@ -11,7 +11,7 @@
           {% if section.settings.intro_illustration_image != blank %}
             <img
               src="{{ section.settings.intro_illustration_image | image_url: width: 1200 }}"
-              alt="Aile ve bebek arabası illüstrasyonu"
+              alt="{{ 'sections.intro.illustration_alt' | t }}"
               class="prava-intro-split__img h-auto w-full max-w-[min(100%,520px)] object-contain md:max-w-none"
               width="800"
               height="600"

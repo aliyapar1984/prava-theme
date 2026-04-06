@@ -7,7 +7,8 @@
   },
   "general": {
     "accessibility": {
-      "skip_to_content": "İçeriğe atla"
+      "skip_to_content": "İçeriğe atla",
+      "color_options": "Mevcut renkler"
     },
     "meta": {
       "tags": "\"{{ tags }}\" etiketi",
@@ -34,6 +35,58 @@
     "copyright": "© {{ year }} {{ shop_name }} — Tüm Hakları Saklıdır.",
     "legal_information_society": "Bilgi Toplumu Hizmetleri",
     "legal_cookies": "Çerezler Politikası",
-    "legal_kvkk": "KVKK Aydınlatma Metni"
+    "legal_kvkk": "KVKK Aydınlatma Metni",
+    "legal_nav_aria": "Yasal bilgiler ve politikalar"
+  },
+  "header": {
+    "menu_visible": "Menü",
+    "menu_open": "Navigasyon menüsünü aç",
+    "utility_nav": "Üst yardımcı bağlantılar",
+    "home": "Anasayfa — {{ shop_name }}",
+    "search": "Ara",
+    "cart": "Sepet",
+    "account": "Hesabım",
+    "mega_menu_label": "Ana site menüsü",
+    "mega_menu_tabs": "Ürün kategorileri",
+    "mega_menu_close": "Menüyü kapat",
+    "mega_feature_alt": "Öne çıkan kategori görseli",
+    "close_visible": "Kapat"
+  },
+  "sections": {
+    "hero": {
+      "aria_label": "Öne çıkan vitrin",
+      "video_aria": "Tanıtım videosu",
+      "slide_tabs": "Slayt seçin",
+      "next_slide": "Sonraki slayt",
+      "cta_slide1": "Öne çıkan ürünleri keşfet",
+      "cta_slide2": "Sezon indirimlerini görüntüle",
+      "cta_slide3": "Travel sistem koleksiyonunu keşfet"
+    },
+    "category_rail": {
+      "aria_label": "Ürün kategorileri",
+      "cta_named": "{{ title }} kategorisini keşfet"
+    },
+    "intro": {
+      "aria_label": "Marka tanıtımı",
+      "illustration_alt": "Aile ve bebek arabası illüstrasyonu"
+    },
+    "popular": {
+      "aria_label": "Popüler ürünler",
+      "feature_alt": "Açık havada bebek arabasıyla aile",
+      "spotlight_alt": "Gold Chrome bebek arabası ürün görseli"
+    },
+    "bestsellers": {
+      "aria_label": "En çok satılan ürünler",
+      "cta_all": "Tüm ürünleri görüntüle",
+      "product_video_decorative": "Üzerine gelindiğinde ürün önizleme videosu"
+    },
+    "blog": {
+      "aria_label": "Blog yazıları",
+      "cta_all": "Tüm blog yazılarını görüntüle"
+    },
+    "faq": {
+      "aria_label": "Destek ve sıkça sorulan sorular",
+      "list_label": "Sıkça sorulan sorular"
+    }
   }
 }

@@ -7,7 +7,8 @@
   },
   "general": {
     "accessibility": {
-      "skip_to_content": "Skip to content"
+      "skip_to_content": "Skip to content",
+      "color_options": "Available colors"
     },
     "meta": {
       "tags": "Tagged \"{{ tags }}\"",
@@ -34,6 +35,58 @@
     "copyright": "© {{ year }} {{ shop_name }} — All rights reserved.",
     "legal_information_society": "Information society services",
     "legal_cookies": "Cookie policy",
-    "legal_kvkk": "Privacy notice (KVKK)"
+    "legal_kvkk": "Privacy notice (KVKK)",
+    "legal_nav_aria": "Legal and policies"
+  },
+  "header": {
+    "menu_visible": "Menu",
+    "menu_open": "Open navigation menu",
+    "utility_nav": "Header utilities",
+    "home": "Home — {{ shop_name }}",
+    "search": "Search",
+    "cart": "Shopping cart",
+    "account": "My account",
+    "mega_menu_label": "Main navigation dialog",
+    "mega_menu_tabs": "Product categories",
+    "mega_menu_close": "Close menu",
+    "mega_feature_alt": "Featured category image",
+    "close_visible": "Close"
+  },
+  "sections": {
+    "hero": {
+      "aria_label": "Featured highlights",
+      "video_aria": "Promotional hero video",
+      "slide_tabs": "Select a slide",
+      "next_slide": "Next slide",
+      "cta_slide1": "Discover featured strollers and travel systems",
+      "cta_slide2": "View seasonal deals and discounts",
+      "cta_slide3": "Explore the travel system collection"
+    },
+    "category_rail": {
+      "aria_label": "Product categories",
+      "cta_named": "Discover {{ title }}"
+    },
+    "intro": {
+      "aria_label": "Brand introduction",
+      "illustration_alt": "Illustration of a family with a stroller"
+    },
+    "popular": {
+      "aria_label": "Popular picks",
+      "feature_alt": "Family with a stroller outdoors",
+      "spotlight_alt": "Gold Chrome stroller product photo"
+    },
+    "bestsellers": {
+      "aria_label": "Bestselling products",
+      "cta_all": "View all products",
+      "product_video_decorative": "Product preview video on hover"
+    },
+    "blog": {
+      "aria_label": "Blog articles",
+      "cta_all": "View all blog posts"
+    },
+    "faq": {
+      "aria_label": "Support and frequently asked questions",
+      "list_label": "Frequently asked questions"
+    }
   }
 }

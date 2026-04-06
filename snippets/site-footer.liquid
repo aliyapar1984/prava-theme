@@ -3,7 +3,7 @@
     <div class="mx-auto px-20 pb-6 pt-20">
       <div class="grid grid-cols-1 gap-14 md:grid-cols-2 xl:grid-cols-4">
         <div class="site-footer__col site-footer__col--news max-w-[300px]">
-          <h3 class="text-lg font-bold uppercase text-[#333333]">{{ 'footer.newsletter_heading' | t }}</h3>
+          <h2 class="text-lg font-bold uppercase text-[#333333]">{{ 'footer.newsletter_heading' | t }}</h2>
           {% form 'customer', class: 'mt-6' %}
             <input type="hidden" name="contact[tags]" value="newsletter">
             <label class="sr-only" for="footer-newsletter-email">{{ 'footer.newsletter_email_label' | t }}</label>
@@ -114,11 +114,13 @@
 
       <div class="site-footer__legal mt-4 flex flex-col gap-6 border-t border-[#333333]/18 pt-8 md:mt-6 md:flex-row md:items-center md:justify-between md:gap-8">
         <p class="text-xs text-[#333333]/85 md:text-sm"><b>{{ 'footer.copyright' | t: year: footer_year, shop_name: shop.name }}</b></p>
-        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
-          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_information_society' | t }}</a></li>
-          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_cookies' | t }}</a></li>
-          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_kvkk' | t }}</a></li>
-        </ul>
+        <nav aria-label="{{ 'footer.legal_nav_aria' | t }}">
+          <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
+            <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_information_society' | t }}</a></li>
+            <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_cookies' | t }}</a></li>
+            <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_kvkk' | t }}</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </footer>

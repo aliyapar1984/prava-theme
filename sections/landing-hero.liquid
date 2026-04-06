@@ -2,7 +2,7 @@
       data-start="12"
       data-end="-12"
       data-scrub="0.8"
-      aria-label="Ana vitrin">
+      aria-label="{{ 'sections.hero.aria_label' | t }}">
   {% liquid
     assign hero_thumb_1 = section.settings.hero_slide_1_image
     if hero_thumb_1 == blank and section.settings.hero_video_poster_image != blank
@@ -22,7 +22,7 @@
               playsinline
               webkit-playsinline
               data-src="{{ section.settings.hero_video_url | escape }}"
-              aria-label="Tanıtım videosu"
+              aria-label="{{ 'sections.hero.video_aria' | t }}"
             ></video>
           </div>
           <div class="absolute inset-0 bg-black/15 z-[1] pointer-events-none"></div>
@@ -30,7 +30,7 @@
             <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] text-left ml-0 mr-auto will-change-transform">
               <h1 class="max-w-[16ch] text-left text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight text-white">Rahatlıkla Büyüyen<br>Mutlu Adımlar.</h1>
               <p class="mt-10 max-w-[36ch] text-left text-lg font-normal leading-relaxed text-white/95">Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı.</p>
-              <a href="#" class="mt-10 inline-block text-left text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity">Keşfet</a>
+              <a href="#" class="mt-10 inline-block text-left text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" aria-label="{{ 'sections.hero.cta_slide1' | t }}">Keşfet</a>
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
             <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] text-left ml-0 mr-auto will-change-transform">
               <h1 class="max-w-[16ch] text-left text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight text-white">Rahatlıkla Büyüyen<br>Mutlu Adımlar.</h1>
               <p class="mt-10 max-w-[36ch] text-left text-lg font-normal leading-relaxed text-white/95">Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı.</p>
-              <a href="#" class="mt-10 inline-block text-left text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity">Keşfet</a>
+              <a href="#" class="mt-10 inline-block text-left text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" aria-label="{{ 'sections.hero.cta_slide1' | t }}">Keşfet</a>
             </div>
           </div>
         </div>
@@ -64,9 +64,9 @@
         <div class="absolute inset-0 bg-black/15 z-[1] pointer-events-none"></div>
         <div class="hero-slide-content absolute inset-0 z-[2] flex items-center justify-start text-right">
           <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] text-right ml-0 ml-auto will-change-transform">
-            <h1 class="max-w-[16ch] text-right text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight text-white">Yeni Sezon Geldi<br>%30’a Varan İndirimle</h1>
+            <h2 class="max-w-[16ch] text-right text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight text-white">Yeni Sezon Geldi<br>%30’a Varan İndirimle</h2>
             <p class="mt-10 max-w-[36ch] text-right text-lg font-normal leading-relaxed text-white/95 ml-auto">En yeni bebek arabası modelleri şimdi avantajlı fiyatlarla. Konfor ve şıklığı birlikte keşfedin.</p>
-            <a href="#" class="mt-10 inline-block text-right text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity">Fırsatları Gör</a>
+            <a href="#" class="mt-10 inline-block text-right text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" aria-label="{{ 'sections.hero.cta_slide2' | t }}">Fırsatları Gör</a>
           </div>
         </div>
       </div>
@@ -81,15 +81,15 @@
         <div class="absolute inset-0 bg-black/15 z-[1] pointer-events-none"></div>
         <div class="hero-slide-content absolute inset-0 z-[2] flex items-center justify-start text-left">
           <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] text-left ml-0 mr-auto will-change-transform">
-            <h1 class="max-w-[16ch] text-left text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight text-white">Güvenle Taşınan<br>Her An.</h1>
+            <h2 class="max-w-[16ch] text-left text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight text-white">Güvenle Taşınan<br>Her An.</h2>
             <p class="mt-10 max-w-[36ch] text-left text-lg font-normal leading-relaxed text-white/95">Avrupa standartlarında test edilen travel sistem koleksiyonu.</p>
-            <a href="#" class="mt-10 inline-block text-left text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity">Keşfet</a>
+            <a href="#" class="mt-10 inline-block text-left text-lg font-bold uppercase text-white hover:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" aria-label="{{ 'sections.hero.cta_slide3' | t }}">Keşfet</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="pointer-events-auto absolute bottom-[6vh] z-[90] flex items-center gap-3 md:gap-4" style="left: 40px;" id="hero-thumb-bar" role="tablist" aria-label="Slayt seçimi">
+  <div class="pointer-events-auto absolute bottom-[6vh] z-[90] flex items-center gap-3 md:gap-4" style="left: 40px;" id="hero-thumb-bar" role="tablist" aria-label="{{ 'sections.hero.slide_tabs' | t }}">
     <div class="swiper hero-thumbs sr-only" aria-hidden="true">
       <div class="swiper-wrapper">
         <div class="swiper-slide !w-auto"><button type="button" tabindex="-1" data-index="0">1</button></div>
@@ -98,7 +98,7 @@
       </div>
     </div>
     <div id="hero-pagination-custom" class="flex items-center gap-3 md:gap-4"></div>
-    <button type="button" id="hero-next" class="ml-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/50 text-white hover:bg-white/10 transition-colors" aria-label="Sonraki slayt">
+    <button type="button" id="hero-next" class="ml-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/50 text-white hover:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="{{ 'sections.hero.next_slide' | t }}">
       <span class="text-lg font-normal leading-none" aria-hidden="true"><img src="{{ 'icons/right-arrow.svg' | asset_url }}" width="24" height="24" alt="" loading="lazy"></span>
     </button>
   </div>

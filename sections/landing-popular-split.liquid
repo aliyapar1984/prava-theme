@@ -1,4 +1,4 @@
-<section class="bg-white text-neutral-900 relative z-10" aria-label="Popüler kampanya ürünleri" style="--pcp-pad-x: 40px;">
+<section class="bg-white text-neutral-900 relative z-10" aria-label="{{ 'sections.popular.aria_label' | t }}" style="--pcp-pad-x: 40px;">
   <div class="mx-auto max-w-[1600px] p-0">
     <div class="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] lg:items-start">
       <article class="overflow-hidden bg-[#e7e4df]">
@@ -12,7 +12,7 @@
             {% if section.settings.popular_feature_image != blank %}
               <img
                 src="{{ section.settings.popular_feature_image | image_url: width: 1600 }}"
-                alt="Aile ve bebek arabası"
+                alt="{{ 'sections.popular.feature_alt' | t }}"
                 class="h-full w-full object-cover object-center"
                 width="1200"
                 height="700"
@@ -34,7 +34,7 @@
           {% if section.settings.popular_spotlight_image != blank %}
             <img
               src="{{ section.settings.popular_spotlight_image | image_url: width: 1040 }}"
-              alt="Gold Chrome Bebek Arabası"
+              alt="{{ 'sections.popular.spotlight_alt' | t }}"
               class="h-full w-full object-contain"
               width="520"
               height="640"
@@ -49,12 +49,12 @@
           </h3>
           <p class="mt-2 text-base font-light uppercase text-neutral-700">Puset</p>
           <div class="mt-8 flex items-center justify-between gap-6">
-            <div class="flex items-center gap-3" aria-label="Renk seçenekleri">
-              <span class="h-5 w-5 rounded-full bg-[#bf7f83]"></span>
-              <span class="h-5 w-5 rounded-full bg-[#d4c176]"></span>
-              <span class="h-5 w-5 rounded-full bg-[#9ea78a]"></span>
-              <span class="h-5 w-5 rounded-full bg-[#88acc8]"></span>
-            </div>
+            <ul class="m-0 flex list-none items-center gap-3 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+              <li class="m-0 p-0"><span class="sr-only">1</span><span class="inline-block h-5 w-5 rounded-full bg-[#bf7f83]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="sr-only">2</span><span class="inline-block h-5 w-5 rounded-full bg-[#d4c176]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="sr-only">3</span><span class="inline-block h-5 w-5 rounded-full bg-[#9ea78a]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="sr-only">4</span><span class="inline-block h-5 w-5 rounded-full bg-[#88acc8]" aria-hidden="true"></span></li>
+            </ul>
             <p class="text-right text-lg leading-none">
               <span class="mr-4 font-light text-neutral-500 line-through">16.000 TL</span>
               <span class="font-medium text-neutral-900">12.000 TL</span>

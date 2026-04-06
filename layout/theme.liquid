@@ -34,13 +34,13 @@
   </script>
 </head>
 <body class="bg-black font-sans antialiased text-[14px] text-white min-h-screen flex flex-col">
-  <a class="skip-to-content-link sr-only focus:not-sr-only focus:absolute focus:z-[200] focus:m-4 focus:bg-white focus:p-3 focus:text-black" href="#MainContent">
+  <a class="skip-to-content-link sr-only focus:not-sr-only focus:absolute focus:z-[200] focus:m-4 focus:bg-white focus:p-3 focus:text-black focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-neutral-900" href="#MainContent">
     {{ 'general.accessibility.skip_to_content' | t }}
   </a>
 
   {% render 'site-header' %}
 
-  <main id="MainContent" class="flex-1 w-full" role="main" tabindex="-1">
+  <main id="MainContent" class="flex-1 w-full" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
