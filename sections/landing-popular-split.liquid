@@ -34,7 +34,8 @@
           {% if section.settings.popular_spotlight_image != blank %}
             <img
               src="{{ section.settings.popular_spotlight_image | image_url: width: 1040 }}"
-              alt="{{ 'sections.popular.spotlight_alt' | t }}"
+              alt=""
+              aria-labelledby="popular-spotlight-title"
               class="h-full w-full object-contain"
               width="520"
               height="640"
@@ -44,16 +45,16 @@
           {% endif %}
         </div>
         <div class="px-8 pb-8 pt-10 md:px-10 md:pb-10 ml-10">
-          <h3 class="text-2xl font-normal leading-tight tracking-tight text-neutral-800">
+          <h3 id="popular-spotlight-title" class="text-2xl font-normal leading-tight tracking-tight text-neutral-800">
             Gold Chrome Bebek Arabası
           </h3>
           <p class="mt-2 text-base font-light uppercase text-neutral-700">Puset</p>
           <div class="mt-8 flex items-center justify-between gap-6">
             <ul class="m-0 flex list-none items-center gap-3 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
-              <li class="m-0 p-0"><span class="sr-only">1</span><span class="inline-block h-5 w-5 rounded-full bg-[#bf7f83]" aria-hidden="true"></span></li>
-              <li class="m-0 p-0"><span class="sr-only">2</span><span class="inline-block h-5 w-5 rounded-full bg-[#d4c176]" aria-hidden="true"></span></li>
-              <li class="m-0 p-0"><span class="sr-only">3</span><span class="inline-block h-5 w-5 rounded-full bg-[#9ea78a]" aria-hidden="true"></span></li>
-              <li class="m-0 p-0"><span class="sr-only">4</span><span class="inline-block h-5 w-5 rounded-full bg-[#88acc8]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="inline-block h-5 w-5 rounded-full bg-[#bf7f83]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="inline-block h-5 w-5 rounded-full bg-[#d4c176]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="inline-block h-5 w-5 rounded-full bg-[#9ea78a]" aria-hidden="true"></span></li>
+              <li class="m-0 p-0"><span class="inline-block h-5 w-5 rounded-full bg-[#88acc8]" aria-hidden="true"></span></li>
             </ul>
             <p class="text-right text-lg leading-none">
               <span class="mr-4 font-light text-neutral-500 line-through">16.000 TL</span>

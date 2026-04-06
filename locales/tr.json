@@ -77,12 +77,14 @@
     },
     "bestsellers": {
       "aria_label": "En çok satılan ürünler",
-      "cta_all": "Tüm ürünleri görüntüle",
+      "cta_all": "Katalogdaki tüm ürünleri görüntüle",
+      "cta_all_visible": "Tüm Ürünleri Gör",
       "product_video_decorative": "Üzerine gelindiğinde ürün önizleme videosu"
     },
     "blog": {
       "aria_label": "Blog yazıları",
-      "cta_all": "Tüm blog yazılarını görüntüle"
+      "cta_all": "Tüm blog yazılarını görüntüle",
+      "cta_all_visible": "Tüm Blog Yazıları"
     },
     "faq": {
       "aria_label": "Destek ve sıkça sorulan sorular",

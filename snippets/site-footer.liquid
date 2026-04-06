@@ -1,5 +1,5 @@
 {% assign footer_year = 'now' | date: '%Y' %}
-<footer class="site-footer mt-auto bg-[#F5F5F0] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]" aria-label="{{ 'footer.aria_label' | t }}" style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %} background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}');{% endif %}">
+<footer class="site-footer mt-auto bg-[#F5F5F0] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]" role="contentinfo" aria-label="{{ 'footer.aria_label' | t }}" style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %} background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}');{% endif %}">
     <div class="mx-auto px-20 pb-6 pt-20">
       <div class="grid grid-cols-1 gap-14 md:grid-cols-2 xl:grid-cols-4">
         <div class="site-footer__col site-footer__col--news max-w-[300px]">

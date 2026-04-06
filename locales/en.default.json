@@ -77,12 +77,14 @@
     },
     "bestsellers": {
       "aria_label": "Bestselling products",
-      "cta_all": "View all products",
+      "cta_all": "View all products in the catalog",
+      "cta_all_visible": "View all products",
       "product_video_decorative": "Product preview video on hover"
     },
     "blog": {
       "aria_label": "Blog articles",
-      "cta_all": "View all blog posts"
+      "cta_all": "View all blog posts",
+      "cta_all_visible": "All blog posts"
     },
     "faq": {
       "aria_label": "Support and frequently asked questions",

@@ -1,4 +1,4 @@
-<section class="prava-blog-rail bg-[#F2F2F0] text-neutral-900 overflow-hidden" aria-label="Blog" style="--pbr-pad-x: 40px;">
+<section class="prava-blog-rail relative bg-[#F2F2F0] text-neutral-900 overflow-hidden" aria-label="{{ 'sections.blog.aria_label' | t }}" style="--pbr-pad-x: 40px;">
   <div class="mx-auto px-[var(--pbr-pad-x)] py-28 pr-0">
     {% if section.settings.blog_texture_image != blank %}
       <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:100px_bottom] bg-[length:800px_auto] opacity-10" style="background-image: url('{{ section.settings.blog_texture_image | image_url: width: 1600 }}');" aria-hidden="true"></div>
@@ -23,8 +23,8 @@
         <p class="relative mt-5 text-base font-normal leading-relaxed text-neutral-600 md:text-lg">
           Bebek arabaları, güvenlik ve konfor hakkında güncel yazılar; yolculuklarınızı daha keyifli hale getirecek ipuçları burada.
         </p>
-        <a href="#" class="relative mt-8 inline-flex items-center gap-2 text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70">
-          Tüm Blog Yazıları
+        <a href="#" class="relative mt-8 inline-flex items-center gap-2 text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label="{{ 'sections.blog.cta_all' | t }}">
+          {{ 'sections.blog.cta_all_visible' | t }}
           <span aria-hidden="true" class="text-lg leading-none">→</span>
         </a>
       </div>
@@ -32,7 +32,7 @@
         <div class="swiper prava-blog-rail__swiper w-full overflow-visible">
           <div class="swiper-wrapper">
             <div class="swiper-slide !h-auto">
-              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md">
+              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <div class="aspect-[1/1] w-full overflow-hidden bg-neutral-100">
                   {% if section.settings.blog_card_1_image != blank %}
                     <img
@@ -43,11 +43,12 @@
                       height="400"
                       loading="lazy"
                       decoding="async"
+                      aria-labelledby="blog-teaser-title-1"
                     >
                   {% endif %}
                 </div>
                 <div class="flex flex-1 flex-col p-6 md:p-8">
-                  <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  <h3 id="blog-teaser-title-1" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                     Bebek arabası seçerken nelere dikkat etmeliyim?
                   </h3>
                   <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-neutral-600 md:text-[15px]">
@@ -57,7 +58,7 @@
               </a>
             </div>
             <div class="swiper-slide !h-auto">
-              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md">
+              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <div class="aspect-[1/1] w-full overflow-hidden bg-neutral-100">
                   {% if section.settings.blog_card_2_image != blank %}
                     <img
@@ -68,11 +69,12 @@
                       height="400"
                       loading="lazy"
                       decoding="async"
+                      aria-labelledby="blog-teaser-title-2"
                     >
                   {% endif %}
                 </div>
                 <div class="flex flex-1 flex-col p-6 md:p-8">
-                  <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  <h3 id="blog-teaser-title-2" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                     Travel sistem ile şehir içi kullanım
                   </h3>
                   <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-neutral-600 md:text-[15px]">
@@ -82,7 +84,7 @@
               </a>
             </div>
             <div class="swiper-slide !h-auto">
-              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md">
+              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <div class="aspect-[1/1] w-full overflow-hidden bg-neutral-100">
                   {% if section.settings.blog_card_3_image != blank %}
                     <img
@@ -93,11 +95,12 @@
                       height="400"
                       loading="lazy"
                       decoding="async"
+                      aria-labelledby="blog-teaser-title-3"
                     >
                   {% endif %}
                 </div>
                 <div class="flex flex-1 flex-col p-6 md:p-8">
-                  <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  <h3 id="blog-teaser-title-3" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                     Yenidoğan için kapsül ve adaptör seçimi
                   </h3>
                   <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-neutral-600 md:text-[15px]">
@@ -107,7 +110,7 @@
               </a>
             </div>
             <div class="swiper-slide !h-auto">
-              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md">
+              <a href="#" class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <div class="aspect-[1/1] w-full overflow-hidden bg-neutral-100">
                   {% if section.settings.blog_card_4_image != blank %}
                     <img
@@ -118,11 +121,12 @@
                       height="400"
                       loading="lazy"
                       decoding="async"
+                      aria-labelledby="blog-teaser-title-4"
                     >
                   {% endif %}
                 </div>
                 <div class="flex flex-1 flex-col p-6 md:p-8">
-                  <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                  <h3 id="blog-teaser-title-4" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                     Mevsim geçişlerinde bebek arabası bakımı
                   </h3>
                   <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-neutral-600 md:text-[15px]">

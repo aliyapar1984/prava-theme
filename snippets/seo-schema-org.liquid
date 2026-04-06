@@ -1,0 +1,44 @@
+{% liquid
+  assign schema_image = nil
+  if settings.seo_share_image != blank
+    assign schema_image = settings.seo_share_image | image_url: width: 512
+  elsif settings.mega_menu_featured_image != blank
+    assign schema_image = settings.mega_menu_featured_image | image_url: width: 512
+  endif
+
+  if schema_image and schema_image contains 'http'
+    assign schema_image_abs = schema_image
+  elsif schema_image
+    assign schema_image_abs = schema_image | prepend: 'https:'
+  else
+    assign schema_image_abs = nil
+  endif
+
+  assign site_url = request.origin | append: routes.root_url
+  assign search_url = request.origin | append: routes.search_url | append: '?q={search_term_string}'
+%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ shop.name | json }},
+  "url": {{ site_url | json }}{% if schema_image_abs %},
+  "logo": {{ schema_image_abs | json }}{% endif %}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ shop.name | json }},
+  "url": {{ site_url | json }},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": {{ search_url | json }}
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>

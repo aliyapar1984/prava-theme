@@ -8,6 +8,21 @@
     "theme_support_url": "https://help.shopify.com/"
   },
   {
+    "name": "SEO ve paylaşım",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Sosyal ve arama önizlemesi"
+      },
+      {
+        "type": "image_picker",
+        "id": "seo_share_image",
+        "label": "Varsayılan paylaşım görseli (Open Graph)",
+        "info": "Facebook, X ve benzeri önizlemeler için; önerilen en az 1200×630 px. Boşsa mega menü vitrin görseli kullanılır."
+      }
+    ]
+  },
+  {
     "name": "Marka görselleri",
     "settings": [
       {

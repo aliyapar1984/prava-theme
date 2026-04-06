@@ -15,8 +15,12 @@
 
   {% if page_description %}
     <meta name="description" content="{{ page_description | escape }}">
+  {% elsif shop.description != blank %}
+    <meta name="description" content="{{ shop.description | strip_html | strip | truncate: 160 | escape }}">
   {% endif %}
 
+  {% render 'seo-meta' %}
+  {% render 'seo-schema-org' %}
   {{ content_for_header }}
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">

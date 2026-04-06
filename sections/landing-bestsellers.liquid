@@ -1,11 +1,11 @@
-<section class="prava-bestsellers bg-white text-neutral-900" aria-label="En çok satılan ürünler" style="--pbs-pad-x: 40px;">
+<section class="prava-bestsellers bg-white text-neutral-900" aria-label="{{ 'sections.bestsellers.aria_label' | t }}" style="--pbs-pad-x: 40px;">
   <div class="mx-auto max-w-[1680px] px-[var(--pbs-pad-x)] pt-44 pb-24">
     <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
       <h2 class="font-medium tracking-tight text-neutral-900 text-[40px]">
         En Çok Satılanlar
       </h2>
-      <a href="#" class="shrink-0 text-left text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 sm:text-right">
-        Tüm Ürünleri Gör
+      <a href="#" class="shrink-0 text-left text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:text-right" aria-label="{{ 'sections.bestsellers.cta_all' | t }}">
+        {{ 'sections.bestsellers.cta_all_visible' | t }}
       </a>
     </div>
     <div class="prava-bestsellers__viewport mt-10 md:mt-14">
@@ -23,6 +23,7 @@
                     height="640"
                     loading="lazy"
                     decoding="async"
+                    aria-labelledby="bs-prod-title-1"
                   >
                 {% endif %}
                 {% if section.settings.bestseller_1_hover_image != blank %}
@@ -34,21 +35,22 @@
                     height="640"
                     loading="lazy"
                     decoding="async"
+                    aria-hidden="true"
                   >
                 {% endif %}
               </div>
               <div class="flex flex-1 flex-col px-[30px] py-[30px]">
-                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                <h3 id="bs-prod-title-1" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                   Gold Chrome Travel Bebek Arabası
                 </h3>
                 <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Travel Sistem</p>
                 <div class="mt-6 flex items-center justify-between gap-4">
-                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#88acc8] ring-1 ring-black/5"></span>
-                  </div>
+                  <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#88acc8] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                  </ul>
                   <p class="shrink-0 text-right text-base leading-none md:text-lg">
                     <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
                     <span class="font-medium text-neutral-900">12.000 TL</span>
@@ -69,6 +71,7 @@
                     height="640"
                     loading="lazy"
                     decoding="async"
+                    aria-labelledby="bs-prod-title-2"
                   >
                 {% endif %}
                 {% if section.settings.bestseller_hover_video_url != blank %}
@@ -79,22 +82,24 @@
                     loop
                     preload="none"
                     data-bestseller-hover-video
+                    aria-hidden="true"
+                    tabindex="-1"
                   >
                     <source src="{{ section.settings.bestseller_hover_video_url | escape }}" type="video/mp4">
                   </video>
                 {% endif %}
               </div>
               <div class="flex flex-1 flex-col px-[30px] py-[30px]">
-                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                <h3 id="bs-prod-title-2" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                   Gold Chrome Bebek Arabası
                 </h3>
                 <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Puset</p>
                 <div class="mt-6 flex items-center justify-between gap-4">
-                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5"></span>
-                  </div>
+                  <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                  </ul>
                   <p class="shrink-0 text-right text-base leading-none md:text-lg">
                     <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
                     <span class="font-medium text-neutral-900">12.000 TL</span>
@@ -115,19 +120,20 @@
                     height="640"
                     loading="lazy"
                     decoding="async"
+                    aria-labelledby="bs-prod-title-3"
                   >
                 {% endif %}
               </div>
               <div class="flex flex-1 flex-col px-[30px] py-[30px]">
-                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                <h3 id="bs-prod-title-3" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                   Gold Chrome Bebek Arabası
                 </h3>
                 <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Puset</p>
                 <div class="mt-6 flex items-center justify-between gap-4">
-                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
-                  </div>
+                  <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                  </ul>
                   <p class="shrink-0 text-right text-base leading-none md:text-lg">
                     <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
                     <span class="font-medium text-neutral-900">12.000 TL</span>
@@ -148,21 +154,22 @@
                     height="640"
                     loading="lazy"
                     decoding="async"
+                    aria-labelledby="bs-prod-title-4"
                   >
                 {% endif %}
               </div>
               <div class="flex flex-1 flex-col px-[30px] py-[30px]">
-                <h3 class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+                <h3 id="bs-prod-title-4" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
                   Gold Chrome Travel Bebek Arabası
                 </h3>
                 <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">Travel Sistem</p>
                 <div class="mt-6 flex items-center justify-between gap-4">
-                  <div class="flex flex-wrap items-center gap-2" aria-label="Renk seçenekleri">
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5"></span>
-                    <span class="h-5 w-5 shrink-0 rounded-full bg-[#88acc8] ring-1 ring-black/5"></span>
-                  </div>
+                  <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#bf7f83] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#d4c176] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#9ea78a] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                    <li class="m-0 p-0"><span class="inline-block h-5 w-5 shrink-0 rounded-full bg-[#88acc8] ring-1 ring-black/5" aria-hidden="true"></span></li>
+                  </ul>
                   <p class="shrink-0 text-right text-base leading-none md:text-lg">
                     <span class="mr-2 font-light text-neutral-500 line-through">16.000 TL</span>
                     <span class="font-medium text-neutral-900">12.000 TL</span>
