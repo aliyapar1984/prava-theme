@@ -165,12 +165,14 @@
                   </p>
                 {% endif %}
                 {% capture hero_btn_wrapper %}buttons mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap {{ text_align }}{% endcapture %}
-                {% render 'buttons',
-                  buttons: block.settings.slide_buttons,
-                  wrapper_class: hero_btn_wrapper,
-                  theme: layout_theme,
-                  size_class: 'text-lg font-bold'
-                %}
+                {% assign hero_slide_buttons = block.settings.slide_buttons %}
+                {% if hero_slide_buttons != blank and hero_slide_buttons.size > 0 %}
+                  <div class="{{ hero_btn_wrapper }}">
+                    {% for button in hero_slide_buttons %}
+                      {% render 'button', button: button, theme: layout_theme, size_class: 'text-lg font-bold' %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
             </div>
           </div>

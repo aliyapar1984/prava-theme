@@ -1,0 +1,48 @@
+{% comment %}
+  Snippet `button` — tek `button` metaobject (CTA).
+  Parametreler: button, theme? (dark|light|), size_class?
+{% endcomment %}
+{% liquid
+  assign scale = size_class | default: 'text-base font-semibold'
+%}
+{% liquid
+  assign href = button.link | default: '#'
+  assign label = button.title | escape
+  assign tgt = button.target | strip | default: '_self'
+  if tgt != '_self' and tgt != '_blank' and tgt != '_parent' and tgt != '_top'
+    assign tgt = '_self'
+  endif
+  assign rel_attr = button.rel | strip
+
+  assign base_class = scale | append: ' inline-block uppercase transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4'
+  if theme == 'light'
+    assign base_class = base_class | append: ' text-zinc-900 hover:opacity-80 focus-visible:outline-zinc-900'
+  elsif theme == 'dark'
+    assign base_class = base_class | append: ' text-white hover:opacity-80 focus-visible:outline-white'
+  else
+    assign base_class = base_class | append: ' hover:opacity-90 focus-visible:outline-current'
+  endif
+
+  assign v = button.variant | strip | downcase
+  case v
+    when 'secondary'
+      assign base_class = base_class | append: ' opacity-95'
+    when 'outline'
+      assign base_class = base_class | append: ' border border-current px-4 py-2 rounded-full'
+    when 'ghost', 'link'
+      assign base_class = base_class | append: ' font-medium normal-case underline-offset-4 hover:underline'
+    else
+      assign base_class = base_class
+  endcase
+  if button.class_name != blank
+    assign base_class = base_class | append: ' ' | append: button.class_name
+  endif
+%}
+{% if label != blank %}
+  <a href="{{ href }}" class="{{ base_class }}" {% if tgt != '_self' %}target="{{ tgt }}"{% endif %}{% if rel_attr != blank %} rel="{{ rel_attr | escape }}"{% endif %} aria-label="{{ label }}">
+    {{ button.title }}
+    {% if button.subtitle != blank %}
+      <span class="mt-0.5 block text-sm font-normal opacity-90">{{ button.subtitle }}</span>
+    {% endif %}
+  </a>
+{% endif %}
