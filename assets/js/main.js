@@ -1,6 +1,6 @@
 /**
  * PRAVA Hero Slider
- * - loop: true, sadece mainSwiper — controller yok (Swiper 11'de çift loop + controller döngüyü kesiyor)
+ * - loop: yalnızca 2+ slayt; tek slayt düz mod
  * - Parallax: slide.progress × width × 0.5 → .hero-parallax-layer translateX
  * - Custom pagination: thumb halka + prev yok, yalnızca #hero-next
  * - Autoplay: imagesReady / load ile başlar
@@ -14,7 +14,11 @@
   var pagHost = document.getElementById('hero-pagination-custom');
   var btnNext = document.getElementById('hero-next');
 
-  if (mainEl && pagHost && btnNext) {
+  if (mainEl) {
+  var paginationEnabled =
+    mainEl.getAttribute('data-hero-pagination') !== 'false' && !!pagHost;
+  var navigationEnabled =
+    mainEl.getAttribute('data-hero-navigation') !== 'false' && !!btnNext;
 
   /* Orijinal slaytları Swiper init'ten ÖNCE oku (klonlar henüz yok) */
   var origSlides = Array.prototype.slice.call(
@@ -25,14 +29,6 @@
     return s.getAttribute('data-thumb') || '';
   });
 
-  var videoSlideIndex = -1;
-  for (var vsi = 0; vsi < origSlides.length; vsi++) {
-    if (origSlides[vsi].hasAttribute('data-hero-video')) {
-      videoSlideIndex = vsi;
-      break;
-    }
-  }
-  var heroVideoEl = mainEl.querySelector('.hero-slide-video[data-src]');
   var heroVideoReduceMotion =
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -64,19 +60,24 @@
   }
 
   function syncHeroVideoSlide(swiper) {
-    if (videoSlideIndex < 0 || !heroVideoEl) return;
-    var onVideo = swiper.realIndex === videoSlideIndex;
-    if (onVideo) {
+    mainEl.querySelectorAll('.hero-slide-video').forEach(pauseHeroVideo);
+    var slide = swiper.slides[swiper.activeIndex];
+    if (!slide) return;
+    var video = slide.querySelector('.hero-slide-video[data-src]');
+    if (video) {
       if (swiper.autoplay && swiper.autoplay.stop) swiper.autoplay.stop();
-      loadAndPlayHeroVideo(heroVideoEl);
+      loadAndPlayHeroVideo(video);
     } else {
-      pauseHeroVideo(heroVideoEl);
       if (swiper.autoplay && swiper.autoplay.start) swiper.autoplay.start();
     }
   }
 
-  var mainSwiper = new Swiper(mainEl, {
-    loop: true,
+  var mainSwiper = null;
+  if (slideCount > 0) {
+  var loopEnabled = slideCount > 1;
+
+  mainSwiper = new Swiper(mainEl, {
+    loop: loopEnabled,
     speed: 1000,
     grabCursor: true,
     watchSlidesProgress: true,
@@ -86,10 +87,12 @@
       delay: 4000,
       disableOnInteraction: false,
     },
-    navigation: {
-      nextEl: '#hero-next',   /* selector — DOM referansı değil */
-      disabledClass: 'opacity-30 pointer-events-none',
-    },
+    navigation: navigationEnabled
+      ? {
+          nextEl: '#hero-next',
+          disabledClass: 'opacity-30 pointer-events-none',
+        }
+      : false,
     on: {
       init: function () {
         var s = this;
@@ -130,11 +133,15 @@
     },
   });
 
-  if (heroVideoEl && videoSlideIndex >= 0 && !heroVideoReduceMotion) {
-    heroVideoEl.addEventListener('ended', function () {
-      if (!mainSwiper || mainSwiper.realIndex !== videoSlideIndex) return;
-      mainSwiper.slideNext();
-      if (mainSwiper.autoplay && mainSwiper.autoplay.start) mainSwiper.autoplay.start();
+  if (!heroVideoReduceMotion) {
+    mainEl.querySelectorAll('.hero-slide-video[data-src]').forEach(function (heroVideoEl) {
+      heroVideoEl.addEventListener('ended', function () {
+        if (!mainSwiper) return;
+        var activeSlide = mainSwiper.slides[mainSwiper.activeIndex];
+        if (!activeSlide || !activeSlide.contains(heroVideoEl)) return;
+        mainSwiper.slideNext();
+        if (mainSwiper.autoplay && mainSwiper.autoplay.start) mainSwiper.autoplay.start();
+      });
     });
   }
 
@@ -176,6 +183,7 @@
 
   /* ── Özel sayfalama (DOM sabit; is-active ile CSS animasyonu) ───────── */
   function buildPagination(swiper) {
+    if (!paginationEnabled || !pagHost) return;
     pagHost.innerHTML = '';
     for (var i = 0; i < slideCount; i++) {
       (function (idx) {
@@ -205,7 +213,11 @@
           if (mainSwiper.autoplay && mainSwiper.autoplay.stop) {
             mainSwiper.autoplay.stop();
           }
-          mainSwiper.slideToLoop(idx);
+          if (mainSwiper.params.loop) {
+            mainSwiper.slideToLoop(idx);
+          } else {
+            mainSwiper.slideTo(idx);
+          }
         });
 
         pagHost.appendChild(btn);
@@ -214,6 +226,7 @@
   }
 
   function updatePagination(swiper) {
+    if (!paginationEnabled || !pagHost) return;
     var active = swiper.realIndex;
     var buttons = pagHost.querySelectorAll('.hero-pag-btn');
     for (var i = 0; i < slideCount; i++) {
@@ -242,6 +255,8 @@
       };
     })(idx);
     return img;
+  }
+
   }
 
   }

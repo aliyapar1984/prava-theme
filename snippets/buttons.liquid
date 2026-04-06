@@ -1,0 +1,55 @@
+{% comment %}
+  Snippet `buttons` — `button` metaobject listesi (CTA grupları).
+  Parametreler: buttons, wrapper_class?, theme? (dark|light|), size_class?
+{% endcomment %}
+{% liquid
+  assign wrap_classes = wrapper_class | default: 'buttons flex flex-wrap items-center gap-3'
+  assign scale = size_class | default: 'text-base font-semibold'
+%}
+{% if buttons != blank and buttons.size > 0 %}
+  <div class="{{ wrap_classes }}">
+    {% for btn in buttons %}
+      {% liquid
+        assign href = btn.link | default: '#'
+        assign label = btn.title | escape
+        assign tgt = btn.target | strip | default: '_self'
+        if tgt != '_self' and tgt != '_blank' and tgt != '_parent' and tgt != '_top'
+          assign tgt = '_self'
+        endif
+        assign rel_attr = btn.rel | strip
+
+        assign base_class = scale | append: ' inline-block uppercase transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4'
+        if theme == 'light'
+          assign base_class = base_class | append: ' text-zinc-900 hover:opacity-80 focus-visible:outline-zinc-900'
+        elsif theme == 'dark'
+          assign base_class = base_class | append: ' text-white hover:opacity-80 focus-visible:outline-white'
+        else
+          assign base_class = base_class | append: ' hover:opacity-90 focus-visible:outline-current'
+        endif
+
+        assign v = btn.variant | strip | downcase
+        case v
+          when 'secondary'
+            assign base_class = base_class | append: ' opacity-95'
+          when 'outline'
+            assign base_class = base_class | append: ' border border-current px-4 py-2 rounded-full'
+          when 'ghost', 'link'
+            assign base_class = base_class | append: ' font-medium normal-case underline-offset-4 hover:underline'
+          else
+            assign base_class = base_class
+        endcase
+        if btn.class_name != blank
+          assign base_class = base_class | append: ' ' | append: btn.class_name
+        endif
+      %}
+      {% if label != blank %}
+        <a href="{{ href }}" class="{{ base_class }}" {% if tgt != '_self' %}target="{{ tgt }}"{% endif %}{% if rel_attr != blank %} rel="{{ rel_attr | escape }}"{% endif %} aria-label="{{ label }}">
+          {{ btn.title }}
+          {% if btn.subtitle != blank %}
+            <span class="mt-0.5 block text-sm font-normal opacity-90">{{ btn.subtitle }}</span>
+          {% endif %}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

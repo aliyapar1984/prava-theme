@@ -2,7 +2,24 @@
   "sections": {
     "landing_hero": {
       "type": "landing-hero",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "hero_slide_1": {
+          "type": "slide",
+          "settings": {
+            "title": "Rahatlıkla Büyüyen Mutlu Adımlar.",
+            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı."
+          }
+        },
+        "hero_slide_2": {
+          "type": "slide",
+          "settings": {
+            "title": "Yeni Sezon Geldi %30'a Varan İndirimle",
+            "subtitle": "En yeni bebek arabası modelleri şimdi avantajlı fiyatlarla."
+          }
+        }
+      },
+      "block_order": ["hero_slide_1", "hero_slide_2"]
     },
     "landing_category_rail": {
       "type": "landing-category-rail",

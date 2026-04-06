@@ -1,0 +1,37 @@
+## Metaobject: `button`
+- title (single_line_text) — Buton metni
+- subtitle (single_line_text) — Opsiyonel alt başlık
+- link (url) — Bağlantı URL
+- target (single_line_text) — Validations: _self, _blank, _parent, _top
+- class_name (single_line_text) — CSS class
+- variant (single_line_text) — Validations: primary, secondary, outline, ghost, link
+- icon (single_line_text) — İkon adı
+- icon_position (single_line_text) — Validations: left, right
+- badge (single_line_text) — Validations: new, sale, featured, bestseller
+- badge_position (single_line_text) — Validations: top, bottom
+- rel (single_line_text) — Link rel attribute
+
+## Metaobject: `layout`
+- theme (single_line_text) — Validations: light, dark
+- class_name (single_line_text) — CSS class
+- vertical_position (single_line_text) — Validations: top, bottom, center
+- horizontal_position (single_line_text) — Validations: left, right, center
+
+## Metaobject: `media`
+- title (single_line_text)
+- class_name (single_line_text)
+- type (single_line_text) — Validations: image, video, iframe
+- desktop_image (file_reference)
+- mobile_image (file_reference)
+- mobile_retina (file_reference)
+- app_image (file_reference)
+- desktop_video (file_reference)
+- desktop_video_poster (file_reference)
+- mobile_video (file_reference)
+- mobile_video_poster (file_reference)
+- iframe_url (url)
+
+## Metaobject: `swiper_settings`
+- class_name (single_line_text)
+- navigation (boolean) — Ok butonları
+- pagination (boolean) — Dots gösterimi

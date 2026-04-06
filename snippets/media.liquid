@@ -1,0 +1,98 @@
+{% comment %}
+  Snippet `media` — `media` metaobject (görsel / video / iframe).
+  Parametreler: media, loading?, aspect_ratio_class?, wrapper_extra_class?
+{% endcomment %}
+{% liquid
+  assign loading = loading | default: 'lazy'
+  assign layer_class = 'media hero-parallax-layer absolute inset-0 overflow-hidden'
+  if aspect_ratio_class != blank
+    assign layer_class = layer_class | append: ' ' | append: aspect_ratio_class
+  endif
+  if wrapper_extra_class != blank
+    assign layer_class = layer_class | append: ' ' | append: wrapper_extra_class
+  endif
+
+  assign media_type = ''
+  if media != blank
+    assign media_type = media.type | strip | downcase
+  endif
+
+  assign desk_alt = ''
+  if media != blank and media.title != blank
+    assign desk_alt = media.title | escape
+  endif
+%}
+<div class="{{ layer_class }}">
+  {% if media == blank %}
+    <div class="hero-parallax-img absolute inset-0 bg-zinc-800" aria-hidden="true"></div>
+  {% elsif media_type == 'iframe' and media.iframe_url != blank %}
+    <iframe
+      class="hero-parallax-img hero-slide-iframe absolute left-1/2 top-1/2 h-[100%] w-[100%] max-w-none -translate-x-1/2 -translate-y-1/2 border-0 object-cover"
+      src="{{ media.iframe_url }}"
+      title="{% if desk_alt != blank %}{{ desk_alt }}{% else %}Media{% endif %}"
+      loading="{% if loading == 'eager' %}eager{% else %}lazy{% endif %}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  {% elsif media_type == 'video' %}
+    {% liquid
+      assign vid_src = blank
+      if media.desktop_video != blank
+        assign vid_src = media.desktop_video | file_url
+      elsif media.mobile_video != blank
+        assign vid_src = media.mobile_video | file_url
+      endif
+      assign poster_url = blank
+      if media.desktop_video_poster != blank
+        assign poster_url = media.desktop_video_poster | image_url: width: 1920
+      elsif media.mobile_video_poster != blank
+        assign poster_url = media.mobile_video_poster | image_url: width: 1920
+      endif
+      assign video_aria = 'sections.hero.video_aria' | t
+    %}
+    {% if vid_src != blank %}
+      <video
+        class="hero-parallax-img hero-slide-video absolute left-1/2 top-1/2 h-[100%] w-[100%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+        {% if poster_url != blank %}poster="{{ poster_url }}"{% endif %}
+        preload="none"
+        muted
+        playsinline
+        webkit-playsinline
+        data-src="{{ vid_src | escape }}"
+        aria-label="{% if desk_alt != blank %}{{ desk_alt }}{% else %}{{ video_aria }}{% endif %}"
+      ></video>
+    {% else %}
+      <div class="hero-parallax-img absolute inset-0 bg-zinc-800" aria-hidden="true"></div>
+    {% endif %}
+  {% else %}
+    {% liquid
+      assign img_desktop = media.desktop_image
+      assign img_mobile = media.mobile_image
+      assign img_retina = media.mobile_retina
+      assign img_app = media.app_image
+      if img_desktop == blank and img_mobile != blank
+        assign img_desktop = img_mobile
+      endif
+    %}
+    {% if img_desktop != blank %}
+      <picture>
+        {% if img_mobile != blank %}
+          <source media="(max-width: 749px)" srcset="{{ img_mobile | image_url: width: 1200 }} 1x{% if img_retina != blank %}, {{ img_retina | image_url: width: 2400 }} 2x{% endif %}">
+        {% elsif img_app != blank %}
+          <source media="(max-width: 749px)" srcset="{{ img_app | image_url: width: 1200 }}">
+        {% endif %}
+        <img
+          src="{{ img_desktop | image_url: width: 1920 }}"
+          alt="{{ desk_alt }}"
+          class="hero-parallax-img absolute left-1/2 top-1/2 h-[100%] w-[100%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+          width="1920"
+          height="1080"
+          loading="{{ loading }}"
+          decoding="async"
+        >
+      </picture>
+    {% else %}
+      <div class="hero-parallax-img absolute inset-0 bg-zinc-800" aria-hidden="true"></div>
+    {% endif %}
+  {% endif %}
+</div>
