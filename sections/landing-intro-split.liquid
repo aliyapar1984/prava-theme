@@ -3,21 +3,35 @@
     <div class="flex flex-col items-stretch gap-12 md:flex-row md:items-center md:justify-between md:gap-14 lg:gap-20">
       <div class="prava-intro-split__copy md:min-w-0 flex-[1_1_80%]">
         <div id="intro-karaoke-root" class="prava-intro-split__text intro-karaoke max-w-[800px] text-left text-[clamp(3rem,4.05vw+0.85rem,2.25rem)] font-normal leading-[1.25] tracking-tight text-neutral-800">
-          Yenilikçi yaklaşım ve modern şık tasarımlar geliştirilen PRAVA, ailelerin günlük hayatını kolaylaştıran pratik çözümler ve üstün konfor sunar.
+          {% if section.settings.intro_text != blank %}
+            {{ section.settings.intro_text | escape }}
+          {% elsif request.design_mode %}
+            <span class="text-neutral-400">Tema ayarlarından intro metnini ekleyin.</span>
+          {% endif %}
         </div>
       </div>
       <div class="prava-intro-split__figure-wrap prava-intro-split__figure-wrap--reveal md:flex-[1_1_45%] md:max-w-xl lg:max-w-2xl">
         <figure class="prava-intro-split__figure m-0 flex w-full justify-center md:justify-end">
           {% if section.settings.intro_illustration_image != blank %}
+            {% liquid
+              assign intro_img_alt = section.settings.intro_image_alt | strip
+              if intro_img_alt == blank
+                assign intro_img_alt = 'sections.intro.illustration_alt' | t
+              endif
+            %}
             <img
               src="{{ section.settings.intro_illustration_image | image_url: width: 1200 }}"
-              alt="{{ 'sections.intro.illustration_alt' | t }}"
+              alt="{{ intro_img_alt | escape }}"
               class="prava-intro-split__img h-auto w-full max-w-[min(100%,520px)] object-contain md:max-w-none"
               width="800"
               height="600"
               loading="lazy"
               decoding="async"
             >
+          {% elsif request.design_mode %}
+            <div class="flex h-[min(60vw,320px)] w-full max-w-[min(100%,520px)] items-center justify-center rounded-sm border border-dashed border-neutral-300 text-center text-sm text-neutral-400 md:max-w-none">
+              Görsel ekleyin
+            </div>
           {% endif %}
         </figure>
       </div>
@@ -32,13 +46,21 @@
   "class": "landing-intro-split-section",
   "settings": [
     {
-      "type": "header",
-      "content": "Intro"
+      "type": "textarea",
+      "id": "intro_text",
+      "label": "Intro metni",
+      "default": "Yenilikçi yaklaşım ve modern şık tasarımlar geliştirilen PRAVA, ailelerin günlük hayatını kolaylaştıran pratik çözümler ve üstün konfor sunar."
     },
     {
       "type": "image_picker",
       "id": "intro_illustration_image",
-      "label": "Yan illüstrasyon"
+      "label": "Yan görsel / illüstrasyon"
+    },
+    {
+      "type": "text",
+      "id": "intro_image_alt",
+      "label": "Görsel alt metni (erişilebilirlik)",
+      "info": "Boşsa tema çevirisindeki varsayılan açıklama kullanılır."
     }
   ],
   "presets": [{ "name": "Intro — metin ve görsel" }]

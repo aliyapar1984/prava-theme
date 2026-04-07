@@ -85,7 +85,11 @@
     },
     "landing_intro_split": {
       "type": "landing-intro-split",
-      "settings": {}
+      "settings": {
+        "intro_text": "Yenilikçi yaklaşım ve modern şık tasarımlar geliştirilen PRAVA, ailelerin günlük hayatını kolaylaştıran pratik çözümler ve üstün konfor sunar.",
+        "intro_illustration_image": "shopify://shop_images/editorial_ara_gorsel.png",
+        "intro_image_alt": ""
+      }
     },
     "landing_popular_split": {
       "type": "landing-popular-split",
