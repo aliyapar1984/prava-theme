@@ -102,8 +102,46 @@
     },
     "landing_bestsellers": {
       "type": "landing-bestsellers",
+      "blocks": {
+        "bestsellers_product_1": {
+          "type": "product_card",
+          "settings": {
+            "product": "prava-avion-p17-travel-sistem-bebek-arabasi",
+            "hover_video_url": ""
+          }
+        },
+        "bestsellers_product_2": {
+          "type": "product_card",
+          "settings": {
+            "product": "prava-p09-pars-aluminyum-baston-fume-bebek-arabasi",
+            "hover_video_url": ""
+          }
+        },
+        "bestsellers_product_3": {
+          "type": "product_card",
+          "settings": {
+            "product": "prava-p09-pars-aluminyum-baston-siyah-bebek-arabasi",
+            "hover_video_url": ""
+          }
+        },
+        "bestsellers_product_4": {
+          "type": "product_card",
+          "settings": {
+            "product": "prava-p15-travel-sistem-gri-bebek-arabasi",
+            "hover_video_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "bestsellers_product_1",
+        "bestsellers_product_2",
+        "bestsellers_product_3",
+        "bestsellers_product_4"
+      ],
       "settings": {
-        "bestseller_hover_video_url": ""
+        "heading": "En Çok Satılanlar",
+        "cta_url": "",
+        "cta_label": ""
       }
     },
     "landing_blog_rail": {
