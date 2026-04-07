@@ -64,7 +64,9 @@
     },
     "category_rail": {
       "aria_label": "Ürün kategorileri",
-      "cta_named": "{{ title }} kategorisini keşfet"
+      "cta": "Keşfet",
+      "cta_named": "{{ title }} kategorisini keşfet",
+      "placeholder_title": "Koleksiyon seçin"
     },
     "intro": {
       "aria_label": "Marka tanıtımı",

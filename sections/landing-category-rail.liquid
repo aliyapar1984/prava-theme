@@ -1,54 +1,31 @@
 <section class="prava-category-rail bg-white text-neutral-900 overflow-hidden" aria-label="{{ 'sections.category_rail.aria_label' | t }}" style="--pcr-pad-x: 40px;">
   <div class="mx-auto max-w-[1680px] px-[var(--pcr-pad-x)] pb-16 pt-44">
-    <h2 class="text-center text-2xl font-semibold tracking-tight text-neutral-900 lg:text-[80px]">Minik Gezintiler</h2>
-    <p class="mx-auto mt-10 max-w-2xl text-center font-normal text-neutral-600 text-xl">Bebeğinizin rahatlığı ve sizin konforunuz düşünülerek tasarlanan bebek arabalarını keşfedin.</p>
+    {% if section.settings.heading != blank %}
+      <h2 class="text-center text-2xl font-semibold tracking-tight text-neutral-900 lg:text-[80px]">
+        {{ section.settings.heading | escape }}
+      </h2>
+    {% endif %}
+    {% if section.settings.description != blank %}
+      <div class="mx-auto mt-10 max-w-2xl text-center font-normal text-neutral-600 text-xl rte">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
     <div class="prava-category-rail__viewport mt-20">
       <div class="swiper prava-category-rail__swiper w-full overflow-visible">
         <div class="swiper-wrapper">
-          <div class="swiper-slide !h-auto">
-            <article class="prava-category-card flex h-full flex-col">
-              <div class="prava-category-card__media aspect-square w-full overflow-hidden rounded-sm bg-[#F0F1EC] flex items-center justify-center">
-                {% if section.settings.category_image_1 != blank %}
-                  <img src="{{ section.settings.category_image_1 | image_url: width: 1040 }}" width="520" height="640" alt="" class="mega-menu__visual-img" loading="lazy" aria-labelledby="category-rail-title-1">
-                {% endif %}
-              </div>
-              <h3 id="category-rail-title-1" class="mt-10 text-left text-[30px] font-normal leading-snug tracking-tight text-neutral-900 lg:text-3xl">Bebek Arabaları</h3>
-              <a href="#" class="mt-3 inline-block w-max text-left text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label="{{ 'sections.category_rail.cta_named' | t: title: 'Bebek Arabaları' }}">Keşfet</a>
-            </article>
-          </div>
-          <div class="swiper-slide !h-auto">
-            <article class="prava-category-card flex h-full flex-col">
-              <div class="prava-category-card__media aspect-square w-full overflow-hidden rounded-sm bg-[#F0F1EC] flex items-center justify-center">
-                {% if section.settings.category_image_2 != blank %}
-                  <img src="{{ section.settings.category_image_2 | image_url: width: 1040 }}" width="520" height="640" alt="" class="mega-menu__visual-img" loading="lazy" aria-labelledby="category-rail-title-2">
-                {% endif %}
-              </div>
-              <h3 id="category-rail-title-2" class="mt-10 text-left text-[30px] font-normal leading-snug tracking-tight text-neutral-900 lg:text-3xl">Pusetler</h3>
-              <a href="#" class="mt-3 inline-block w-max text-left text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label="{{ 'sections.category_rail.cta_named' | t: title: 'Pusetler' }}">Keşfet</a>
-            </article>
-          </div>
-          <div class="swiper-slide !h-auto">
-            <article class="prava-category-card flex h-full flex-col">
-              <div class="prava-category-card__media aspect-square w-full overflow-hidden rounded-sm bg-[#F0F1EC] flex items-center justify-center">
-                {% if section.settings.category_image_3 != blank %}
-                  <img src="{{ section.settings.category_image_3 | image_url: width: 1040 }}" width="520" height="640" alt="" class="mega-menu__visual-img" loading="lazy" aria-labelledby="category-rail-title-3">
-                {% endif %}
-              </div>
-              <h3 id="category-rail-title-3" class="mt-10 text-left text-[30px] font-normal leading-snug tracking-tight text-neutral-900 lg:text-3xl">Baston Arabalar</h3>
-              <a href="#" class="mt-3 inline-block w-max text-left text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label="{{ 'sections.category_rail.cta_named' | t: title: 'Baston Arabalar' }}">Keşfet</a>
-            </article>
-          </div>
-          <div class="swiper-slide !h-auto">
-            <article class="prava-category-card flex h-full flex-col">
-              <div class="prava-category-card__media aspect-square w-full overflow-hidden rounded-sm bg-[#F0F1EC] flex items-center justify-center">
-                {% if section.settings.category_image_4 != blank %}
-                  <img src="{{ section.settings.category_image_4 | image_url: width: 1040 }}" width="520" height="640" alt="" class="mega-menu__visual-img" loading="lazy" aria-labelledby="category-rail-title-4">
-                {% endif %}
-              </div>
-              <h3 id="category-rail-title-4" class="mt-10 text-left text-[30px] font-normal leading-snug tracking-tight text-neutral-900 lg:text-3xl">Çift Yönlü Bebek Arabaları</h3>
-              <a href="#" class="mt-3 inline-block w-max text-left text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label="{{ 'sections.category_rail.cta_named' | t: title: 'Çift Yönlü Bebek Arabaları' }}">Keşfet</a>
-            </article>
-          </div>
+          {% for block in section.blocks %}
+            {% liquid
+              assign img_loading = 'lazy'
+              if forloop.first
+                assign img_loading = 'eager'
+              endif
+            %}
+            {% render 'landing-category-rail-item',
+              block: block,
+              collection: block.settings.collection,
+              loading: img_loading
+            %}
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -60,32 +37,62 @@
   "name": "Kategori şeridi",
   "tag": "div",
   "class": "landing-category-rail-section",
+  "max_blocks": 12,
   "settings": [
     {
-      "type": "header",
-      "content": "Kategori şeridi"
+      "type": "text",
+      "id": "heading",
+      "label": "Başlık",
+      "default": "Minik Gezintiler"
     },
     {
-      "type": "image_picker",
-      "id": "category_image_1",
-      "label": "Kart 1 — görsel"
-    },
-    {
-      "type": "image_picker",
-      "id": "category_image_2",
-      "label": "Kart 2 — görsel"
-    },
-    {
-      "type": "image_picker",
-      "id": "category_image_3",
-      "label": "Kart 3 — görsel"
-    },
-    {
-      "type": "image_picker",
-      "id": "category_image_4",
-      "label": "Kart 4 — görsel"
+      "type": "richtext",
+      "id": "description",
+      "label": "Açıklama",
+      "default": "<p>Bebeğinizin rahatlığı ve sizin konforunuz düşünülerek tasarlanan bebek arabalarını keşfedin.</p>"
     }
   ],
-  "presets": [{ "name": "Kategori şeridi" }]
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Koleksiyon",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Koleksiyon"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Özel başlık",
+          "info": "Boş bırakılırsa koleksiyon adı kullanılır."
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Özel görsel",
+          "info": "Boş bırakılırsa koleksiyon öne çıkan görseli kullanılır."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Bağlantı metni",
+          "info": "Boş bırakılırsa varsayılan çeviri kullanılır."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kategori şeridi",
+      "blocks": [
+        { "type": "collection_card" },
+        { "type": "collection_card" },
+        { "type": "collection_card" },
+        { "type": "collection_card" }
+      ]
+    }
+  ]
 }
 {% endschema %}

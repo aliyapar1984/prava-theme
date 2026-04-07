@@ -64,7 +64,9 @@
     },
     "category_rail": {
       "aria_label": "Product categories",
-      "cta_named": "Discover {{ title }}"
+      "cta": "Discover",
+      "cta_named": "Discover {{ title }}",
+      "placeholder_title": "Select a collection"
     },
     "intro": {
       "aria_label": "Brand introduction",

@@ -1,29 +1,87 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "landing_hero": {
       "type": "landing-hero",
-      "settings": {},
       "blocks": {
         "hero_slide_1": {
           "type": "slide",
           "settings": {
             "title": "Rahatlıkla Büyüyen Mutlu Adımlar.",
-            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı."
+            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı.",
+            "slide_media": "yeni-sezon-video",
+            "slide_buttons": [],
+            "theme": "dark",
+            "class_name": "",
+            "vertical_position": "items-center",
+            "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
           }
         },
         "hero_slide_2": {
           "type": "slide",
           "settings": {
             "title": "Yeni Sezon Geldi %30'a Varan İndirimle",
-            "subtitle": "En yeni bebek arabası modelleri şimdi avantajlı fiyatlarla."
+            "subtitle": "En yeni bebek arabası modelleri şimdi avantajlı fiyatlarla.",
+            "slide_media": "rahatlik-buyuyen-mutluluklar",
+            "slide_buttons": [],
+            "theme": "dark",
+            "class_name": "",
+            "vertical_position": "items-center",
+            "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
           }
         }
       },
-      "block_order": ["hero_slide_1", "hero_slide_2"]
+      "block_order": [
+        "hero_slide_1",
+        "hero_slide_2"
+      ],
+      "settings": {}
     },
     "landing_category_rail": {
       "type": "landing-category-rail",
-      "settings": {}
+      "blocks": {
+        "collection_card_ppLYrY": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "cift-yonlu-bebek-arabalari",
+            "custom_title": "",
+            "cta_label": ""
+          }
+        },
+        "collection_card_mVaiW6": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "travel-sistem-bebek-arabalari",
+            "custom_title": "",
+            "cta_label": ""
+          }
+        },
+        "collection_card_VMUX4Y": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "baston-bebek-arabasi",
+            "custom_title": "",
+            "cta_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_ppLYrY",
+        "collection_card_mVaiW6",
+        "collection_card_VMUX4Y"
+      ],
+      "settings": {
+        "heading": "Minik Gezintiler",
+        "description": "<p>Bebeğinizin rahatlığı ve sizin konforunuz düşünülerek tasarlanan bebek arabalarını keşfedin.</p>"
+      }
     },
     "landing_intro_split": {
       "type": "landing-intro-split",
@@ -35,7 +93,9 @@
     },
     "landing_bestsellers": {
       "type": "landing-bestsellers",
-      "settings": {}
+      "settings": {
+        "bestseller_hover_video_url": ""
+      }
     },
     "landing_blog_rail": {
       "type": "landing-blog-rail",
