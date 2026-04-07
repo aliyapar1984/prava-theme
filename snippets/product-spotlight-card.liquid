@@ -1,0 +1,88 @@
+{% liquid
+  assign spotlight_product = product
+  assign title_id = aria_title_id | default: 'product-spotlight-title'
+  assign article_extra = article_class | strip
+  assign current_variant = nil
+  assign card_image = nil
+
+  if spotlight_product != blank
+    assign current_variant = spotlight_product.selected_or_first_available_variant
+    assign card_image = current_variant.featured_image | default: spotlight_product.featured_image
+  endif
+
+  assign color_option = nil
+  if spotlight_product != blank
+    for option in spotlight_product.options_with_values
+      assign opt_name = option.name | downcase
+      if opt_name contains 'color' or opt_name contains 'colour' or opt_name contains 'renk'
+        assign color_option = option
+        break
+      endif
+    endfor
+  endif
+%}
+{% if spotlight_product != blank %}
+  <article class="product-spotlight-card {{ article_extra }}" data-product-spotlight>
+    <div class="aspect-[1/1] w-full bg-[#e7e4df]">
+      {% if card_image != blank %}
+        <a href="{{ spotlight_product.url }}" class="block h-full w-full">
+          <img
+            src="{{ card_image | image_url: width: 1040 }}"
+            alt="{{ card_image.alt | default: spotlight_product.title | escape }}"
+            aria-labelledby="{{ title_id }}"
+            class="h-full w-full object-contain"
+            width="{{ card_image.width | default: 520 }}"
+            height="{{ card_image.height | default: 640 }}"
+            loading="lazy"
+            decoding="async"
+          >
+        </a>
+      {% endif %}
+    </div>
+    <div class="px-8 pb-8 pt-10 md:px-10 md:pb-10 ml-10">
+      <h3 id="{{ title_id }}" class="text-2xl font-normal leading-tight tracking-tight text-neutral-800">
+        <a href="{{ spotlight_product.url }}" class="text-inherit no-underline hover:opacity-80">{{ spotlight_product.title }}</a>
+      </h3>
+      {% if spotlight_product.type != blank %}
+        <p class="mt-2 text-base font-light uppercase text-neutral-700">{{ spotlight_product.type }}</p>
+      {% endif %}
+      <div class="mt-8 flex items-center justify-between gap-6">
+        {% if color_option != blank and color_option.values.size > 0 %}
+          <ul class="m-0 flex list-none flex-wrap items-center gap-3 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+            {% for value in color_option.values %}
+              <li class="m-0 p-0">
+                {% liquid
+                  assign i = forloop.index0 | modulo: 4
+                  case i
+                    when 0
+                      assign swatch_bg = 'bg-[#bf7f83]'
+                    when 1
+                      assign swatch_bg = 'bg-[#d4c176]'
+                    when 2
+                      assign swatch_bg = 'bg-[#9ea78a]'
+                    else
+                      assign swatch_bg = 'bg-[#88acc8]'
+                  endcase
+                %}
+                <span class="inline-block h-5 w-5 rounded-full {{ swatch_bg }}" title="{{ value | escape }}" aria-hidden="true"></span>
+                <span class="sr-only">{{ value }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <span class="min-w-0 flex-1" aria-hidden="true"></span>
+        {% endif %}
+        <div class="shrink-0 text-right text-lg leading-none">
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <span class="mr-4 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
+          {% endif %}
+          <span class="font-medium text-neutral-900">{{ current_variant.price | money }}</span>
+        </div>
+      </div>
+    </div>
+  </article>
+{% elsif request.design_mode %}
+  <article class="product-spotlight-card border border-dashed border-neutral-300 bg-neutral-50 p-8 {{ article_extra }}" data-product-spotlight>
+    <p class="m-0 text-sm text-neutral-500">Ürün seçin (tema ayarları).</p>
+  </article>
+{% endif %}

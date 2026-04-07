@@ -93,7 +93,12 @@
     },
     "landing_popular_split": {
       "type": "landing-popular-split",
-      "settings": {}
+      "settings": {
+        "cover_image": "shopify://shop_images/promo_populer.jpg",
+        "cover_image_alt": "",
+        "heading": "Popüler Seçimler",
+        "spotlight_product": "prava-avion-p17-travel-sistem-bebek-arabasi"
+      }
     },
     "landing_bestsellers": {
       "type": "landing-bestsellers",
