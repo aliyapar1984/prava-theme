@@ -9,21 +9,8 @@
   assign hero_media_aspect_ratio_class = ''
   assign hero_media_layer_extra_class = ''
 
-  assign ss = section.settings.swiper_settings
-  assign swiper_extra_class = ''
   assign show_nav = true
   assign show_pag = true
-  if ss != blank
-    if ss.class_name != blank
-      assign swiper_extra_class = ss.class_name | strip
-    endif
-    if ss.navigation == false
-      assign show_nav = false
-    endif
-    if ss.pagination == false
-      assign show_pag = false
-    endif
-  endif
 
   if section.blocks.size < 2
     assign show_pag = false
@@ -39,61 +26,49 @@
   {% if section.blocks.size == 0 %}
     {% if request.design_mode %}
       <div class="flex h-full min-h-[100svh] items-center justify-center bg-zinc-800 px-6 text-center text-white">
-        <p>Bu bölümde en az bir «Slayt» bloğu ekleyin; medya ve düzeni metaobject’lerle bağlayın.</p>
+        <p>Bu bölümde en az bir «Slayt» bloğu ekleyin; medya ve metin alanlarını doldurun.</p>
       </div>
     {% endif %}
   {% else %}
     <div
-      class="swiper hero-main h-full w-full parallax-content {{ swiper_extra_class }}"
+      class="swiper hero-main h-full w-full parallax-content"
       data-hero-pagination="{% if show_pag %}true{% else %}false{% endif %}"
       data-hero-navigation="{% if show_nav %}true{% else %}false{% endif %}"
     >
       <div class="swiper-wrapper">
         {% for block in section.blocks %}
           {% liquid
-            assign ly = block.settings.slide_layout
-            assign v_items = 'items-center'
-            assign h_justify = 'justify-start'
-            assign text_align = 'text-left'
-            assign copy_margin = 'ml-0 mr-auto'
-            assign layout_theme = 'dark'
-            assign layout_extra = ''
-
-            if ly != blank
-              assign vpos = ly.vertical_position | strip | downcase
-              assign hpos = ly.horizontal_position | strip | downcase
-              assign t = ly.theme | strip | downcase
-              if t == 'light' or t == 'dark'
-                assign layout_theme = t
-              endif
-              if ly.class_name != blank
-                assign layout_extra = ly.class_name | strip
-              endif
-
-              case vpos
-                when 'top'
-                  assign v_items = 'items-start'
-                when 'bottom'
-                  assign v_items = 'items-end'
-                else
-                  assign v_items = 'items-center'
-              endcase
-
-              case hpos
-                when 'right'
-                  assign h_justify = 'justify-end'
-                  assign text_align = 'text-right'
-                  assign copy_margin = 'ml-auto mr-0'
-                when 'center'
-                  assign h_justify = 'justify-center'
-                  assign text_align = 'text-center'
-                  assign copy_margin = 'mx-auto'
-                else
-                  assign h_justify = 'justify-start'
-                  assign text_align = 'text-left'
-                  assign copy_margin = 'ml-0 mr-auto'
-              endcase
+            assign v_items = block.settings.vertical_position | strip
+            if v_items == blank
+              assign v_items = 'items-center'
             endif
+
+            assign h_raw = block.settings.horizontal_position | strip
+            assign h_parts = h_raw | split: '|'
+            assign h_outer = h_parts[0] | strip
+            assign copy_margin = h_parts[1] | strip
+            assign sub_extra = h_parts[2] | strip
+            if h_outer == blank
+              assign h_outer = 'justify-start text-left'
+            endif
+            if copy_margin == blank
+              assign copy_margin = 'ml-0 mr-auto'
+            endif
+
+            if h_outer contains 'text-right'
+              assign text_align_cls = 'text-right'
+            elsif h_outer contains 'text-center'
+              assign text_align_cls = 'text-center'
+            else
+              assign text_align_cls = 'text-left'
+            endif
+
+            assign layout_theme = block.settings.theme | strip | downcase
+            if layout_theme != 'light' and layout_theme != 'dark'
+              assign layout_theme = 'dark'
+            endif
+
+            assign layout_extra = block.settings.class_name | strip
 
             if layout_theme == 'light'
               assign title_clr = 'text-zinc-900'
@@ -152,19 +127,19 @@
               wrapper_extra_class: media_wrap
             %}
             <div class="absolute inset-0 bg-black/15 z-[1] pointer-events-none"></div>
-            <div class="hero-slide-content absolute inset-0 z-[2] flex {{ v_items }} {{ h_justify }} {{ text_align }} {{ layout_extra }}">
-              <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] {{ text_align }} {{ copy_margin }} will-change-transform">
+            <div class="hero-slide-content absolute inset-0 z-[2] flex {{ v_items }} {{ h_outer }} {{ layout_extra }}">
+              <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] {{ text_align_cls }} {{ copy_margin }} will-change-transform">
                 {% if block.settings.title != blank %}
-                  <h2 class="max-w-[16ch] {{ text_align }} text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight {{ title_clr }}">
+                  <h2 class="max-w-[16ch] {{ text_align_cls }} text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight {{ title_clr }}">
                     {{ block.settings.title | newline_to_br }}
                   </h2>
                 {% endif %}
                 {% if block.settings.subtitle != blank %}
-                  <p class="mt-10 max-w-[36ch] {{ text_align }} text-lg font-normal leading-relaxed {{ sub_clr }} {% if h_justify == 'justify-end' %}ml-auto{% elsif h_justify == 'justify-center' %}mx-auto{% endif %}">
+                  <p class="mt-10 max-w-[36ch] {{ text_align_cls }} text-lg font-normal leading-relaxed {{ sub_clr }} {{ sub_extra }}">
                     {{ block.settings.subtitle | newline_to_br }}
                   </p>
                 {% endif %}
-                {% capture hero_btn_wrapper %}buttons mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap {{ text_align }}{% endcapture %}
+                {% capture hero_btn_wrapper %}buttons mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap {{ text_align_cls }}{% endcapture %}
                 {% assign hero_slide_buttons = block.settings.slide_buttons %}
                 {% if hero_slide_buttons != blank and hero_slide_buttons.size > 0 %}
                   <div class="{{ hero_btn_wrapper }}">
@@ -204,18 +179,7 @@
   "tag": "div",
   "class": "landing-hero-section",
   "max_blocks": 12,
-  "settings": [
-    {
-      "type": "header",
-      "content": "Swiper (metaobject)"
-    },
-    {
-      "type": "metaobject",
-      "id": "swiper_settings",
-      "label": "Swiper ayarları",
-      "metaobject_type": "swiper_settings"
-    }
-  ],
+  "settings": [],
   "blocks": [
     {
       "type": "slide",
@@ -246,10 +210,52 @@
           "limit": 8
         },
         {
-          "type": "metaobject",
-          "id": "slide_layout",
-          "label": "Yerleşim",
-          "metaobject_type": "layout"
+          "type": "select",
+          "id": "theme",
+          "label": "Tema (metin rengi / buton)",
+          "options": [
+            { "value": "dark", "label": "Koyu (açık metin)" },
+            { "value": "light", "label": "Açık (koyu metin)" }
+          ],
+          "default": "dark"
+        },
+        {
+          "type": "text",
+          "id": "class_name",
+          "label": "Ek Tailwind sınıfları (içerik sarmalayıcı)",
+          "info": "Örn. gap-4 veya md:px-16. Boş bırakılabilir."
+        },
+        {
+          "type": "select",
+          "id": "vertical_position",
+          "label": "Dikey hizalama (Tailwind)",
+          "options": [
+            { "value": "items-start", "label": "Üst" },
+            { "value": "items-center", "label": "Orta" },
+            { "value": "items-end", "label": "Alt" }
+          ],
+          "default": "items-center"
+        },
+        {
+          "type": "select",
+          "id": "horizontal_position",
+          "label": "Yatay hizalama",
+          "info": "Değer: dış flex + metin | kopya kutusu margin | alt başlık ek margin (| ile ayrılmış Tailwind sınıfları). Özelleştirirken bu yapıyı koruyun.",
+          "options": [
+            {
+              "value": "justify-start text-left|ml-0 mr-auto|",
+              "label": "Sol"
+            },
+            {
+              "value": "justify-center text-center|mx-auto|mx-auto",
+              "label": "Orta"
+            },
+            {
+              "value": "justify-end text-right|ml-auto mr-0|ml-auto",
+              "label": "Sağ"
+            }
+          ],
+          "default": "justify-start text-left|ml-0 mr-auto|"
         }
       ]
     }
@@ -262,14 +268,20 @@
           "type": "slide",
           "settings": {
             "title": "Rahatlıkla Büyüyen Mutlu Adımlar.",
-            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı."
+            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı.",
+            "theme": "dark",
+            "vertical_position": "items-center",
+            "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
           }
         },
         {
           "type": "slide",
           "settings": {
             "title": "Yeni sezonda %30’a varan indirim.",
-            "subtitle": "En yeni modeller şimdi avantajlı fiyatlarla."
+            "subtitle": "En yeni modeller şimdi avantajlı fiyatlarla.",
+            "theme": "dark",
+            "vertical_position": "items-center",
+            "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
           }
         }
       ]
