@@ -146,11 +146,60 @@
     },
     "landing_blog_rail": {
       "type": "landing-blog-rail",
-      "settings": {}
+      "blocks": {
+        "RailPost1": {
+          "type": "post",
+          "settings": {
+            "article": "stroller-guides/moduler-bebek-arabasi-nasil-secilir-2026"
+          }
+        }
+      },
+      "block_order": [
+        "RailPost1"
+      ],
+      "settings": {
+        "heading": "Mutlu Yolculuklar Blogu",
+        "description": "<p>Bebek arabaları, güvenlik ve konfor hakkında güncel yazılar; yolculuklarınızı daha keyifli hale getirecek ipuçları burada.</p>",
+        "cta_url": "",
+        "cta_blog": "",
+        "cta_label": ""
+      }
     },
     "landing_support_faq": {
       "type": "landing-support-faq",
-      "settings": {}
+      "blocks": {
+        "support_faq_row_HFiJJ3": {
+          "type": "support-faq-row",
+          "settings": {
+            "question": "Prava’yı neden tercih etmelisiniz?",
+            "answer": "<p>PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güvenli malzemeler ve günlük kullanımda pratik detaylarla öne çıkar. Uzun ömürlü bileşenler ve şeffaf yedek parça desteği ile ailelerin yanında olmayı hedefler.</p>"
+          }
+        },
+        "support_faq_row_Pw93hi": {
+          "type": "support-faq-row",
+          "settings": {
+            "question": "Bebeğim için en güvenli seçimi nasıl yapabilirim?",
+            "answer": "<p>Ürün yaşı ve kilo aralığına uygunluk, emniyet kemeri / Isofix kullanımı ve üretici talimatlarına uyum önemlidir. Satın almadan önce mağazada deneme, kapsül–puset uyumluluğu ve fren / katlanma mekanizmasını kontrol etmenizi öneririz.</p>"
+          }
+        },
+        "support_faq_row_DjzpBR": {
+          "type": "support-faq-row",
+          "settings": {
+            "question": "Hangi bebek arabası kullanımım için en pratik olanıdır?",
+            "answer": "<p>Şehir içi ve toplu taşıma için hafif baston veya kompakt modeller; uzun yürüyüşler ve farklı arazi için süspansiyonlu ve daha geniş tekerlekli modeller uygundur. Travel sistem ihtiyacınız varsa ana kucağı + puset uyumunu birlikte değerlendirin.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "support_faq_row_HFiJJ3",
+        "support_faq_row_Pw93hi",
+        "support_faq_row_DjzpBR"
+      ],
+      "settings": {
+        "heading_line_1": "Prava",
+        "heading_line_2": "Destek",
+        "support_texture_image": "shopify://shop_images/accent_destek.png"
+      }
     }
   },
   "order": [

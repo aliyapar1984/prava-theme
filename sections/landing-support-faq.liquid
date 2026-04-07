@@ -1,16 +1,3 @@
-{% assign faq_q1 = "Prava'yı neden tercih etmelisiniz?" %}
-{% assign faq_q2 = "Bebeğim için en güvenli seçimi nasıl yapabilirim?" %}
-{% assign faq_q3 = "Hangi bebek arabası kullanımım için en pratik olanıdır?" %}
-{% capture faq_a1 %}
-PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güvenli malzemeler ve günlük kullanımda pratik detaylarla öne çıkar. Uzun ömürlü bileşenler ve şeffaf yedek parça desteği ile ailelerin yanında olmayı hedefler.
-{% endcapture %}
-{% capture faq_a2 %}
-Ürün yaşı ve kilo aralığına uygunluk, emniyet kemeri / Isofix kullanımı ve üretici talimatlarına uyum önemlidir. Satın almadan önce mağazada deneme, kapsül–puset uyumluluğu ve fren / katlanma mekanizmasını kontrol etmenizi öneririz.
-{% endcapture %}
-{% capture faq_a3 %}
-Şehir içi ve toplu taşıma için hafif baston veya kompakt modeller; uzun yürüyüşler ve farklı arazi için süspansiyonlu ve daha geniş tekerlekli modeller uygundur. Travel sistem ihtiyacınız varsa ana kucağı + puset uyumunu birlikte değerlendirin.
-{% endcapture %}
-
 <section class="prava-support-faq bg-white text-neutral-900 px-10 pt-44 pb-10" aria-label="{{ 'sections.faq.aria_label' | t }}">
   <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-10 py-5">
     {% if section.settings.support_texture_image != blank %}
@@ -19,80 +6,75 @@ PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güven
     <div class="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center gap-24">
       <div class="prava-support-faq__intro relative z-[1] w-full shrink-0 lg:max-w-[min(100%,420px)] xl:max-w-[480px]">
         <div class="pointer-events-none absolute -right-8 bottom-0 left-0 top-0 overflow-visible opacity-[0.12] lg:-right-4" aria-hidden="true"></div>
-        <h2 id="faq-support-heading" class="relative font-semibold text-neutral-800 text-[50px] leading-none">
-          <span class="block">Prava</span>
-          <span class="mt-1 block md:mt-2">Destek</span>
-        </h2>
+        {% if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank %}
+          <h2 id="faq-support-heading" class="relative font-semibold text-neutral-800 text-[50px] leading-none">
+            {% if section.settings.heading_line_1 != blank %}
+              <span class="block">{{ section.settings.heading_line_1 | escape }}</span>
+            {% endif %}
+            {% if section.settings.heading_line_2 != blank %}
+              <span class="mt-1 block md:mt-2">{{ section.settings.heading_line_2 | escape }}</span>
+            {% endif %}
+          </h2>
+        {% endif %}
       </div>
-      <div class="prava-support-faq__list min-w-0 flex-1 [&>details:last-child]:border-b-0" role="region" aria-labelledby="faq-support-heading">
+      <div
+        class="prava-support-faq__list min-w-0 flex-1 [&>details:last-child]:border-b-0"
+        role="region"
+        {% if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank %}
+          aria-labelledby="faq-support-heading"
+        {% else %}
+          aria-label="{{ 'sections.faq.list_label' | t }}"
+        {% endif %}
+      >
         <p class="sr-only">{{ 'sections.faq.list_label' | t }}</p>
-        <details class="prava-support-faq__item border-b border-neutral-200/90">
-          <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:gap-4 md:text-lg md:leading-snug">
-            <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
-            <span>{{ faq_q1 }}</span>
-          </summary>
-          <div class="prava-support-faq__panel prava-support-faq__panel--inner">
-            <p class="pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
-              {{ faq_a1 | strip }}
-            </p>
-          </div>
-        </details>
-        <details class="prava-support-faq__item border-b border-neutral-200/90">
-          <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:gap-4 md:text-lg md:leading-snug">
-            <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
-            <span>{{ faq_q2 }}</span>
-          </summary>
-          <div class="prava-support-faq__panel prava-support-faq__panel--inner">
-            <p class="pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
-              {{ faq_a2 | strip }}
-            </p>
-          </div>
-        </details>
-        <details class="prava-support-faq__item border-b border-neutral-200/90">
-          <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:gap-4 md:text-lg md:leading-snug">
-            <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
-            <span>{{ faq_q3 }}</span>
-          </summary>
-          <div class="prava-support-faq__panel prava-support-faq__panel--inner">
-            <p class="pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
-              {{ faq_a3 | strip }}
-            </p>
-          </div>
-        </details>
+        {% for block in section.blocks %}
+          {% if block.settings.question != blank %}
+            <details class="prava-support-faq__item border-b border-neutral-200/90" {{ block.shopify_attributes }}>
+              <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:gap-4 md:text-lg md:leading-snug">
+                <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
+                <span>{{ block.settings.question | escape }}</span>
+              </summary>
+              <div class="prava-support-faq__panel prava-support-faq__panel--inner">
+                {% if block.settings.answer != blank %}
+                  <div class="rte pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
+                    {{ block.settings.answer }}
+                  </div>
+                {% endif %}
+              </div>
+            </details>
+          {% elsif request.design_mode %}
+            <div class="border-b border-dashed border-neutral-300 py-6 text-sm text-neutral-500" {{ block.shopify_attributes }}>
+              Soru ekleyin
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
 </section>
 
+{% liquid
+  assign ld_first = true
+%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {
-      "@type": "Question",
-      "name": {{ faq_q1 | json }},
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": {{ faq_a1 | strip | json }}
-      }
-    },
-    {
-      "@type": "Question",
-      "name": {{ faq_q2 | json }},
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": {{ faq_a2 | strip | json }}
-      }
-    },
-    {
-      "@type": "Question",
-      "name": {{ faq_q3 | json }},
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": {{ faq_a3 | strip | json }}
-      }
-    }
+    {%- for block in section.blocks -%}
+      {%- if block.settings.question != blank and block.settings.answer != blank -%}
+        {%- unless ld_first -%},{%- endunless -%}
+        {
+          "@type": "Question",
+          "name": {{ block.settings.question | json }},
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": {{ block.settings.answer | strip_html | strip | json }}
+          }
+        }
+        {%- assign ld_first = false -%}
+      {%- endif -%}
+    {%- endfor -%}
   ]
 }
 </script>
@@ -102,10 +84,19 @@ PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güven
   "name": "Destek / SSS",
   "tag": "div",
   "class": "landing-support-faq-section",
+  "max_blocks": 40,
   "settings": [
     {
-      "type": "header",
-      "content": "Destek / SSS"
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Başlık — 1. satır",
+      "default": "Prava"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Başlık — 2. satır",
+      "default": "Destek"
     },
     {
       "type": "image_picker",
@@ -113,6 +104,51 @@ PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güven
       "label": "Kutu arka plan dokusu"
     }
   ],
-  "presets": [{ "name": "Destek / SSS" }]
+  "blocks": [
+    {
+      "type": "support-faq-row",
+      "name": "Soru / cevap",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Soru"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Cevap"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Destek / SSS",
+      "blocks": [
+        {
+          "type": "support-faq-row",
+          "settings": {
+            "question": "Prava'yı neden tercih etmelisiniz?",
+            "answer": "<p>PRAVA, Avrupa standartlarında test edilen ürünler; ergonomik tasarım, güvenli malzemeler ve günlük kullanımda pratik detaylarla öne çıkar. Uzun ömürlü bileşenler ve şeffaf yedek parça desteği ile ailelerin yanında olmayı hedefler.</p>"
+          }
+        },
+        {
+          "type": "support-faq-row",
+          "settings": {
+            "question": "Bebeğim için en güvenli seçimi nasıl yapabilirim?",
+            "answer": "<p>Ürün yaşı ve kilo aralığına uygunluk, emniyet kemeri / Isofix kullanımı ve üretici talimatlarına uyum önemlidir. Satın almadan önce mağazada deneme, kapsül–puset uyumluluğu ve fren / katlanma mekanizmasını kontrol etmenizi öneririz.</p>"
+          }
+        },
+        {
+          "type": "support-faq-row",
+          "settings": {
+            "question": "Hangi bebek arabası kullanımım için en pratik olanıdır?",
+            "answer": "<p>Şehir içi ve toplu taşıma için hafif baston veya kompakt modeller; uzun yürüyüşler ve farklı arazi için süspansiyonlu ve daha geniş tekerlekli modeller uygundur. Travel sistem ihtiyacınız varsa ana kucağı + puset uyumunu birlikte değerlendirin.</p>"
+          }
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
