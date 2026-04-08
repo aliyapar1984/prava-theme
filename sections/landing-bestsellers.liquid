@@ -30,23 +30,27 @@
           {% assign first_bestseller_slide = 'yes' %}
           {% for block in section.blocks %}
             {% if block.settings.product != blank or request.design_mode %}
-              {% liquid
-                if first_bestseller_slide == 'yes'
-                  assign card_image_loading = 'eager'
-                  assign first_bestseller_slide = 'no'
-                else
-                  assign card_image_loading = 'lazy'
-                endif
-              %}
               <div class="swiper-slide !h-auto">
-                {% render 'product-list-card',
-                  product: block.settings.product,
-                  block: block,
-                  title_id: 'bs-prod-title-' | append: block.id,
-                  hover_image: block.settings.hover_image,
-                  hover_video_url: block.settings.hover_video_url,
-                  image_loading: card_image_loading
-                %}
+                {% if first_bestseller_slide == 'yes' %}
+                  {% assign first_bestseller_slide = 'no' %}
+                  {% render 'product-list-card',
+                    product: block.settings.product,
+                    block: block,
+                    title_id: 'bs-prod-title-' | append: block.id,
+                    hover_image: block.settings.hover_image,
+                    hover_video_url: block.settings.hover_video_url,
+                    image_loading: 'eager'
+                  %}
+                {% else %}
+                  {% render 'product-list-card',
+                    product: block.settings.product,
+                    block: block,
+                    title_id: 'bs-prod-title-' | append: block.id,
+                    hover_image: block.settings.hover_image,
+                    hover_video_url: block.settings.hover_video_url,
+                    image_loading: 'lazy'
+                  %}
+                {% endif %}
               </div>
             {% endif %}
           {% endfor %}

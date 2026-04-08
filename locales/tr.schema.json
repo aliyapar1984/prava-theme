@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "footer": {
+      "name": "Altbilgi",
+      "blocks": {
+        "link_list": {
+          "name": "Menü",
+          "settings": {
+            "heading": {
+              "label": "Başlık",
+              "info": "Boş bırakırsanız Gezinme’deki menü adı kullanılır."
+            },
+            "menu": {
+              "label": "Menü"
+            }
+          }
+        },
+        "text": {
+          "name": "Metin",
+          "settings": {
+            "heading": {
+              "label": "Başlık"
+            },
+            "subtext": {
+              "label": "İçerik"
+            }
+          }
+        }
+      },
+      "settings": {
+        "newsletter_enable": {
+          "label": "Bülten kaydı göster"
+        },
+        "newsletter_heading": {
+          "label": "Bülten başlığı",
+          "info": "Boş bırakırsanız temadaki varsayılan çeviri kullanılır."
+        },
+        "show_social": {
+          "label": "Sosyal ikonları göster"
+        },
+        "tagline_year": {
+          "label": "Slogan yılı (“…’den beri”)"
+        }
+      }
+    }
+  }
+}

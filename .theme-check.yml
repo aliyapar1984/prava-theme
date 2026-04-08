@@ -1,0 +1,4 @@
+# Swiper / GSAP remain on jsDelivr until vendored into assets (large bundles).
+RemoteAsset:
+  ignore:
+    - layout/theme.liquid

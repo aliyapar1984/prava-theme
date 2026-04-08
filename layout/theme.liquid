@@ -26,15 +26,21 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   {{ 'css/style.css' | asset_url | stylesheet_tag }}
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Sen', 'system-ui', 'sans-serif'] },
-        },
-      },
-    };
+    (function (d) {
+      var s = d.createElement('script');
+      s.src = 'https://cdn.tailwindcss.com';
+      s.onload = function () {
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: { sans: ['Sen', 'system-ui', 'sans-serif'] },
+            },
+          },
+        };
+      };
+      d.head.appendChild(s);
+    })(document);
   </script>
 </head>
 <body class="bg-black font-sans antialiased text-[14px] text-white min-h-screen flex flex-col">

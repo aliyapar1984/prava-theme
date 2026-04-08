@@ -55,21 +55,23 @@
             {% assign first_blog_slide = 'yes' %}
             {% for block in section.blocks %}
               {% if block.settings.article != blank or request.design_mode %}
-                {% liquid
-                  if first_blog_slide == 'yes'
-                    assign card_loading = 'eager'
-                    assign first_blog_slide = 'no'
-                  else
-                    assign card_loading = 'lazy'
-                  endif
-                %}
                 <div class="swiper-slide !h-auto">
-                  {% render 'blog-article-card',
-                    article: block.settings.article,
-                    block: block,
-                    title_id: 'blog-teaser-title-' | append: block.id,
-                    image_loading: card_loading
-                  %}
+                  {% if first_blog_slide == 'yes' %}
+                    {% assign first_blog_slide = 'no' %}
+                    {% render 'blog-article-card',
+                      article: block.settings.article,
+                      block: block,
+                      title_id: 'blog-teaser-title-' | append: block.id,
+                      image_loading: 'eager'
+                    %}
+                  {% else %}
+                    {% render 'blog-article-card',
+                      article: block.settings.article,
+                      block: block,
+                      title_id: 'blog-teaser-title-' | append: block.id,
+                      image_loading: 'lazy'
+                    %}
+                  {% endif %}
                 </div>
               {% endif %}
             {% endfor %}
