@@ -91,6 +91,49 @@
     "faq": {
       "aria_label": "Support and frequently asked questions",
       "list_label": "Frequently asked questions"
+    },
+    "footer": {
+      "name": "Footer",
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "If empty, the menu title from Navigation is used."
+            },
+            "menu": {
+              "label": "Menu"
+            }
+          }
+        },
+        "text": {
+          "name": "Text",
+          "settings": {
+            "heading": {
+              "label": "Heading"
+            },
+            "subtext": {
+              "label": "Subtext"
+            }
+          }
+        }
+      },
+      "settings": {
+        "newsletter_enable": {
+          "label": "Show newsletter signup"
+        },
+        "newsletter_heading": {
+          "label": "Newsletter heading",
+          "info": "Leave blank to use the default theme translation."
+        },
+        "show_social": {
+          "label": "Show social icons"
+        },
+        "tagline_year": {
+          "label": "Tagline year (e.g. “Since …”)"
+        }
+      }
     }
   }
 }

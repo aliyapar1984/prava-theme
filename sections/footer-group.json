@@ -1,0 +1,44 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer_menu_1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "footer"
+          }
+        },
+        "footer_menu_2": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Info",
+            "menu": "footer"
+          }
+        },
+        "footer_menu_3": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Support",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "footer_menu_1",
+        "footer_menu_2",
+        "footer_menu_3"
+      ],
+      "settings": {
+        "newsletter_enable": true,
+        "newsletter_heading": "",
+        "show_social": true,
+        "tagline_year": "1983"
+      }
+    }
+  },
+  "order": ["footer"]
+}

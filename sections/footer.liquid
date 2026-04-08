@@ -1,0 +1,241 @@
+{% assign footer_year = 'now' | date: '%Y' %}
+{% liquid
+  assign newsletter_heading = section.settings.newsletter_heading
+  if newsletter_heading == blank
+    assign newsletter_heading = 'footer.newsletter_heading' | t
+  endif
+%}
+<footer
+  class="site-footer mt-auto bg-[#F5F5F0] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]"
+  role="contentinfo"
+  aria-label="{{ 'footer.aria_label' | t }}"
+  style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %} background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}');{% endif %}"
+>
+  <div class="mx-auto px-20 pb-6 pt-20">
+    <div class="grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+      {% if section.settings.newsletter_enable or section.settings.show_social %}
+        <div class="site-footer__col site-footer__col--news max-w-[300px]">
+          {% if section.settings.newsletter_enable %}
+            <h2 class="text-lg font-bold uppercase text-[#333333]">{{ newsletter_heading }}</h2>
+            {% form 'customer', class: 'mt-6' %}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label class="sr-only" for="footer-newsletter-email-{{ section.id }}">{{ 'footer.newsletter_email_label' | t }}</label>
+              <div class="site-footer__field flex overflow-hidden rounded-lg bg-[#E6E6E1]">
+                <input
+                  id="footer-newsletter-email-{{ section.id }}"
+                  name="contact[email]"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="{{ 'footer.newsletter_placeholder' | t }}"
+                  class="site-footer__input min-w-0 flex-1 border-0 bg-transparent px-4 py-3.5 text-sm text-[#333333] placeholder:text-neutral-500 outline-none"
+                  required
+                >
+                <button type="submit" class="site-footer__submit flex shrink-0 items-center justify-center px-4 text-[#333333] transition-opacity hover:opacity-70" aria-label="{{ 'footer.newsletter_submit_aria' | t }}">
+                  <img src="{{ 'icons/right-arrow.svg' | asset_url }}" width="20" height="20" alt="" class="h-5 w-5 invert" loading="lazy">
+                </button>
+              </div>
+            {% endform %}
+            <p class="mt-3 max-w-sm text-base leading-relaxed text-neutral-600">
+              {{ 'footer.newsletter_description' | t }}
+            </p>
+          {% endif %}
+          {% if section.settings.show_social %}
+            <ul class="mt-10 flex flex-wrap items-center gap-6 {% unless section.settings.newsletter_enable %}mt-0{% endunless %}" aria-label="{{ 'footer.social_aria' | t }}">
+              <li>
+                <a href="#" class="text-[#333333] transition-opacity hover:opacity-70" aria-label="{{ 'footer.social_facebook' | t }}">
+                  <img src="{{ 'icons/facebook.svg' | asset_url }}" width="20" height="20" alt="" class="h-5 w-5" loading="lazy">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-[#333333] transition-opacity hover:opacity-70" aria-label="{{ 'footer.social_instagram' | t }}">
+                  <img src="{{ 'icons/instagram.svg' | asset_url }}" width="20" height="20" alt="" class="h-5 w-5" loading="lazy">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-[#333333] transition-opacity hover:opacity-70" aria-label="{{ 'footer.social_x' | t }}">
+                  <img src="{{ 'icons/x.svg' | asset_url }}" width="20" height="20" alt="" class="h-5 w-5" loading="lazy">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-[#333333] transition-opacity hover:opacity-70" aria-label="{{ 'footer.social_youtube' | t }}">
+                  <img src="{{ 'icons/youtube.svg' | asset_url }}" width="20" height="20" alt="" class="h-5 w-6" loading="lazy">
+                </a>
+              </li>
+            </ul>
+            <p class="mt-3 text-[10px] font-normal uppercase tracking-wide text-neutral-500">{{ 'footer.social_accounts_caption' | t }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {%- for block in section.blocks -%}
+        <div class="site-footer__col {% unless block.type == '@app' %}px-10{% endunless %}" {{ block.shopify_attributes }}>
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'link_list' -%}
+              {%- if block.settings.menu != blank -%}
+                {%- assign menu_obj = block.settings.menu -%}
+                {%- if menu_obj.links.size > 0 -%}
+                  <nav aria-label="{{ menu_obj.title | escape }}">
+                    <h3 class="text-lg font-bold uppercase text-[#333333]">
+                      {%- if block.settings.heading != blank -%}
+                        {{- block.settings.heading -}}
+                      {%- else -%}
+                        {{ menu_obj.title | escape }}
+                      {%- endif -%}
+                    </h3>
+                    <ul class="mt-6 space-y-3 text-base font-normal text-[#333333]">
+                      {%- for link in menu_obj.links -%}
+                        <li>
+                          <a href="{{ link.url }}" class="transition-opacity hover:opacity-70{% if link.active %} font-medium{% endif %}">{{ link.title | escape }}</a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </nav>
+                {%- endif -%}
+              {%- endif -%}
+            {%- when 'text' -%}
+              {%- if block.settings.heading != blank -%}
+                <h3 class="text-lg font-bold uppercase text-[#333333]">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {%- if block.settings.subtext != blank -%}
+                <div class="footer-block__text rte mt-6 text-base font-normal text-neutral-700 [&_a]:underline [&_a]:underline-offset-4">
+                  {{ block.settings.subtext }}
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="relative overflow-hidden text-center mt-24">
+      <div class="relative z-[1] flex flex-col items-center mb-5">
+        <img
+          src="{{ 'icons/logo-prava.svg' | asset_url }}"
+          width="200"
+          height="48"
+          alt="{{ shop.name | escape }}"
+          class="h-auto w-[min(100%,300px)] brightness-0"
+          loading="lazy"
+        >
+        {% liquid
+          assign tag_yr = section.settings.tagline_year | strip
+          if tag_yr == blank
+            assign tag_yr = '1983'
+          endif
+        %}
+        <p class="mt-5 text-base font-medium">{{ 'footer.tagline_since' | t: year: tag_yr }}</p>
+      </div>
+    </div>
+
+    <div class="site-footer__legal mt-4 flex flex-col gap-6 border-t border-[#333333]/18 pt-8 md:mt-6 md:flex-row md:items-center md:justify-between md:gap-8">
+      <p class="text-xs text-[#333333]/85 md:text-sm"><b>{{ 'footer.copyright' | t: year: footer_year, shop_name: shop.name }}</b></p>
+      <nav aria-label="{{ 'footer.legal_nav_aria' | t }}">
+        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
+          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_information_society' | t }}</a></li>
+          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_cookies' | t }}</a></li>
+          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_kvkk' | t }}</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "tag": "div",
+  "class": "footer-group-section",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "link_list",
+      "name": "t:sections.footer.blocks.link_list.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:sections.footer.blocks.link_list.settings.heading.label",
+          "info": "t:sections.footer.blocks.link_list.settings.heading.info"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.footer.blocks.link_list.settings.menu.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.footer.blocks.text.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:sections.footer.blocks.text.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "label": "t:sections.footer.blocks.text.settings.subtext.label"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.newsletter_enable.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_heading",
+      "label": "t:sections.footer.settings.newsletter_heading.label",
+      "info": "t:sections.footer.settings.newsletter_heading.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "t:sections.footer.settings.show_social.label"
+    },
+    {
+      "type": "text",
+      "id": "tagline_year",
+      "label": "t:sections.footer.settings.tagline_year.label",
+      "default": "1983"
+    }
+  ],
+  "default": {
+    "settings": {
+      "newsletter_enable": true,
+      "show_social": true,
+      "tagline_year": "1983"
+    },
+    "blocks": [
+      {
+        "type": "link_list",
+        "settings": {
+          "heading": "Quick links",
+          "menu": "footer"
+        }
+      },
+      {
+        "type": "link_list",
+        "settings": {
+          "heading": "Info",
+          "menu": "footer"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

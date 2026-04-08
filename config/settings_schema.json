@@ -44,29 +44,11 @@
     ]
   },
   {
-    "name": "Footer menüleri",
+    "name": "Alt bilgi menüleri",
     "settings": [
       {
         "type": "paragraph",
-        "content": "Online mağaza → Gezinme üzerinden menü oluşturun. Başlık ve bağlantı metinleri menüde tanımlanır (çok dilli içerik için mağaza dilleri / menü çevirileri kullanın)."
-      },
-      {
-        "type": "link_list",
-        "id": "footer_menu_primary",
-        "label": "Menü sütunu 1",
-        "info": "Örn. Kurumsal"
-      },
-      {
-        "type": "link_list",
-        "id": "footer_menu_secondary",
-        "label": "Menü sütunu 2",
-        "info": "Örn. Ürünler"
-      },
-      {
-        "type": "link_list",
-        "id": "footer_menu_tertiary",
-        "label": "Menü sütunu 3",
-        "info": "Örn. Danışma / Destek"
+        "content": "Footer sütunları ve menüler: Online mağaza → Tema özelleştir → «Altbilgi» (footer) grubunda «Footer» bölümüne «Menü» blokları ekleyerek yönetilir (Shopify Dawn temasıyla aynı mantık). Gezinme menülerini Mağaza yönetiminde oluşturup her blokta seçebilirsiniz."
       }
     ]
   }
