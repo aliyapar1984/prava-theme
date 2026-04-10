@@ -15,7 +15,23 @@
       "page": "Page {{ page }}"
     },
     "pagination": {
-      "slide": "Slide"
+      "slide": "Slide",
+      "previous": "Previous",
+      "next": "Next",
+      "nav_aria": "Pagination"
+    },
+    "breadcrumb": {
+      "nav_aria": "Breadcrumb",
+      "home": "Home"
+    }
+  },
+  "templates": {
+    "collection": {
+      "category_nav_aria": "Browse categories",
+      "category_heading": "Categories",
+      "sibling_nav_aria": "Categories at the same level",
+      "products_region_aria": "Products in this collection",
+      "empty": "No products in this collection."
     }
   },
   "footer": {
@@ -62,6 +78,9 @@
       "cta_slide1": "Discover featured strollers and travel systems",
       "cta_slide2": "View seasonal deals and discounts",
       "cta_slide3": "Explore the travel system collection"
+    },
+    "collection_catalog": {
+      "aria_label": "Product catalog"
     },
     "category_rail": {
       "aria_label": "Product categories",

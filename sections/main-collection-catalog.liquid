@@ -1,0 +1,144 @@
+{% comment %}
+  Koleksiyon kataloğu — üstte tüm koleksiyonlar (yatay), ortada ürün grid + sayfalama, altta SEO metni (collection.description).
+  Filtre yok; ürün kartı: snippets/product-list-card.liquid
+{% endcomment %}
+<section
+  class="main-collection-catalog bg-white text-neutral-900"
+  aria-label="{{ 'sections.collection_catalog.aria_label' | t }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 md:pb-24 md:pt-16">
+    {% render 'breadcrumbs', current_title: collection.title %}
+    <header class="mb-8 md:mb-10">
+      <h1 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
+        {{ collection.title | escape }}
+      </h1>
+    </header>
+
+    <nav
+      class="collection-all-categories mb-10 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      aria-label="{{ 'templates.collection.category_nav_aria' | t }}"
+    >
+      <ul class="flex min-w-0 flex-nowrap gap-2 pb-1 md:flex-wrap md:gap-3" role="list">
+        {% for col in collections %}
+          {% unless col.handle == 'frontpage' %}
+            <li class="shrink-0">
+              <a
+                href="{{ col.url }}"
+                class="inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium transition-colors{% if col.handle == collection.handle %} border-neutral-900 bg-neutral-900 text-white{% else %} border-neutral-200 text-neutral-800 hover:border-neutral-400 hover:opacity-90{% endif %}"
+                {% if col.handle == collection.handle %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- col.title | escape -}}
+              </a>
+            </li>
+          {% endunless %}
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div aria-label="{{ 'templates.collection.products_region_aria' | t }}">
+      {% paginate collection.products by section.settings.products_per_page %}
+        {% if collection.products.size == 0 %}
+          <p class="text-base text-neutral-600">{{ 'templates.collection.empty' | t }}</p>
+        {% else %}
+          <div
+            class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 xl:grid-cols-3"
+          >
+            {% for product in collection.products %}
+              {% if forloop.index <= 3 %}
+                {%
+                  render 'product-list-card',
+                  product: product,
+                  title_id: 'col-prod-' | append: product.id,
+                  image_loading: 'eager'
+                %}
+              {% else %}
+                {%
+                  render 'product-list-card',
+                  product: product,
+                  title_id: 'col-prod-' | append: product.id,
+                  image_loading: 'lazy'
+                %}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            <nav
+              class="mt-14 flex flex-wrap items-center justify-center gap-2"
+              aria-label="{{ 'general.pagination.nav_aria' | t }}"
+            >
+              {% if paginate.previous %}
+                <a
+                  href="{{ paginate.previous.url }}"
+                  class="rounded border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-800 transition-opacity hover:opacity-70"
+                >
+                  {{ 'general.pagination.previous' | t }}
+                </a>
+              {% endif %}
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                  <a
+                    href="{{ part.url }}"
+                    class="min-w-[2.5rem] rounded border border-neutral-200 px-3 py-2 text-center text-sm text-neutral-800 transition-opacity hover:opacity-70"
+                  >
+                    {{- part.title -}}
+                  </a>
+                {% else %}
+                  {% if part.title == paginate.current_page %}
+                    <span
+                      class="min-w-[2.5rem] rounded border border-neutral-900 bg-neutral-900 px-3 py-2 text-center text-sm font-medium text-white"
+                      aria-current="page"
+                    >
+                      {{- part.title -}}
+                    </span>
+                  {% else %}
+                    <span class="min-w-[2.5rem] px-2 py-2 text-center text-sm text-neutral-400">{{ part.title }}</span>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if paginate.next %}
+                <a
+                  href="{{ paginate.next.url }}"
+                  class="rounded border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-800 transition-opacity hover:opacity-70"
+                >
+                  {{ 'general.pagination.next' | t }}
+                </a>
+              {% endif %}
+            </nav>
+          {% endif %}
+        {% endif %}
+      {% endpaginate %}
+    </div>
+
+    {% if collection.description != blank %}
+      <div class="rte mt-14 max-w-3xl text-base font-light leading-relaxed text-neutral-600 [&_a]:underline [&_a]:underline-offset-4 md:mt-16">
+        {{ collection.description }}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.collection_catalog.name",
+  "tag": "section",
+  "class": "section-collection-catalog",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "default": 24,
+      "label": "t:sections.collection_catalog.settings.products_per_page.label"
+    }
+  ]
+}
+{% endschema %}

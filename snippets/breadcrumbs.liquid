@@ -1,0 +1,31 @@
+{% comment %}
+  Basit sayfa yolu: Ana sayfa → [isteğe bağlı üst] → mevcut sayfa.
+  Parametreler: current_title (zorunlu), parent_title, parent_url (üst düzey için ikisi birden)
+{% endcomment %}
+<nav class="breadcrumbs mb-6 text-sm font-light text-neutral-500 md:mb-8" aria-label="{{ 'general.breadcrumb.nav_aria' | t }}">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <li>
+      <a
+        href="{{ routes.root_url }}"
+        class="text-neutral-600 underline-offset-4 transition-opacity hover:text-neutral-900 hover:underline"
+      >
+        {{- 'general.breadcrumb.home' | t -}}
+      </a>
+    </li>
+    {% if parent_title != blank and parent_url != blank %}
+      <li aria-hidden="true" class="shrink-0 select-none text-neutral-400">/</li>
+      <li class="min-w-0">
+        <a
+          href="{{ parent_url }}"
+          class="block truncate text-neutral-600 underline-offset-4 transition-opacity hover:text-neutral-900 hover:underline"
+        >
+          {{- parent_title | escape -}}
+        </a>
+      </li>
+    {% endif %}
+    <li aria-hidden="true" class="shrink-0 select-none text-neutral-400">/</li>
+    <li class="min-w-0 truncate font-normal text-neutral-900" aria-current="page">
+      {{- current_title | escape -}}
+    </li>
+  </ol>
+</nav>

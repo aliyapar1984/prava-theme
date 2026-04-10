@@ -1,26 +1,77 @@
 {% liquid
   assign main_menu = linklists['main-menu']
   assign nav_items = shop.metaobjects.navigation_item.values
+  assign header_transparent = false
+  if template.name == 'index'
+    assign header_transparent = true
+  endif
 %}
-<div class="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[120px] bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true"></div>
+{% if header_transparent %}
+  <div class="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[120px] bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true"></div>
+{% endif %}
 
-  <header id="site-header" class="fixed top-0 left-0 right-0 z-[100] flex h-[88px] items-center justify-between px-10" style="--header-pad-x: 40px;" role="banner">
-    <button type="button" id="btn-menu" class="flex items-center gap-3 text-base font-semibold tracking-wide text-white hover:opacity-80 transition-opacity" aria-expanded="false" aria-controls="mega-menu" aria-haspopup="dialog" aria-label="{{ 'header.menu_open' | t }}">
-      <img src="{{ 'icons/menu.svg' | asset_url }}" width="32" height="32" alt="" class="shrink-0" aria-hidden="true">
+  <header
+    id="site-header"
+    class="z-[100] flex h-[88px] shrink-0 items-center justify-between px-10 transition-[background-color,box-shadow] duration-200{% if header_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full border-b border-neutral-200/80 bg-white shadow-sm{% endif %}"
+    style="--header-pad-x: 40px;"
+    role="banner"
+    data-header-theme="{% if header_transparent %}transparent{% else %}solid{% endif %}"
+  >
+    <button
+      type="button"
+      id="btn-menu"
+      class="flex items-center gap-3 text-base font-semibold tracking-wide transition-opacity hover:opacity-80{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}"
+      aria-expanded="false"
+      aria-controls="mega-menu"
+      aria-haspopup="dialog"
+      aria-label="{{ 'header.menu_open' | t }}"
+    >
+      <img
+        src="{{ 'icons/menu.svg' | asset_url }}"
+        width="32"
+        height="32"
+        alt=""
+        class="shrink-0{% unless header_transparent %} brightness-0{% endunless %}"
+        aria-hidden="true"
+      >
       <span aria-hidden="true">{{ 'header.menu_visible' | t }}</span>
     </button>
     <a href="{{ routes.root_url }}" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-label="{{ 'header.home' | t: shop_name: shop.name }}">
-      <img src="{{ 'icons/prava_logo.svg' | asset_url }}" width="120" height="22" alt="{{ shop.name | escape }}" class="h-[22px] w-auto">
+      <img
+        src="{{ 'icons/prava_logo.svg' | asset_url }}"
+        width="120"
+        height="22"
+        alt="{{ shop.name | escape }}"
+        class="h-[22px] w-auto{% unless header_transparent %} brightness-0{% endunless %}"
+      >
     </a>
-    <nav class="flex items-center gap-8 lg:gap-10 text-[15px] font-semibold tracking-wide text-white" aria-label="{{ 'header.utility_nav' | t }}">
-      <a href="{{ routes.search_url }}" class="hidden sm:flex items-center gap-2 hover:opacity-80 transition-opacity font-light border-b border-white/40 py-1" aria-label="{{ 'header.search' | t }}">
-        <img src="{{ 'icons/search.svg' | asset_url }}" width="18" height="17" alt="" aria-hidden="true">
+    <nav class="flex items-center gap-8 text-[15px] font-semibold tracking-wide lg:gap-10{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}" aria-label="{{ 'header.utility_nav' | t }}">
+      <a
+        href="{{ routes.search_url }}"
+        class="hidden items-center gap-2 py-1 font-light transition-opacity hover:opacity-80 sm:flex{% if header_transparent %} border-b border-white/40{% else %} border-b border-neutral-300{% endif %}"
+        aria-label="{{ 'header.search' | t }}"
+      >
+        <img
+          src="{{ 'icons/search.svg' | asset_url }}"
+          width="18"
+          height="17"
+          alt=""
+          class="{% unless header_transparent %}brightness-0{% endunless %}"
+          aria-hidden="true"
+        >
         <span>{{ 'header.search' | t }}</span>
       </a>
-      <a href="{{ routes.account_url }}" class="hidden md:inline hover:opacity-80 transition-opacity font-light">{{ 'header.account' | t }}</a>
-      <a href="{{ routes.cart_url }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity font-light" aria-label="{{ 'header.cart' | t }}">
+      <a href="{{ routes.account_url }}" class="hidden font-light transition-opacity hover:opacity-80 md:inline">{{ 'header.account' | t }}</a>
+      <a href="{{ routes.cart_url }}" class="flex items-center gap-2 font-light transition-opacity hover:opacity-80" aria-label="{{ 'header.cart' | t }}">
         <span>{{ 'header.cart' | t }}</span>
-        <img src="{{ 'icons/basket.svg' | asset_url }}" width="32" height="32" alt="" aria-hidden="true">
+        <img
+          src="{{ 'icons/basket.svg' | asset_url }}"
+          width="32"
+          height="32"
+          alt=""
+          class="{% unless header_transparent %}brightness-0{% endunless %}"
+          aria-hidden="true"
+        >
       </a>
     </nav>
   </header>

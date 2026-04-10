@@ -1,5 +1,13 @@
 {
   "sections": {
+    "collection_catalog": {
+      "name": "Koleksiyon — katalog",
+      "settings": {
+        "products_per_page": {
+          "label": "Sayfa başına ürün"
+        }
+      }
+    },
     "footer": {
       "name": "Altbilgi",
       "blocks": {

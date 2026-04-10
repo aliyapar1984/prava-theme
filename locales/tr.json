@@ -15,7 +15,23 @@
       "page": "Sayfa {{ page }}"
     },
     "pagination": {
-      "slide": "Slayt"
+      "slide": "Slayt",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "nav_aria": "Sayfalama"
+    },
+    "breadcrumb": {
+      "nav_aria": "Sayfa yolu",
+      "home": "Ana sayfa"
+    }
+  },
+  "templates": {
+    "collection": {
+      "category_nav_aria": "Kategorilere göz at",
+      "category_heading": "Kategoriler",
+      "sibling_nav_aria": "Aynı seviyedeki kategoriler",
+      "products_region_aria": "Bu koleksiyondaki ürünler",
+      "empty": "Bu koleksiyonda ürün yok."
     }
   },
   "footer": {
@@ -62,6 +78,9 @@
       "cta_slide1": "Öne çıkan ürünleri keşfet",
       "cta_slide2": "Sezon indirimlerini görüntüle",
       "cta_slide3": "Travel sistem koleksiyonunu keşfet"
+    },
+    "collection_catalog": {
+      "aria_label": "Ürün kataloğu"
     },
     "category_rail": {
       "aria_label": "Ürün kategorileri",
