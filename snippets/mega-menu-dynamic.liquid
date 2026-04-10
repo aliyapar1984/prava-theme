@@ -1,0 +1,166 @@
+{% comment %}
+  Mega menü — main-menu + navigation_item metaobject (menu_uri ↔ link.url).
+
+  Metaobject: navigation_item — örnek alanlar:
+  menu_uri, gorsel, icon_name, aciklama, discover_label, discover_url, cta_label, cta_url
+
+  Parametreler: main_menu, nav_items
+{% endcomment %}
+{% assign mega_cta_default = 'header.mega_default_cta' | t %}
+
+{% if main_menu.links.size > 0 %}
+  <div class="mega-menu__tabs-wrap">
+    <div class="mega-menu__tabs" role="tablist" aria-label="{{ 'header.mega_menu_tabs' | t }}">
+      {% for link in main_menu.links %}
+        {% assign pmeta = false %}
+        {% for entry in nav_items %}
+          {% if entry.menu_uri.value == link.url %}
+            {% assign pmeta = entry %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+        <button
+          type="button"
+          class="mega-menu__tab{% if forloop.first %} is-active{% endif %}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="mega-panel-{{ forloop.index0 }}"
+          data-mega-tab="{{ forloop.index0 }}"
+          id="mega-tab-{{ forloop.index0 }}"
+        >
+          {{ link.title | escape }}
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="mega-menu__panels">
+    {% for link in main_menu.links %}
+      {% assign pmeta = false %}
+      {% for entry in nav_items %}
+        {% if entry.menu_uri.value == link.url %}
+          {% assign pmeta = entry %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+
+      {% liquid
+        if pmeta
+          assign fd = pmeta.discover_label.value | default: link.title
+          assign fh = pmeta.discover_url.value | default: link.url
+          assign fc = pmeta.cta_label.value | default: mega_cta_default
+          assign fch = pmeta.cta_url.value | default: '#'
+          assign panel_visual = pmeta.gorsel.value
+        else
+          assign fd = link.title
+          assign fh = link.url
+          assign fc = mega_cta_default
+          assign fch = '#'
+          assign panel_visual = blank
+        endif
+        if panel_visual == blank and settings.mega_menu_featured_image != blank
+          assign panel_visual = settings.mega_menu_featured_image
+        endif
+      %}
+
+      <div
+        class="mega-menu__panel"
+        role="tabpanel"
+        id="mega-panel-{{ forloop.index0 }}"
+        {% unless forloop.first %}
+          hidden
+        {% endunless %}
+        aria-labelledby="mega-tab-{{ forloop.index0 }}"
+        data-mega-panel="{{ forloop.index0 }}"
+        data-footer-discover="{{ fd | escape }}"
+        data-footer-discover-href="{{ fh | escape }}"
+        data-footer-cta="{{ fc | escape }}"
+        data-footer-cta-href="{{ fch | escape }}"
+      >
+        <div class="mega-menu__panel-grid">
+          <div class="mega-menu__col mega-menu__col--list">
+            {% if link.links.size > 0 %}
+              <ul class="mega-menu__sublist">
+                {% for child in link.links %}
+                  {% assign child_meta = false %}
+                  {% for entry in nav_items %}
+                    {% if entry.menu_uri.value == child.url %}
+                      {% assign child_meta = entry %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+
+                  {% liquid
+                    assign child_gorsel = blank
+                    if child_meta and child_meta.gorsel.value != blank
+                      assign child_gorsel = child_meta.gorsel.value | image_url: width: 1040
+                    endif
+                  %}
+
+                  <li
+                    {% if child_gorsel != blank %}
+                      data-gorsel="{{ child_gorsel | escape }}"
+                    {% endif %}
+                  >
+                    <a
+                      href="{{ child.url }}"
+                      class="mega-menu__subitem{% if forloop.first or child.active %} is-active{% endif %}"
+                      {% if child.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {% if child_meta and child_meta.icon_name.value != blank %}
+                        <span class="mega-menu__subicon" aria-hidden="true">
+                          <img
+                            src="{{ child_meta.icon_name.value | strip | asset_url }}"
+                            alt=""
+                            width="48"
+                            height="48"
+                            loading="lazy"
+                          >
+                        </span>
+                      {% endif %}
+                      <span class="mega-menu__subtext">
+                        <span class="mega-menu__subtitle">{{ child.title | escape }}</span>
+                        {% if child_meta and child_meta.aciklama.value != blank %}
+                          <span class="mega-menu__subdesc">{{ child_meta.aciklama.value }}</span>
+                        {% endif %}
+                      </span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <ul class="mega-menu__sublist">
+                <li>
+                  <a href="{{ link.url }}" class="mega-menu__subitem is-active">
+                    <span class="mega-menu__subtext">
+                      <span class="mega-menu__subtitle">{{ link.title | escape }}</span>
+                      {% if pmeta and pmeta.aciklama.value != blank %}
+                        <span class="mega-menu__subdesc">{{ pmeta.aciklama.value }}</span>
+                      {% endif %}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            {% endif %}
+          </div>
+          <div class="mega-menu__col mega-menu__col--visual">
+            <div class="mega-menu__visual">
+              {% if panel_visual != blank %}
+                <img
+                  src="{{ panel_visual | image_url: width: 1040 }}"
+                  width="520"
+                  height="640"
+                  alt="{{ link.title | escape }}"
+                  class="mega-menu__visual-img"
+                  loading="lazy"
+                >
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

@@ -1,3 +1,7 @@
+{% liquid
+  assign main_menu = linklists['main-menu']
+  assign nav_items = shop.metaobjects.navigation_item.values
+%}
 <div class="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[120px] bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true"></div>
 
   <header id="site-header" class="fixed top-0 left-0 right-0 z-[100] flex h-[88px] items-center justify-between px-10" style="--header-pad-x: 40px;" role="banner">
@@ -32,75 +36,13 @@
           <img src="{{ 'icons/prava_logo.svg' | asset_url }}" width="120" height="22" alt="{{ shop.name | escape }}" class="h-[22px] w-auto invert">
         </div>
       </div>
-      <div class="mega-menu__tabs-wrap">
-        <div class="mega-menu__tabs" role="tablist" aria-label="{{ 'header.mega_menu_tabs' | t }}">
-          <button type="button" class="mega-menu__tab is-active" role="tab" aria-selected="true" aria-controls="mega-panel-0" data-mega-tab="0" id="mega-tab-0">Bebek Arabaları</button>
-          <button type="button" class="mega-menu__tab" role="tab" aria-selected="false" aria-controls="mega-panel-1" data-mega-tab="1" id="mega-tab-1">Pusetler</button>
-          <button type="button" class="mega-menu__tab" role="tab" aria-selected="false" aria-controls="mega-panel-2" data-mega-tab="2" id="mega-tab-2">Kapsüller</button>
-          <button type="button" class="mega-menu__tab" role="tab" aria-selected="false" aria-controls="mega-panel-3" data-mega-tab="3" id="mega-tab-3">Aksesuarlar</button>
-          <button type="button" class="mega-menu__tab" role="tab" aria-selected="false" aria-controls="mega-panel-4" data-mega-tab="4" id="mega-tab-4">Yedek Parça</button>
+      {% comment %} main-menu (Gezinme) + navigation_item metaobject — snippets/mega-menu-dynamic.liquid {% endcomment %}
+      {% render 'mega-menu-dynamic', main_menu: main_menu, nav_items: nav_items %}
+      {% if main_menu.links.size > 0 %}
+        <div class="mega-menu__footer">
+          <a href="{{ main_menu.links.first.url }}" class="mega-menu__footer-link" id="mega-footer-discover">{{ main_menu.links.first.title | escape }}</a>
+          <a href="#" class="mega-menu__footer-cta" id="mega-footer-cta">{{ 'header.mega_default_cta' | t }}</a>
         </div>
-      </div>
-      <div class="mega-menu__panels">
-        <div class="mega-menu__panel" role="tabpanel" id="mega-panel-0" aria-labelledby="mega-tab-0" data-mega-panel="0" data-footer-discover="Bebek Arabalarını Keşfet" data-footer-discover-href="#" data-footer-cta="Tüm Ürünler" data-footer-cta-href="#">
-          <div class="mega-menu__panel-grid">
-            <div class="mega-menu__col mega-menu__col--list">
-              <ul class="mega-menu__sublist">
-                <li><a href="#" class="mega-menu__subitem is-active"><span class="mega-menu__subicon" aria-hidden="true"><img src="{{ 'icons/menu1.svg' | asset_url }}" alt="" width="48" height="48" loading="lazy"></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Travel Sistem Bebek Arabaları</span><span class="mega-menu__subdesc">Puset ve ana kucağını bir arada sunan pratik çözümlerdir.</span></span></a></li>
-                <li><a href="#" class="mega-menu__subitem"><span class="mega-menu__subicon" aria-hidden="true"><img src="{{ 'icons/menu2.svg' | asset_url }}" alt="" width="48" height="48" loading="lazy"></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Çift Yönlü Bebek Arabaları</span><span class="mega-menu__subdesc">Çift yönlü kullanım sayesinde esnek ve konforlu sürüş sağlar.</span></span></a></li>
-                <li><a href="#" class="mega-menu__subitem"><span class="mega-menu__subicon" aria-hidden="true"><img src="{{ 'icons/menu3.svg' | asset_url }}" alt="" width="48" height="48" loading="lazy"></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Baston Bebek Arabası</span><span class="mega-menu__subdesc">Hafif ve kolay katlanabilir yapısıyla günlük kullanım için ideal.</span></span></a></li>
-              </ul>
-            </div>
-            <div class="mega-menu__col mega-menu__col--visual"><div class="mega-menu__visual">{% if settings.mega_menu_featured_image != blank %}<img src="{{ settings.mega_menu_featured_image | image_url: width: 1040 }}" width="520" height="640" alt="{{ 'header.mega_feature_alt' | t }}" class="mega-menu__visual-img" loading="lazy">{% endif %}</div></div>
-          </div>
-        </div>
-        <div class="mega-menu__panel" role="tabpanel" id="mega-panel-1" hidden aria-labelledby="mega-tab-1" data-mega-panel="1" data-footer-discover="Pusetleri Keşfet" data-footer-discover-href="#" data-footer-cta="Tüm Ürünler" data-footer-cta-href="#">
-          <div class="mega-menu__panel-grid">
-            <div class="mega-menu__col mega-menu__col--list">
-              <ul class="mega-menu__sublist">
-                <li><a href="#" class="mega-menu__subitem is-active"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M14 34V20h20v14M12 38h24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M18 20V14h12v6" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Travel Puset</span><span class="mega-menu__subdesc">Ana kucağı ile uyumlu, hafif taşıma çözümleri.</span></span></a></li>
-                <li><a href="#" class="mega-menu__subitem"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect x="14" y="16" width="20" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M12 38h24M20 16v-4h8v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Baston Puset</span><span class="mega-menu__subdesc">Tek elle katlanır, kompakt şehir kullanımı.</span></span></a></li>
-              </ul>
-            </div>
-            <div class="mega-menu__col mega-menu__col--visual"><div class="mega-menu__visual">{% if settings.mega_menu_featured_image != blank %}<img src="{{ settings.mega_menu_featured_image | image_url: width: 1040 }}" width="520" height="640" alt="{{ 'header.mega_feature_alt' | t }}" class="mega-menu__visual-img" loading="lazy">{% endif %}</div></div>
-          </div>
-        </div>
-        <div class="mega-menu__panel" role="tabpanel" id="mega-panel-2" hidden aria-labelledby="mega-tab-2" data-mega-panel="2" data-footer-discover="Kapsülleri Keşfet" data-footer-discover-href="#" data-footer-cta="Tüm Ürünler" data-footer-cta-href="#">
-          <div class="mega-menu__panel-grid">
-            <div class="mega-menu__col mega-menu__col--list">
-              <ul class="mega-menu__sublist">
-                <li><a href="#" class="mega-menu__subitem is-active"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><ellipse cx="24" cy="26" rx="14" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M16 18h16M20 14h8v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Grup 0+ Kapsül</span><span class="mega-menu__subdesc">Yenidoğan güvenliği için ergonomik taşıma.</span></span></a></li>
-                <li><a href="#" class="mega-menu__subitem"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect x="12" y="18" width="24" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M18 38h12M24 18v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">İsofix Baza</span><span class="mega-menu__subdesc">Araç içi güvenli ve hızlı montaj.</span></span></a></li>
-              </ul>
-            </div>
-            <div class="mega-menu__col mega-menu__col--visual"><div class="mega-menu__visual">{% if settings.mega_menu_featured_image != blank %}<img src="{{ settings.mega_menu_featured_image | image_url: width: 1040 }}" width="520" height="640" alt="{{ 'header.mega_feature_alt' | t }}" class="mega-menu__visual-img" loading="lazy">{% endif %}</div></div>
-          </div>
-        </div>
-        <div class="mega-menu__panel" role="tabpanel" id="mega-panel-3" hidden aria-labelledby="mega-tab-3" data-mega-panel="3" data-footer-discover="Aksesuarları Keşfet" data-footer-discover-href="#" data-footer-cta="Tüm Ürünler" data-footer-cta-href="#">
-          <div class="mega-menu__panel-grid">
-            <div class="mega-menu__col mega-menu__col--list">
-              <ul class="mega-menu__sublist">
-                <li><a href="#" class="mega-menu__subitem is-active"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="24" cy="22" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M16 38h16M24 30v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Tekerlek ve Gövde</span><span class="mega-menu__subdesc">Bakım ve kişiselleştirme parçaları.</span></span></a></li>
-                <li><a href="#" class="mega-menu__subitem"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M14 20h20v14H14V20z" stroke="currentColor" stroke-width="1.5"/><path d="M18 20V16h12v4" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Mosquito ve Yağmurluk</span><span class="mega-menu__subdesc">Hava koşullarına karşı koruma.</span></span></a></li>
-              </ul>
-            </div>
-            <div class="mega-menu__col mega-menu__col--visual"><div class="mega-menu__visual">{% if settings.mega_menu_featured_image != blank %}<img src="{{ settings.mega_menu_featured_image | image_url: width: 1040 }}" width="520" height="640" alt="{{ 'header.mega_feature_alt' | t }}" class="mega-menu__visual-img" loading="lazy">{% endif %}</div></div>
-          </div>
-        </div>
-        <div class="mega-menu__panel" role="tabpanel" id="mega-panel-4" hidden aria-labelledby="mega-tab-4" data-mega-panel="4" data-footer-discover="Yedek Parça Keşfet" data-footer-discover-href="#" data-footer-cta="Tüm Ürünler" data-footer-cta-href="#">
-          <div class="mega-menu__panel-grid">
-            <div class="mega-menu__col mega-menu__col--list">
-              <ul class="mega-menu__sublist">
-                <li><a href="#" class="mega-menu__subitem is-active"><span class="mega-menu__subicon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M24 12v8M20 16h8M18 28h12v8H18v-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="mega-menu__subtext"><span class="mega-menu__subtitle">Orijinal Yedek Parça</span><span class="mega-menu__subdesc">Üretici onaylı parçalar ve aksamlar.</span></span></a></li>
-              </ul>
-            </div>
-            <div class="mega-menu__col mega-menu__col--visual"><div class="mega-menu__visual">{% if settings.mega_menu_featured_image != blank %}<img src="{{ settings.mega_menu_featured_image | image_url: width: 1040 }}" width="520" height="640" alt="{{ 'header.mega_feature_alt' | t }}" class="mega-menu__visual-img" loading="lazy">{% endif %}</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="mega-menu__footer">
-        <a href="#" class="mega-menu__footer-link" id="mega-footer-discover">Bebek Arabalarını Keşfet</a>
-        <a href="#" class="mega-menu__footer-cta" id="mega-footer-cta">Tüm Ürünler</a>
-      </div>
+      {% endif %}
     </div>
   </div>
