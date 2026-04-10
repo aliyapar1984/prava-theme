@@ -3,18 +3,6 @@
     "footer": {
       "name": "Footer",
       "blocks": {
-        "link_list": {
-          "name": "Menu",
-          "settings": {
-            "heading": {
-              "label": "Heading",
-              "info": "If empty, the menu title from Navigation is used."
-            },
-            "menu": {
-              "label": "Menu"
-            }
-          }
-        },
         "text": {
           "name": "Text",
           "settings": {

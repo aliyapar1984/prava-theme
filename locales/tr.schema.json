@@ -3,18 +3,6 @@
     "footer": {
       "name": "Altbilgi",
       "blocks": {
-        "link_list": {
-          "name": "Menü",
-          "settings": {
-            "heading": {
-              "label": "Başlık",
-              "info": "Boş bırakırsanız Gezinme’deki menü adı kullanılır."
-            },
-            "menu": {
-              "label": "Menü"
-            }
-          }
-        },
         "text": {
           "name": "Metin",
           "settings": {

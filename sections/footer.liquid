@@ -5,6 +5,8 @@
     assign newsletter_heading = 'footer.newsletter_heading' | t
   endif
 %}
+{% assign footer_menu = linklists['footer'] %}
+{% assign footer_bottom_menu = linklists['footer-bottom-menu'] %}
 <footer
   class="site-footer mt-auto bg-[#F5F5F0] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]"
   role="contentinfo"
@@ -12,11 +14,11 @@
   style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %} background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}');{% endif %}"
 >
   <div class="mx-auto px-20 pb-6 pt-20">
-    <div class="grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+    <div class="grid grid-cols-1 gap-14 md:grid-cols-2 xl:grid-cols-4">
       {% if section.settings.newsletter_enable or section.settings.show_social %}
         <div class="site-footer__col site-footer__col--news max-w-[300px]">
           {% if section.settings.newsletter_enable %}
-            <h2 class="text-lg font-bold uppercase text-[#333333]">{{ newsletter_heading }}</h2>
+            <h3 class="text-lg font-bold uppercase text-[#333333]">{{ newsletter_heading }}</h3>
             {% form 'customer', class: 'mt-6' %}
               <input type="hidden" name="contact[tags]" value="newsletter">
               <label class="sr-only" for="footer-newsletter-email-{{ section.id }}">{{ 'footer.newsletter_email_label' | t }}</label>
@@ -40,7 +42,7 @@
             </p>
           {% endif %}
           {% if section.settings.show_social %}
-            <ul class="mt-10 flex flex-wrap items-center gap-6 {% unless section.settings.newsletter_enable %}mt-0{% endunless %}" aria-label="{{ 'footer.social_aria' | t }}">
+            <ul class="mt-10 flex flex-wrap items-center gap-6" aria-label="{{ 'footer.social_aria' | t }}">
               <li>
                 <a href="#" class="text-[#333333] transition-opacity hover:opacity-70" aria-label="{{ 'footer.social_facebook' | t }}">
                   <img src="{{ 'icons/facebook.svg' | asset_url }}" width="20" height="20" alt="" class="h-5 w-5" loading="lazy">
@@ -67,33 +69,40 @@
         </div>
       {% endif %}
 
+      {%- if footer_menu.links.size > 0 -%}
+        {% for link in footer_menu.links %}
+          <nav class="site-footer__col px-10" aria-label="{{ link.title | escape }}">
+            {% if link.links.size > 0 %}
+              <h3 class="text-lg font-bold uppercase text-[#333333]">{{ link.title | escape }}</h3>
+              <ul class="mt-6 space-y-3 text-base font-normal text-[#333333]">
+                {% for child_link in link.links %}
+                  <li>
+                    <a
+                      href="{{ child_link.url }}"
+                      class="transition-opacity hover:opacity-70{% if child_link.active %} font-medium{% endif %}"
+                      {% if child_link.current %}aria-current="page"{% endif %}
+                    >
+                      {{- child_link.title | escape -}}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% elsif link.url != blank %}
+              <h3 class="text-lg font-bold uppercase text-[#333333]">
+                <a href="{{ link.url }}" class="transition-opacity hover:opacity-70{% if link.active %} font-medium{% endif %}">{{ link.title | escape }}</a>
+              </h3>
+            {% else %}
+              <h3 class="text-lg font-bold uppercase text-[#333333]">{{ link.title | escape }}</h3>
+            {% endif %}
+          </nav>
+        {% endfor %}
+      {%- endif -%}
+
       {%- for block in section.blocks -%}
         <div class="site-footer__col {% unless block.type == '@app' %}px-10{% endunless %}" {{ block.shopify_attributes }}>
           {%- case block.type -%}
             {%- when '@app' -%}
               {% render block %}
-            {%- when 'link_list' -%}
-              {%- if block.settings.menu != blank -%}
-                {%- assign menu_obj = block.settings.menu -%}
-                {%- if menu_obj.links.size > 0 -%}
-                  <nav aria-label="{{ menu_obj.title | escape }}">
-                    <h3 class="text-lg font-bold uppercase text-[#333333]">
-                      {%- if block.settings.heading != blank -%}
-                        {{- block.settings.heading -}}
-                      {%- else -%}
-                        {{ menu_obj.title | escape }}
-                      {%- endif -%}
-                    </h3>
-                    <ul class="mt-6 space-y-3 text-base font-normal text-[#333333]">
-                      {%- for link in menu_obj.links -%}
-                        <li>
-                          <a href="{{ link.url }}" class="transition-opacity hover:opacity-70{% if link.active %} font-medium{% endif %}">{{ link.title | escape }}</a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </nav>
-                {%- endif -%}
-              {%- endif -%}
             {%- when 'text' -%}
               {%- if block.settings.heading != blank -%}
                 <h3 class="text-lg font-bold uppercase text-[#333333]">{{ block.settings.heading }}</h3>
@@ -130,13 +139,23 @@
 
     <div class="site-footer__legal mt-4 flex flex-col gap-6 border-t border-[#333333]/18 pt-8 md:mt-6 md:flex-row md:items-center md:justify-between md:gap-8">
       <p class="text-xs text-[#333333]/85 md:text-sm"><b>{{ 'footer.copyright' | t: year: footer_year, shop_name: shop.name }}</b></p>
-      <nav aria-label="{{ 'footer.legal_nav_aria' | t }}">
-        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
-          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_information_society' | t }}</a></li>
-          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_cookies' | t }}</a></li>
-          <li><a href="#" class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70">{{ 'footer.legal_kvkk' | t }}</a></li>
-        </ul>
-      </nav>
+      {%- if footer_bottom_menu.links.size > 0 -%}
+        <nav aria-label="{{ footer_bottom_menu.title | escape }}">
+          <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
+            {% for link in footer_bottom_menu.links %}
+              <li>
+                <a
+                  href="{{ link.url }}"
+                  class="text-[#333333] decoration-[#333333]/35 underline-offset-4 transition-opacity hover:opacity-70{% if link.active %} font-medium{% endif %}"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{- link.title | escape -}}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {%- endif -%}
     </div>
   </div>
 </footer>
@@ -153,23 +172,6 @@
   "blocks": [
     {
       "type": "@app"
-    },
-    {
-      "type": "link_list",
-      "name": "t:sections.footer.blocks.link_list.name",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "heading",
-          "label": "t:sections.footer.blocks.link_list.settings.heading.label",
-          "info": "t:sections.footer.blocks.link_list.settings.heading.info"
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "label": "t:sections.footer.blocks.link_list.settings.menu.label"
-        }
-      ]
     },
     {
       "type": "text",
@@ -219,23 +221,7 @@
       "newsletter_enable": true,
       "show_social": true,
       "tagline_year": "1983"
-    },
-    "blocks": [
-      {
-        "type": "link_list",
-        "settings": {
-          "heading": "Quick links",
-          "menu": "footer"
-        }
-      },
-      {
-        "type": "link_list",
-        "settings": {
-          "heading": "Info",
-          "menu": "footer"
-        }
-      }
-    ]
+    }
   }
 }
 {% endschema %}

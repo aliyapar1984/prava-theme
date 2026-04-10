@@ -12,19 +12,6 @@
     "landing_hero": {
       "type": "landing-hero",
       "blocks": {
-        "hero_slide_1": {
-          "type": "slide",
-          "settings": {
-            "title": "Rahatlıkla Büyüyen Mutlu Adımlar.",
-            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı.",
-            "slide_media": "yeni-sezon-video",
-            "slide_buttons": [],
-            "theme": "dark",
-            "class_name": "",
-            "vertical_position": "items-center",
-            "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
-          }
-        },
         "hero_slide_2": {
           "type": "slide",
           "settings": {
@@ -37,11 +24,24 @@
             "vertical_position": "items-center",
             "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
           }
+        },
+        "hero_slide_1": {
+          "type": "slide",
+          "settings": {
+            "title": "Rahatlıkla Büyüyen Mutlu Adımlar.",
+            "subtitle": "Her yolculukta, hem sizin hem bebeğinizin mutluluğu için tasarlandı.",
+            "slide_media": "yeni-sezon-video",
+            "slide_buttons": [],
+            "theme": "dark",
+            "class_name": "",
+            "vertical_position": "items-center",
+            "horizontal_position": "justify-start text-left|ml-0 mr-auto|"
+          }
         }
       },
       "block_order": [
-        "hero_slide_1",
-        "hero_slide_2"
+        "hero_slide_2",
+        "hero_slide_1"
       ],
       "settings": {}
     },
