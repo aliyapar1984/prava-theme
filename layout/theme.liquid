@@ -26,8 +26,24 @@
   {% endif %}
   {{ content_for_header }}
 
+  {% comment %}
+    Sepete ekle (AJAX): assets/product-detail.js ve benzeri formlar routes.cart_add_url ile fetch yapar (Dawn ile aynı desen).
+  {% endcomment %}
+  <script>
+    window.routes = {
+      cart_add_url: {{ routes.cart_add_url | json }},
+      cart_url: {{ routes.cart_url | json }}
+    };
+    window.PRAVA_I18N = window.PRAVA_I18N || {};
+    window.PRAVA_I18N.cart_add_error = {{ 'products.cart_add_error' | t | json }};
+    window.PRAVA_I18N.cart_add_network = {{ 'products.cart_add_network' | t | json }};
+    window.PravaCartSections = 'prava-cart-drawer,prava-cart-bubble';
+  </script>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   {{ 'css/style.css' | asset_url | stylesheet_tag }}
+  {{ 'prava-cart-drawer.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'prava-cart-drawer.js' | asset_url }}" defer="defer"></script>
 
   <script>
     (function (d) {
@@ -52,6 +68,7 @@
   </a>
 
   {% render 'site-header' %}
+  {% section 'prava-cart-drawer' %}
 
   <main id="MainContent" class="flex-1 w-full" tabindex="-1">
     {{ content_for_layout }}
@@ -64,7 +81,8 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/SplitText.min.js" defer></script>
   <script defer>
-    window.PRAVA_I18N = { slide_aria: {{ 'general.pagination.slide' | t | default: 'Slayt' | json }} };
+    window.PRAVA_I18N = window.PRAVA_I18N || {};
+    window.PRAVA_I18N.slide_aria = {{ 'general.pagination.slide' | t | default: 'Slayt' | json }};
   </script>
   <script src="{{ 'js/main.js' | asset_url }}" defer></script>
   <script src="{{ 'js/intro-karaoke.js' | asset_url }}" defer></script>

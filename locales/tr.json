@@ -38,7 +38,9 @@
     "variant_label": "Varyant seçin",
     "specs_heading": "Teknik özellikler",
     "view_360": "360° Görünüm",
-    "view_360_help": "Modeli fare veya dokunuşla döndürebilirsiniz."
+    "view_360_help": "Modeli fare veya dokunuşla döndürebilirsiniz.",
+    "cart_add_error": "Ürün sepete eklenemedi. Sayfayı yenileyip tekrar deneyin.",
+    "cart_add_network": "Bağlantı hatası. İnternetinizi kontrol edip tekrar deneyin."
   },
   "templates": {
     "collection": {
@@ -76,6 +78,7 @@
     "home": "Anasayfa — {{ shop_name }}",
     "search": "Ara",
     "cart": "Sepet",
+    "cart_count": "Sepet, {{ count }} ürün",
     "account": "Hesabım",
     "mega_menu_label": "Ana site menüsü",
     "mega_menu_tabs": "Ürün kategorileri",
@@ -130,6 +133,17 @@
     "product_detail": {
       "aria_label": "Ürün detayı",
       "support_region": "Ürün destek soruları"
+    },
+    "mini_cart": {
+      "title": "Sepetim",
+      "empty": "Sepetiniz boş",
+      "continue_shopping": "Alışverişe devam et",
+      "subtotal": "Ara toplam",
+      "view_cart": "Sepete git",
+      "checkout": "Ödemeye geç",
+      "remove": "Kaldır",
+      "close": "Kapat",
+      "line_quantity": "Adet: {{ count }}"
     },
     "footer": {
       "name": "Altbilgi",

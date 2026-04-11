@@ -1,12 +1,11 @@
 /**
  * PRAVA ürün detay (PDP) — sections/main-product-detail.liquid ile eşleşir.
  *
- * Bağlantı noktaları:
- * - [data-prava-pdp] ve data-section-id: bu bölümün kökü; aynı id ProductJson-*, PdpVariantMeta-* script’leriyle eşlenir.
- * - Varyant <select> (çoklu varyantta): değişince fiyat, taksit gizli input, ana görsel, swatch aria-pressed güncellenir.
- * - Küçük resim düğmeleri: ana görseli değiştirir (sayfa yenilenmez).
+ * 1) Varyant UI: fiyat, taksit gizli input, ana görsel, swatch (Dawn’daki product-info.js’e benzer ama hafif).
+ * 2) Sepete ekle: Dawn’daki product-form.js gibi form gönderimini yakalayıp fetch + FormData ile
+ *    routes.cart_add_url’e POST (klasik tam sayfa POST yerine; vitrin / Ajax Cart API ile uyumlu).
  *
- * Tek varyantlı ürünlerde select yoktur; bu dosya erken çıkış yapmaz, sadece thumb dinleyicileri çalışır.
+ * window.routes: layout/theme.liquid içinde tanımlanır (cart_add_url, cart_url).
  */
 (function () {
   'use strict';
@@ -86,6 +85,16 @@
   function updatePriceAndUi(variantId) {
     var meta = variantMeta[String(variantId)];
     var variant = findVariant(variantId);
+
+    if (!meta && variant && submitBtn) {
+      submitBtn.disabled = !variant.available;
+      var addL = submitBtn.getAttribute('data-label-add') || 'Sepete ekle';
+      var soldL = submitBtn.getAttribute('data-label-sold') || 'Tükendi';
+      submitBtn.textContent = variant.available ? addL : soldL;
+      if (variant) updateMainImageFromVariant(variant);
+      return;
+    }
+
     if (!meta) return;
 
     var p = priceWrap ? priceWrap.querySelector('p') : null;
@@ -157,5 +166,92 @@
       var mid = btn.getAttribute('data-media-id');
       if (mid) setThumbActive(mid);
     });
+  });
+
+  /**
+   * Dawn product-form.js ile aynı fikir: formu Ajax ile /cart/add’a gönder, JSON yanıtı işle.
+   * FormData kullanıldığında Content-Type header’ını set etme (boundary için tarayıcıya bırak).
+   */
+  function bindAjaxAddToCart(form) {
+    if (!form || form.getAttribute('data-prava-ajax-cart') === 'bound') return;
+    form.setAttribute('data-prava-ajax-cart', 'bound');
+
+    var btn = form.querySelector('button[type="submit"][name="add"]');
+
+    form.addEventListener('submit', function (evt) {
+      var routes = window.routes;
+      if (!routes || !routes.cart_add_url) {
+        return;
+      }
+
+      evt.preventDefault();
+
+      if (btn && btn.disabled) return;
+
+      var fd = new FormData(form);
+      if (typeof window.PravaCartSections === 'string' && window.PravaCartSections.length) {
+        fd.append('sections', window.PravaCartSections);
+        try {
+          fd.append('sections_url', window.location.pathname);
+        } catch (e2) {}
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-70');
+      }
+
+      fetch(routes.cart_add_url, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          Accept: 'application/json, application/javascript, text/javascript, */*',
+        },
+        body: fd,
+      })
+        .then(function (res) {
+          return res.json().catch(function () {
+            return {};
+          });
+        })
+        .then(function (data) {
+          if (data && data.status) {
+            var msg =
+              (data.description && String(data.description)) ||
+              (data.message && String(data.message)) ||
+              (window.PRAVA_I18N && window.PRAVA_I18N.cart_add_error) ||
+              'Error';
+            window.alert(msg);
+            return;
+          }
+          var drawer = document.querySelector('cart-drawer');
+          if (data && data.sections && drawer && typeof drawer.renderContents === 'function') {
+            drawer.renderContents(data);
+            return;
+          }
+          if (routes.cart_url) {
+            window.location.href = routes.cart_url;
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch(function () {
+          var net =
+            (window.PRAVA_I18N && window.PRAVA_I18N.cart_add_network) || 'Network error';
+          window.alert(net);
+        })
+        .finally(function () {
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-70');
+          }
+        });
+    });
+  }
+
+  var mainForm = document.getElementById('ProductForm-' + sectionId);
+  bindAjaxAddToCart(mainForm);
+
+  root.querySelectorAll('.prava-pdp-related-card form').forEach(function (f) {
+    bindAjaxAddToCart(f);
   });
 })();

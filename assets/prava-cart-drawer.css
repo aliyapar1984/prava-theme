@@ -1,0 +1,30 @@
+/* Mini sepet çekmece — cart-drawer.active ile görünür */
+body.prava-mini-cart-open {
+  overflow: hidden;
+}
+
+.prava-mini-cart-drawer {
+  pointer-events: none;
+}
+
+.prava-mini-cart-drawer.active {
+  pointer-events: auto;
+}
+
+.prava-mini-cart-drawer__overlay {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.prava-mini-cart-drawer.active .prava-mini-cart-drawer__overlay {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.prava-mini-cart-drawer__panel {
+  transform: translateX(100%);
+}
+
+.prava-mini-cart-drawer.active .prava-mini-cart-drawer__panel {
+  transform: translateX(0);
+}

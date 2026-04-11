@@ -8,7 +8,8 @@
 
   JS eşlemesi (assets/product-detail.js):
   - [data-prava-pdp] kök; data-section-id ile ProductJson / PdpVariantMeta script id’leri eşleşir.
-  - Sepete ekle: ana form (product_form_id). Taksit: ayrı küçük form — varyant id’si JS ile senkronlanır.
+  - Sepete ekle: ana form (product_form_id) — gönderim Dawn’daki gibi fetch + FormData ile window.routes.cart_add_url (layout’ta tanımlı).
+  - Taksit: ayrı küçük form — varyant id’si JS ile senkronlanır (Ajax sepete dahil değil).
 {% endcomment %}
 {% liquid
   # Seçili varyant + öne çıkan medya (yoksa ürünün varsayılan görseli)

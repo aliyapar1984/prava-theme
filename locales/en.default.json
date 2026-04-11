@@ -38,7 +38,9 @@
     "variant_label": "Choose a variant",
     "specs_heading": "Specifications",
     "view_360": "360° view",
-    "view_360_help": "Drag to rotate the model."
+    "view_360_help": "Drag to rotate the model.",
+    "cart_add_error": "Could not add to cart. Refresh the page and try again.",
+    "cart_add_network": "Network error. Check your connection and try again."
   },
   "templates": {
     "collection": {
@@ -76,6 +78,7 @@
     "home": "Home — {{ shop_name }}",
     "search": "Search",
     "cart": "Shopping cart",
+    "cart_count": "Cart, {{ count }} items",
     "account": "My account",
     "mega_menu_label": "Main navigation dialog",
     "mega_menu_tabs": "Product categories",
@@ -130,6 +133,17 @@
     "product_detail": {
       "aria_label": "Product detail",
       "support_region": "Product support questions"
+    },
+    "mini_cart": {
+      "title": "Your cart",
+      "empty": "Your cart is empty",
+      "continue_shopping": "Continue shopping",
+      "subtotal": "Subtotal",
+      "view_cart": "View cart",
+      "checkout": "Checkout",
+      "remove": "Remove",
+      "close": "Close",
+      "line_quantity": "Qty: {{ count }}"
     },
     "footer": {
       "name": "Footer",

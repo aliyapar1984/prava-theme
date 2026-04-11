@@ -62,16 +62,13 @@
         <span>{{ 'header.search' | t }}</span>
       </a>
       <a href="{{ routes.account_url }}" class="hidden font-light transition-opacity hover:opacity-80 md:inline">{{ 'header.account' | t }}</a>
-      <a href="{{ routes.cart_url }}" class="flex items-center gap-2 font-light transition-opacity hover:opacity-80" aria-label="{{ 'header.cart' | t }}">
-        <span>{{ 'header.cart' | t }}</span>
-        <img
-          src="{{ 'icons/basket.svg' | asset_url }}"
-          width="32"
-          height="32"
-          alt=""
-          class="{% unless header_transparent %}brightness-0{% endunless %}"
-          aria-hidden="true"
-        >
+      <a
+        href="{{ routes.cart_url }}"
+        id="cart-icon-bubble"
+        class="flex items-center gap-2 font-light transition-opacity hover:opacity-80{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}"
+        aria-label="{{ 'header.cart' | t }}"
+      >
+        {% render 'prava-cart-icon-inner', transparent_header: header_transparent %}
       </a>
     </nav>
   </header>

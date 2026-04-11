@@ -1,0 +1,117 @@
+{% comment %}
+  Mini sepet çekmecesi — Dawn’daki cart-drawer + Cart API sections yanıtı ile güncellenir.
+  CSS/JS: layout/theme.liquid (defer sırası: önce prava-cart-drawer.js, sonra ürün sayfası script’leri).
+{% endcomment %}
+
+<cart-drawer class="prava-mini-cart-drawer pointer-events-none fixed inset-0 z-[220]" data-prava-mini-cart>
+  <div
+    id="CartDrawer-Overlay"
+    class="prava-mini-cart-drawer__overlay fixed inset-0 z-0 bg-black/40 transition-opacity duration-300"
+    aria-hidden="true"
+    onclick="var d=this.closest('cart-drawer'); if(d&&d.close)d.close();"
+  ></div>
+
+  <div
+    id="CartDrawer"
+    class="prava-mini-cart-drawer__panel fixed right-0 top-0 z-[1] flex h-full w-full max-w-md flex-col bg-[#f5f5f3] text-neutral-900 shadow-2xl transition-transform duration-300 ease-out"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'sections.mini_cart.title' | t }}"
+    tabindex="-1"
+  >
+    <div class="flex items-center justify-between border-b border-neutral-200/90 px-6 py-4">
+      <h2 class="m-0 text-lg font-semibold tracking-tight md:text-xl">{{ 'sections.mini_cart.title' | t }}</h2>
+      <button
+        type="button"
+        class="prava-mini-cart-drawer__close flex h-10 w-10 items-center justify-center rounded-md text-2xl leading-none text-neutral-600 transition-colors hover:bg-neutral-200/80 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800"
+        onclick="this.closest('cart-drawer').close()"
+        aria-label="{{ 'sections.mini_cart.close' | t }}"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    {% if cart == empty %}
+      <div class="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-12 text-center">
+        <p class="m-0 text-base text-neutral-600">{{ 'sections.mini_cart.empty' | t }}</p>
+        <a
+          href="{{ routes.all_products_collection_url }}"
+          class="inline-flex items-center justify-center border border-neutral-800 bg-neutral-800 px-6 py-3 text-sm font-medium uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+        >
+          {{ 'sections.mini_cart.continue_shopping' | t }}
+        </a>
+      </div>
+    {% else %}
+      <ul class="m-0 flex flex-1 list-none flex-col gap-0 overflow-y-auto overscroll-contain px-0 py-2" role="list">
+        {% for item in cart.items %}
+          <li class="border-b border-neutral-200/80 px-6 py-4" role="listitem">
+            <div class="flex gap-4">
+              {% if item.image != blank %}
+                <a href="{{ item.url }}" class="relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-white" tabindex="-1">
+                  <img
+                    src="{{ item.image | image_url: width: 240 }}"
+                    alt="{{ item.image.alt | default: item.title | escape }}"
+                    width="80"
+                    height="80"
+                    class="h-full w-full object-contain"
+                    loading="lazy"
+                  >
+                </a>
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                <a href="{{ item.url }}" class="text-sm font-medium text-neutral-900 no-underline hover:underline">
+                  {{- item.product.title | escape -}}
+                </a>
+                {% unless item.product.has_only_default_variant %}
+                  <p class="mt-1 text-xs text-neutral-600">{{ item.variant.title | escape }}</p>
+                {% endunless %}
+                <p class="mt-2 text-xs text-neutral-500">
+                  {{ 'sections.mini_cart.line_quantity' | t: count: item.quantity }}
+                </p>
+                <div class="mt-2 flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-sm font-semibold text-neutral-900">{{ item.final_line_price | money }}</span>
+                  <a
+                    href="{{ item.url_to_remove }}"
+                    class="text-xs font-medium text-neutral-500 underline underline-offset-2 hover:text-neutral-800"
+                  >
+                    {{ 'sections.mini_cart.remove' | t }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="border-t border-neutral-200/90 bg-[#eeedeb] px-6 py-5">
+        <div class="flex items-center justify-between gap-4">
+          <span class="text-sm font-medium text-neutral-800">{{ 'sections.mini_cart.subtotal' | t }}</span>
+          <span class="text-lg font-semibold text-neutral-900">{{ cart.total_price | money }}</span>
+        </div>
+        <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+          <a
+            href="{{ routes.cart_url }}"
+            class="flex flex-1 items-center justify-center border border-neutral-300 bg-white px-4 py-3 text-center text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100"
+          >
+            {{ 'sections.mini_cart.view_cart' | t }}
+          </a>
+          <a
+            href="/checkout"
+            class="flex flex-1 items-center justify-center border border-neutral-800 bg-neutral-800 px-4 py-3 text-center text-sm font-medium uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+          >
+            {{ 'sections.mini_cart.checkout' | t }}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Mini sepet çekmecesi",
+  "tag": "aside",
+  "class": "prava-cart-drawer-section",
+  "settings": []
+}
+{% endschema %}

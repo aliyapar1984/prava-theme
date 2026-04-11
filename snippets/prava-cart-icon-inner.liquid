@@ -1,0 +1,38 @@
+{% comment %}
+  Sepet ikonu + adet rozeti — header ve prava-cart-bubble section’da aynı içerik (AJAX sonrası güncellenir).
+  @param transparent_header {Boolean} üst şeffaf header (ana sayfa) için ikon rengi
+{% endcomment %}
+{% liquid
+  assign th = transparent_header | default: false
+%}
+<span class="relative inline-flex items-center">
+  <img
+    src="{{ 'icons/basket.svg' | asset_url }}"
+    width="32"
+    height="32"
+    alt=""
+    class="prava-cart-bubble__icon{% unless th %} brightness-0{% endunless %}"
+    aria-hidden="true"
+  >
+  {%- if cart.item_count > 0 -%}
+    <span
+      class="prava-cart-count absolute -right-1.5 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-neutral-900 px-1 text-[11px] font-semibold leading-none text-white"
+      aria-hidden="true"
+      data-prava-cart-count
+    >
+      {%- if cart.item_count < 100 -%}
+        {{- cart.item_count -}}
+      {%- else -%}
+        99+
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</span>
+<span class="font-light{% if th %} text-white{% else %} text-neutral-900{% endif %}">{{ 'header.cart' | t }}</span>
+<span class="sr-only" data-prava-cart-count-aria>
+  {%- if cart.item_count > 0 -%}
+    {{- 'header.cart_count' | t: count: cart.item_count -}}
+  {%- else -%}
+    {{- 'header.cart' | t -}}
+  {%- endif -%}
+</span>
