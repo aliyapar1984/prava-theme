@@ -24,7 +24,9 @@
   endif
 
   assign og_image_url = nil
-  if settings.seo_share_image != blank
+  if template.name == 'product' and product != blank and product.featured_image != blank
+    assign og_image_url = product.featured_image | image_url: width: 1200
+  elsif settings.seo_share_image != blank
     assign og_image_url = settings.seo_share_image | image_url: width: 1200
   elsif settings.mega_menu_featured_image != blank
     assign og_image_url = settings.mega_menu_featured_image | image_url: width: 1200

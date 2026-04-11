@@ -1,0 +1,828 @@
+{% comment %}
+  main-product-detail — Shopify ürün detay (PDP) ana bölümü.
+
+  Ne işe yarar?
+  - Sol: medya galerisi (büyük görsel + küçük resim düğmeleri; varyant değişince JS ana görseli güncelleyebilir).
+  - Sağ: başlık (tek h1), açıklama, taksit metni (Shopify payment_terms), sepete ekle formu, fiyat.
+  - Aşağıda tema editörü blokları: özellik kutuları, teknik akordeon, 360/3D veya yer tutucu, benzer ürünler (her biri ayrı ATC formu), destek SSS.
+
+  JS eşlemesi (assets/product-detail.js):
+  - [data-prava-pdp] kök; data-section-id ile ProductJson / PdpVariantMeta script id’leri eşleşir.
+  - Sepete ekle: ana form (product_form_id). Taksit: ayrı küçük form — varyant id’si JS ile senkronlanır.
+{% endcomment %}
+{% liquid
+  # Seçili varyant + öne çıkan medya (yoksa ürünün varsayılan görseli)
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+
+  # Renk seçeneği (isimde color/colour/renk): swatch ve option1/2/3 eşlemesi için
+  assign color_option_index = nil
+  assign color_option = nil
+  for option in product.options_with_values
+    assign on = option.name | downcase
+    if on contains 'color' or on contains 'colour' or on contains 'renk'
+      assign color_option_index = forloop.index0
+      assign color_option = option
+      break
+    endif
+  endfor
+
+  # Medyada 3D model — model_viewer_tag + CDN stylesheet
+  assign first_model = nil
+  for m in product.media
+    if m.media_type == 'model'
+      assign first_model = m
+      break
+    endif
+  endfor
+
+  # Breadcrumb: üst link için ürünün ilk koleksiyonu
+  assign parent_col = product.collections.first
+
+  # Sepet formu id + taksit formu id (aynı sayfada iki form; id’ler benzersiz)
+  assign product_form_id = 'ProductForm-' | append: section.id
+  assign installment_form_id = 'ProductInstallment-' | append: section.id
+%}
+
+{%- comment -%}
+  3D model varsa: model_viewer bileşeninin stilleri (Shopify CDN). media="print" + onload ile render bloklamadan yükleme.
+{%- endcomment -%}
+{%- if first_model -%}
+  <link
+    rel="stylesheet"
+    href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css"
+    media="print"
+    onload="this.media='all'"
+  >
+{%- endif -%}
+
+{% comment %} Varyant/fiyat/görsel senkronu — section id ile script içindeki JSON id’leri eşleşir {% endcomment %}
+<script src="{{ 'product-detail.js' | asset_url }}" defer="defer"></script>
+
+<section
+  class="prava-pdp bg-[#f5f5f3] text-neutral-900"
+  data-prava-pdp
+  data-section-id="{{ section.id }}"
+  aria-label="{{ 'sections.product_detail.aria_label' | t }}"
+>
+  <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-8 md:pb-24 md:pt-12">
+    {% if parent_col != blank %}
+      {% render 'breadcrumbs', current_title: product.title, parent_title: parent_col.title, parent_url: parent_col.url %}
+    {% else %}
+      {% render 'breadcrumbs', current_title: product.title %}
+    {% endif %}
+
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-20">
+      {% comment %}
+        Sol sütun — Galeri: ana alan seçili varyantın öne çıkan medyası (görsel/video/embedded).
+        Küçük resimler yalnızca image (ve işaretli video thumb) — tıklanınca JS ana görseli değiştirir; varyant değişince de güncellenir.
+      {% endcomment %}
+      <div class="prava-pdp__gallery min-w-0">
+        <div class="overflow-hidden rounded-lg bg-white">
+          {% if featured_media != blank %}
+            {% assign main_alt = featured_media.alt | default: product.title %}
+            {% if featured_media.media_type == 'image' %}
+              <img
+                id="PdpMainImg-{{ section.id }}"
+                src="{{ featured_media | image_url: width: 1400 }}"
+                alt="{{ main_alt | escape }}"
+                width="{{ featured_media.width | default: 1200 }}"
+                height="{{ featured_media.height | default: 1200 }}"
+                class="aspect-square w-full object-contain p-4 md:p-8"
+                loading="eager"
+                decoding="async"
+                data-prava-pdp-main-img
+              >
+            {% elsif featured_media.media_type == 'video' %}
+              {{ featured_media | video_tag: image_size: '1400x', autoplay: false, loop: true, muted: true, controls: true, class: 'aspect-square w-full object-contain' }}
+            {% else %}
+              {{ featured_media | media_tag: image_size: '1400x', class: 'aspect-square w-full object-contain' }}
+            {% endif %}
+          {% else %}
+            <div class="flex aspect-square items-center justify-center bg-neutral-100 text-neutral-500">{{ 'products.no_image' | t }}</div>
+          {% endif %}
+        </div>
+
+        {% if product.media.size > 1 %}
+          <div
+            class="mt-4 flex flex-wrap gap-2"
+            role="group"
+            aria-label="{{ 'products.gallery_thumbnails' | t }}"
+          >
+            {% for media in product.media %}
+              {% if media.media_type == 'image' %}
+                <button
+                  type="button"
+                  class="group relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 border-transparent bg-white p-1 transition-[border-color] hover:border-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 data-[active=true]:border-neutral-900"
+                  data-prava-pdp-thumb
+                  data-media-id="{{ media.id }}"
+                  data-src="{{ media | image_url: width: 1400 }}"
+                  data-alt="{{ media.alt | default: product.title | escape }}"
+                  aria-pressed="{% if media.id == featured_media.id %}true{% else %}false{% endif %}"
+                  aria-label="{{ 'products.view_image' | t }} {{ forloop.index }}"
+                >
+                  <img
+                    src="{{ media | image_url: width: 200 }}"
+                    alt=""
+                    class="h-full w-full object-contain"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                </button>
+              {% elsif media.media_type == 'video' %}
+                <button
+                  type="button"
+                  class="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 border-transparent bg-neutral-900 p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800"
+                  data-prava-pdp-thumb-video
+                  aria-label="{{ 'products.view_video' | t }} {{ forloop.index }}"
+                >
+                  <span class="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">▶</span>
+                </button>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% comment %}
+        Sağ sütun — Başlık (SEO: sayfada tek h1), isteğe bağlı satıcı, Shopify Reviews metafield ile yıldız,
+        ürün açıklaması (RTE), ayrı taksit formu, ana sepet formu (varyant + miktar + fiyat + ATC).
+      {% endcomment %}
+      <div class="prava-pdp__info flex min-w-0 flex-col">
+        <header class="border-b border-neutral-200/80 pb-6">
+          <h1 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-[34px] md:leading-tight">
+            {{ product.title | escape }}
+          </h1>
+          {% if section.settings.show_vendor and product.vendor != blank %}
+            <p class="mt-2 text-sm font-light text-neutral-600">{{ product.vendor | escape }}</p>
+          {% endif %}
+
+          {% if product.metafields.reviews.rating.value != blank %}
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <div
+                class="inline-flex items-center gap-0.5"
+                role="img"
+                aria-label="{{ 'products.rating_aria' | t: rating: product.metafields.reviews.rating.value.rating, max: product.metafields.reviews.rating.value.scale_max }}"
+              >
+                {% assign rating_val = product.metafields.reviews.rating.value.rating | floor %}
+                {% assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5 %}
+                {% for i in (1..scale_max) %}
+                  <span class="text-amber-500" aria-hidden="true">{% if i <= rating_val %}★{% else %}☆{% endif %}</span>
+                {% endfor %}
+              </div>
+              <span class="text-sm text-neutral-600">
+                <span aria-hidden="true">{{ product.metafields.reviews.rating.value.rating }} / {{ scale_max }}</span>
+                {% if product.metafields.reviews.rating_count != blank %}
+                  <span class="sr-only">{{ product.metafields.reviews.rating_count }} {{ 'products.reviews_count' | t }}</span>
+                  <span class="text-neutral-500" aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
+                {% endif %}
+              </span>
+            </div>
+          {% endif %}
+        </header>
+
+        {% if product.description != blank %}
+          <div class="product-description rte mt-6 text-base leading-relaxed text-neutral-700">
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+        {% comment %}
+          Taksit / ödeme koşulları: Shopify payment_terms için ürün formu ayrı bir form etiketi olarak tanımlanmalıdır.
+          Gizli id seçilen varyantı taşır; product-detail.js seçim değişince bu alanı günceller.
+        {% endcomment %}
+        <div class="mt-6">
+          {% assign installment_variant_id = 'installment-variant-' | append: section.id %}
+          {% form 'product', product, id: installment_form_id, class: 'installment-form text-sm text-neutral-600' %}
+            <input type="hidden" name="id" id="{{ installment_variant_id }}" value="{{ current_variant.id }}">
+            {{ form | payment_terms }}
+          {% endform %}
+        </div>
+
+        {% comment %}
+          Ana sepet formu: name="id" ile varyant (select veya gizli input), gönder düğmesi name="add".
+          Çoklu varyantta renk swatch’leri aynı select değerini hedefler; yedek olarak doğrudan select kullanılabilir.
+        {% endcomment %}
+        {% form 'product', product, id: product_form_id, class: 'mt-8 flex flex-col gap-6' %}
+          {% if form.errors %}
+            <div class="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert" tabindex="-1">
+              <ul class="m-0 list-disc pl-5">
+                {% for field in form.errors %}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if product.has_only_default_variant == false %}
+            <div class="flex flex-col gap-3">
+              <label class="text-sm font-medium text-neutral-800" for="PdpVariantSelect-{{ section.id }}">
+                {{ 'products.variant_label' | t }}
+              </label>
+              <select
+                name="id"
+                id="PdpVariantSelect-{{ section.id }}"
+                class="w-full max-w-md rounded-md border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-900 focus-visible:border-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800"
+                data-prava-pdp-variant-select
+              >
+                {% for variant in product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == current_variant %}
+                      selected
+                    {% endif %}
+                    {% unless variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+                    {{ variant.title }} — {{ variant.price | money }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            {% comment %}
+              Renk swatch: her renk değeri için o seçenekle eşleşen ilk varyant id’si kullanılır (basit matris; tek seçenekli renk senaryoları için uygundur).
+            {% endcomment %}
+            {% if color_option_index != nil and color_option != blank %}
+              <div class="flex flex-col gap-2">
+                <span class="text-sm font-medium text-neutral-800" id="PdpColorLegend-{{ section.id }}">{{ color_option.name | escape }}</span>
+                <div class="flex flex-wrap gap-2" role="group" aria-labelledby="PdpColorLegend-{{ section.id }}">
+                  {% for value in color_option.values %}
+                    {% assign var_for_color = nil %}
+                    {% for v in product.variants %}
+                      {% if color_option_index == 0 and v.option1 == value %}
+                        {% assign var_for_color = v %}
+                        {% break %}
+                      {% elsif color_option_index == 1 and v.option2 == value %}
+                        {% assign var_for_color = v %}
+                        {% break %}
+                      {% elsif color_option_index == 2 and v.option3 == value %}
+                        {% assign var_for_color = v %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                    {% if var_for_color %}
+                      <button
+                        type="button"
+                        class="h-9 w-9 rounded-full border-2 border-neutral-200 bg-white p-0.5 transition-[border-color,box-shadow] hover:border-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 data-[active=true]:border-neutral-900 data-[active=true]:ring-2 data-[active=true]:ring-neutral-400"
+                        data-prava-pdp-swatch
+                        data-variant-id="{{ var_for_color.id }}"
+                        aria-pressed="{% if var_for_color.id == current_variant.id %}true{% else %}false{% endif %}"
+                        aria-label="{{ value | escape }}"
+                      >
+                        <span class="block h-full w-full rounded-full bg-gradient-to-br from-neutral-300 to-neutral-500" aria-hidden="true"></span>
+                      </button>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% else %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+          {% endif %}
+
+          <input type="hidden" name="quantity" value="1">
+
+          {% comment %} role="status" + aria-live: ekran okuyucu fiyat güncellemesini duyurabilir (JS innerHTML ile güncellenir). {% endcomment %}
+          <div id="PdpPrice-{{ section.id }}" class="price-display" role="status" aria-live="polite">
+            <p class="m-0 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
+              {% if current_variant.compare_at_price > current_variant.price %}
+                <span class="mr-2 text-xl font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
+              {% endif %}
+              <span data-prava-pdp-price>{{ current_variant.price | money }}</span>
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            name="add"
+            id="PdpSubmit-{{ section.id }}"
+            class="w-full max-w-md border-0 bg-neutral-800 py-4 text-center text-base font-semibold uppercase tracking-widest text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+            {% unless current_variant.available %}
+              disabled
+            {% endunless %}
+            data-prava-pdp-submit
+            data-label-add="{{ 'products.add_to_cart' | t | escape }}"
+            data-label-sold="{{ 'products.sold_out' | t | escape }}"
+          >
+            {% if current_variant.available %}
+              {{ 'products.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.sold_out' | t }}
+            {% endif %}
+          </button>
+        {% endform %}
+
+        {% comment %} Tema ayarlarından gelen kısa güven metinleri (kargo / iade / güvenli ödeme). {% endcomment %}
+        <ul class="mt-8 flex flex-wrap gap-6 text-sm text-neutral-600" role="list">
+          {% if section.settings.trust_shipping != blank %}
+            <li class="flex max-w-[200px] items-start gap-2">
+              <span class="mt-0.5 shrink-0 text-neutral-800" aria-hidden="true">✓</span>
+              <span>{{ section.settings.trust_shipping | escape }}</span>
+            </li>
+          {% endif %}
+          {% if section.settings.trust_return != blank %}
+            <li class="flex max-w-[200px] items-start gap-2">
+              <span class="mt-0.5 shrink-0 text-neutral-800" aria-hidden="true">✓</span>
+              <span>{{ section.settings.trust_return | escape }}</span>
+            </li>
+          {% endif %}
+          {% if section.settings.trust_secure != blank %}
+            <li class="flex max-w-[200px] items-start gap-2">
+              <span class="mt-0.5 shrink-0 text-neutral-800" aria-hidden="true">✓</span>
+              <span>{{ section.settings.trust_secure | escape }}</span>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    {% comment %}
+      "Ürün detayı" alanı: ayarlardan başlık + giriş metni; blok tipi feature_tile = görsel + başlık + kısa metin (4 sütuna kadar grid).
+    {% endcomment %}
+    {% if section.settings.details_heading != blank or section.settings.details_intro != blank or section.blocks.size > 0 %}
+      <div class="mt-20 border-t border-neutral-200/90 pt-16">
+        {% if section.settings.details_heading != blank %}
+          <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">{{ section.settings.details_heading | escape }}</h2>
+        {% endif %}
+        {% if section.settings.details_intro != blank %}
+          <div class="rte mt-4 max-w-3xl text-base leading-relaxed text-neutral-700">
+            {{ section.settings.details_intro }}
+          </div>
+        {% endif %}
+        <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {% for block in section.blocks %}
+            {% if block.type == 'feature_tile' %}
+              <article class="flex flex-col" {{ block.shopify_attributes }}>
+                {% if block.settings.image != blank %}
+                  <div class="aspect-square overflow-hidden rounded-lg bg-white">
+                    <img
+                      src="{{ block.settings.image | image_url: width: 800 }}"
+                      alt="{{ block.settings.image.alt | default: block.settings.heading | escape }}"
+                      width="600"
+                      height="600"
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  </div>
+                {% endif %}
+                {% if block.settings.heading != blank %}
+                  <h3 class="mt-4 text-lg font-medium text-neutral-900">{{ block.settings.heading | escape }}</h3>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <p class="mt-2 text-sm leading-relaxed text-neutral-600">{{ block.settings.text | escape }}</p>
+                {% endif %}
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% comment %} Teknik özellikler: blok tipi spec_accordion — native <details>/<summary> (klavye ile erişilebilir). {% endcomment %}
+    {% assign has_spec = false %}
+    {% for block in section.blocks %}
+      {% if block.type == 'spec_accordion' %}
+        {% assign has_spec = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    {% if has_spec %}
+      <div class="mt-16 rounded-xl bg-[#ebe9e6] px-6 py-8 md:px-10 md:py-12">
+        <h2 class="sr-only">{{ 'products.specs_heading' | t }}</h2>
+        <div class="divide-y divide-neutral-300/90 border-y border-neutral-300/90">
+          {% for block in section.blocks %}
+            {% if block.type == 'spec_accordion' %}
+              <details class="group py-2" {{ block.shopify_attributes }} {% if block.settings.open %}open{% endif %}>
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-medium text-neutral-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
+                  <span>{{ block.settings.heading | escape }}</span>
+                  <span class="text-xl font-light text-neutral-600 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                </summary>
+                <div class="rte pb-6 pr-8 text-sm leading-relaxed text-neutral-700 md:text-base">
+                  {{ block.settings.body }}
+                </div>
+              </details>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% comment %}
+      360° / 3D: ürün medyasında model varsa Shopify model_viewer_tag; yoksa ve ayar açıksa yer tutucu görsel + metin.
+    {% endcomment %}
+    {% if first_model != blank %}
+      <div class="mt-20">
+        <h2 class="text-center text-2xl font-medium text-neutral-900 md:text-3xl">{{ 'products.view_360' | t }}</h2>
+        <div class="mx-auto mt-8 max-w-3xl [&_model-viewer]:aspect-square [&_model-viewer]:w-full [&_model-viewer]:bg-white">
+          {{ first_model | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true }}
+        </div>
+        <p class="mt-4 text-center text-sm text-neutral-600">{{ 'products.view_360_help' | t }}</p>
+      </div>
+    {% elsif section.settings.show_360_placeholder %}
+      <div class="mt-20 text-center">
+        <h2 class="text-2xl font-medium text-neutral-900 md:text-3xl">{{ 'products.view_360' | t }}</h2>
+        {% if section.settings.placeholder_360_image != blank %}
+          <div class="mx-auto mt-8 max-w-2xl overflow-hidden rounded-xl bg-white">
+            <img
+              src="{{ section.settings.placeholder_360_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.placeholder_360_image.alt | default: product.title | escape }}"
+              width="1200"
+              height="800"
+              class="w-full object-contain"
+              loading="lazy"
+            >
+          </div>
+        {% endif %}
+        {% if section.settings.placeholder_360_text != blank %}
+          <p class="mt-6 text-neutral-600">{{ section.settings.placeholder_360_text | escape }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% comment %}
+      Benzer ürünler: blok related_product ile seçilir; her kart snippets/product-card-atc (ayrı form + ATC). Swiper: assets/js/main.js içinde .prava-pdp-related__swiper.
+    {% endcomment %}
+    {% assign related_count = 0 %}
+    {% for block in section.blocks %}
+      {% if block.type == 'related_product' and block.settings.product != blank %}
+        {% assign related_count = related_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    {% if related_count > 0 %}
+      <div class="mt-24">
+        {% liquid
+          assign r_cta = section.settings.related_cta_url | strip
+          if r_cta == blank
+            assign r_cta = routes.all_products_collection_url
+          endif
+          assign r_lbl = section.settings.related_cta_label | strip
+          if r_lbl == blank
+            assign r_lbl = 'sections.bestsellers.cta_all_visible' | t
+          endif
+        %}
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          {% if section.settings.related_heading != blank %}
+            <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">{{ section.settings.related_heading | escape }}</h2>
+          {% endif %}
+          <a
+            href="{{ r_cta }}"
+            class="shrink-0 text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          >
+            {{ r_lbl | escape }}
+          </a>
+        </div>
+        <div class="prava-pdp-related__viewport mt-10">
+          <div class="swiper prava-pdp-related__swiper w-full">
+            <div class="swiper-wrapper">
+              {% for block in section.blocks %}
+                {% if block.type == 'related_product' and block.settings.product != blank %}
+                  <div class="swiper-slide !h-auto">
+                    {% render 'product-card-atc',
+                      product: block.settings.product,
+                      block: block,
+                      title_id: 'pdp-rel-' | append: block.id,
+                      form_suffix: section.id,
+                      image_loading: 'lazy'
+                    %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% comment %} Ürün destek: blok support_faq — soru/cevap; cevaplı çiftler için aşağıda FAQPage JSON-LD de üretilir. {% endcomment %}
+    {% assign has_support = false %}
+    {% for block in section.blocks %}
+      {% if block.type == 'support_faq' %}
+        {% assign has_support = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    {% if has_support %}
+      <div class="mt-24 rounded-xl bg-[#f0eeeb] px-6 py-10 md:px-12 md:py-14">
+        {% if section.settings.support_heading != blank %}
+          <h2 class="text-3xl font-medium text-neutral-900 md:text-4xl">{{ section.settings.support_heading | escape }}</h2>
+        {% endif %}
+        <div class="mt-8 space-y-0 divide-y divide-neutral-300/80" role="region" aria-label="{{ 'sections.product_detail.support_region' | t }}">
+          {% for block in section.blocks %}
+            {% if block.type == 'support_faq' and block.settings.question != blank %}
+              <details class="group py-2" {{ block.shopify_attributes }}>
+                <summary class="flex cursor-pointer list-none items-start gap-3 py-4 text-left text-base text-neutral-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
+                  <span class="mt-0.5 text-lg font-light" aria-hidden="true">+</span>
+                  <span>{{ block.settings.question | escape }}</span>
+                </summary>
+                {% if block.settings.answer != blank %}
+                  <div class="rte pb-6 pl-8 text-sm leading-relaxed text-neutral-700 md:pl-11">
+                    {{ block.settings.answer }}
+                  </div>
+                {% endif %}
+              </details>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% comment %} Arama motorları için SSS şeması (yalnızca hem soru hem cevap dolu bloklar). {% endcomment %}
+  {% if has_support %}
+    {% liquid
+      assign ld_faq_first = true
+    %}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'support_faq' and block.settings.question != blank and block.settings.answer != blank -%}
+              {%- unless ld_faq_first -%},{%- endunless -%}
+              {
+                "@type": "Question",
+                "name": {{ block.settings.question | json }},
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": {{ block.settings.answer | strip_html | strip | json }}
+                }
+              }
+              {%- assign ld_faq_first = false -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  {% endif %}
+
+  {% comment %}
+    ProductJson: Shopify ürün nesnesi (varyantların featured_image vb.) — product-detail.js parse eder.
+    PdpVariantMeta: her varyant için sunucuda formatlanmış fiyat metni + stok — JS sayfayı yenilemeden günceller.
+  {% endcomment %}
+  <script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+  </script>
+  <script type="application/json" id="PdpVariantMeta-{{ section.id }}">
+    {
+      {% for variant in product.variants %}
+        "{{ variant.id }}": {
+          "price": {{ variant.price | money | strip_html | json }},
+          "compare_at_price": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | strip_html | json }}{% else %}null{% endif %},
+          "available": {{ variant.available | json }},
+          "featured_media_id": {% if variant.featured_media %}{{ variant.featured_media.id | json }}{% else %}null{% endif %}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    }
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Ürün detay (ana)",
+  "tag": "section",
+  "class": "main-product-detail-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Satıcı adını göster",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Ürün detayı bölümü"
+    },
+    {
+      "type": "text",
+      "id": "details_heading",
+      "label": "Özellik alanı başlığı",
+      "default": "Ürün Detayı"
+    },
+    {
+      "type": "richtext",
+      "id": "details_intro",
+      "label": "Özellik alanı giriş metni"
+    },
+    {
+      "type": "header",
+      "content": "Güven metinleri (satır altı)"
+    },
+    {
+      "type": "text",
+      "id": "trust_shipping",
+      "label": "Kargo",
+      "default": "Ücretsiz kargo"
+    },
+    {
+      "type": "text",
+      "id": "trust_return",
+      "label": "İade",
+      "default": "Kolay iade"
+    },
+    {
+      "type": "text",
+      "id": "trust_secure",
+      "label": "Güvenlik",
+      "default": "Güvenli alışveriş"
+    },
+    {
+      "type": "header",
+      "content": "360° / 3D"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_360_placeholder",
+      "label": "3D yoksa yer tutucu göster",
+      "default": true,
+      "info": "Üründe 3D model yoksa açıklama ve isteğe bağlı görsel gösterilir."
+    },
+    {
+      "type": "image_picker",
+      "id": "placeholder_360_image",
+      "label": "Yer tutucu görseli"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_360_text",
+      "label": "Yer tutucu metni",
+      "default": "360° görünüm yakında veya mağazada deneyimleyin."
+    },
+    {
+      "type": "header",
+      "content": "Benzer ürünler"
+    },
+    {
+      "type": "text",
+      "id": "related_heading",
+      "label": "Başlık",
+      "default": "Benzer Ürünler"
+    },
+    {
+      "type": "url",
+      "id": "related_cta_url",
+      "label": "Tümünü gör — bağlantı"
+    },
+    {
+      "type": "text",
+      "id": "related_cta_label",
+      "label": "Tümünü gör — metin",
+      "default": "Tümünü Gör"
+    },
+    {
+      "type": "header",
+      "content": "Ürün destek"
+    },
+    {
+      "type": "text",
+      "id": "support_heading",
+      "label": "Başlık",
+      "default": "Ürün Destek"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_tile",
+      "name": "Özellik kutusu",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Görsel"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Başlık",
+          "default": "Özellik"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "Kısa açıklama metni."
+        }
+      ]
+    },
+    {
+      "type": "spec_accordion",
+      "name": "Teknik satır (akordeon)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Başlık",
+          "default": "Boyutlar ve ağırlık"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "İçerik"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Varsayılan açık",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "related_product",
+      "name": "Benzer ürün",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Ürün"
+        }
+      ]
+    },
+    {
+      "type": "support_faq",
+      "name": "Destek sorusu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Soru",
+          "default": "Bu ürün hangi yaş aralığı için uygundur?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Cevap"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ürün detay sayfası",
+      "blocks": [
+        {
+          "type": "feature_tile",
+          "settings": {
+            "heading": "Premium kumaş",
+            "text": "Nefes alabilen, kolay temizlenen döşeme."
+          }
+        },
+        {
+          "type": "feature_tile",
+          "settings": {
+            "heading": "Süspansiyon",
+            "text": "Tüm tekerleklerde amortisör desteği."
+          }
+        },
+        {
+          "type": "spec_accordion",
+          "settings": {
+            "heading": "Boyutlar ve ağırlık",
+            "open": true
+          }
+        },
+        {
+          "type": "spec_accordion",
+          "settings": {
+            "heading": "Özellikler",
+            "open": false
+          }
+        },
+        {
+          "type": "spec_accordion",
+          "settings": {
+            "heading": "Kullanım talimatları",
+            "open": false
+          }
+        },
+        {
+          "type": "support_faq",
+          "settings": {
+            "question": "Bu ürün hangi yaş aralığı için uygundur?"
+          }
+        },
+        {
+          "type": "support_faq",
+          "settings": {
+            "question": "Kutuda neler var?"
+          }
+        },
+        {
+          "type": "support_faq",
+          "settings": {
+            "question": "Sorun yaşarsam nasıl destek alırım?"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

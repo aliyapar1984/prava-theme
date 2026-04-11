@@ -21,6 +21,9 @@
 
   {% render 'seo-meta' %}
   {% render 'seo-schema-org' %}
+  {% if template.name == 'product' %}
+    {% render 'product-json-ld', product: product %}
+  {% endif %}
   {{ content_for_header }}
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">

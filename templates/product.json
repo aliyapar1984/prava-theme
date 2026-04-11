@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-detail",
+      "settings": {
+        "details_heading": "Ürün Detayı",
+        "trust_shipping": "Ücretsiz kargo",
+        "trust_return": "Kolay iade",
+        "trust_secure": "Güvenli alışveriş",
+        "show_360_placeholder": true,
+        "placeholder_360_text": "360° görünüm yakında veya mağazada deneyimleyin.",
+        "related_heading": "Benzer Ürünler",
+        "related_cta_label": "Tümünü Gör",
+        "support_heading": "Ürün Destek"
+      },
+      "blocks": {},
+      "block_order": []
+    }
+  },
+  "order": ["main"]
+}

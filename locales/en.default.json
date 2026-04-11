@@ -25,6 +25,21 @@
       "home": "Home"
     }
   },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "add_to_cart_for": "Add {{ title }} to cart",
+    "sold_out": "Sold out",
+    "no_image": "No image",
+    "gallery_thumbnails": "Product images",
+    "view_image": "View image",
+    "view_video": "View video",
+    "rating_aria": "{{ rating }} out of {{ max }} stars",
+    "reviews_count": "reviews",
+    "variant_label": "Choose a variant",
+    "specs_heading": "Specifications",
+    "view_360": "360° view",
+    "view_360_help": "Drag to rotate the model."
+  },
   "templates": {
     "collection": {
       "category_nav_aria": "Browse categories",
@@ -111,6 +126,10 @@
     "faq": {
       "aria_label": "Support and frequently asked questions",
       "list_label": "Frequently asked questions"
+    },
+    "product_detail": {
+      "aria_label": "Product detail",
+      "support_region": "Product support questions"
     },
     "footer": {
       "name": "Footer",

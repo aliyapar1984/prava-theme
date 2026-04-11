@@ -1,0 +1,108 @@
+{% comment %}
+  product-json-ld — Arama motorları için yapılandırılmış veri (layout/theme.liquid ürün şablonunda render edilir).
+
+  Üretir:
+  - schema.org Product: ad, açıklama, görsel, marka, sku (varsa), Offer (fiyat, para birimi, stok).
+  - schema.org BreadcrumbList: Ana sayfa → (ürün bir koleksiyondaysa) koleksiyon → ürün.
+
+  Not: fiyat, Liquid’de variant.price mağaza alt biriminde (ör. kuruş) geldiği için Offer’da bölünür.
+  Görsel URL’si CDN’den gelir; https ile mutlak adres üretmek için protokol kontrolü yapılır.
+{% endcomment %}
+{% if product == blank %}
+{% else %}
+  {% liquid
+    assign cv = product.selected_or_first_available_variant
+    assign prod_url = request.origin | append: product.url
+    assign img_url = nil
+    if product.featured_image
+      assign img_url = product.featured_image | image_url: width: 1200
+      if img_url contains 'https://'
+        assign img_abs = img_url
+      elsif img_url contains '//'
+        assign img_abs = 'https:' | append: img_url
+      else
+        assign img_abs = img_url
+      endif
+    else
+      assign img_abs = nil
+    endif
+    assign bc_second_name = nil
+    assign bc_second_url = nil
+    if product.collections.size > 0
+      assign bc_second_name = product.collections.first.title
+      assign bc_second_url = request.origin | append: product.collections.first.url
+    endif
+  %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ product.description | strip_html | strip | truncate: 5000 | json }},
+    "url": {{ prod_url | json }}{% if img_abs %},
+    "image": [{{ img_abs | json }}]{% endif %}{% if product.vendor != blank %},
+    "brand": {
+      "@type": "Brand",
+      "name": {{ product.vendor | json }}
+    }{% endif %}{% if cv.sku != blank %},
+    "sku": {{ cv.sku | json }}{% endif %},
+    "offers": {
+      "@type": "Offer",
+      "url": {{ prod_url | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "price": {{ cv.price | divided_by: 100.0 | json }},
+      "availability": "{% if cv.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+  </script>
+  {% if bc_second_name %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ 'general.breadcrumb.home' | t | json }},
+          "item": {{ request.origin | append: routes.root_url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ bc_second_name | json }},
+          "item": {{ bc_second_url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ product.title | json }},
+          "item": {{ prod_url | json }}
+        }
+      ]
+    }
+    </script>
+  {% else %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ 'general.breadcrumb.home' | t | json }},
+          "item": {{ request.origin | append: routes.root_url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ product.title | json }},
+          "item": {{ prod_url | json }}
+        }
+      ]
+    }
+    </script>
+  {% endif %}
+{% endif %}

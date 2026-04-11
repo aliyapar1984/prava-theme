@@ -1,0 +1,116 @@
+{% comment %}
+  product-card-atc — PDP “benzer ürünler” şeridinde kullanılan kart.
+
+  Ne işe yarar?
+  - Ürün görseli + başlık linki (ürün sayfasına gider).
+  - Renk seçeneği varsa dekoratif swatch (satın alma seçimi değil; sadece önizleme).
+  - Varsayılan varyant fiyatı ve ürün formu ile “Sepete ekle” (ana PDP formundan bağımsız benzersiz form id).
+
+  Parametreler:
+  - product: zorunlu
+  - block: tema editöründe blok seçimi için shopify_attributes
+  - title_id: başlık h3 ile görsel img arasında erişilebilir ilişki (aria-labelledby)
+  - image_loading: eager | lazy
+  - form_suffix: form id’sinde kullanılır; aynı sayfada birden fazla kart için section.id geçin
+{% endcomment %}
+{% liquid
+  assign fs = form_suffix | default: section.id
+  assign p = product
+  assign current_variant = p.selected_or_first_available_variant
+  assign main_img = current_variant.featured_image | default: p.featured_image
+  assign uid = title_id | strip
+  if uid == blank and p != blank
+    assign uid = 'pdp-related-title-' | append: p.id
+  endif
+  assign img_loading = image_loading | default: 'lazy'
+
+  assign color_option = nil
+  if p != blank
+    for option in p.options_with_values
+      assign opt_name = option.name | downcase
+      if opt_name contains 'color' or opt_name contains 'colour' or opt_name contains 'renk'
+        assign color_option = option
+        break
+      endif
+    endfor
+  endif
+%}
+{% if p != blank %}
+  <article
+    class="prava-pdp-related-card flex h-full flex-col bg-[#f2f2f0]{% if block %}{% endif %}"
+    {% if block %}{{ block.shopify_attributes }}{% endif %}
+  >
+    <div class="relative flex aspect-[1/1] w-full items-center justify-center overflow-hidden">
+      <a href="{{ p.url }}" class="relative z-0 block h-full w-full">
+        {% if main_img != blank %}
+          <img
+            src="{{ main_img | image_url: width: 1040 }}"
+            alt="{{ main_img.alt | default: p.title | escape }}"
+            class="h-full w-full object-contain"
+            width="{{ main_img.width | default: 520 }}"
+            height="{{ main_img.height | default: 640 }}"
+            loading="{{ img_loading }}"
+            decoding="async"
+            aria-labelledby="{{ uid }}"
+          >
+        {% endif %}
+      </a>
+    </div>
+    <div class="flex flex-1 flex-col px-[22px] pb-[22px] pt-5">
+      <h3 id="{{ uid }}" class="text-base font-medium leading-snug tracking-tight text-neutral-900 md:text-lg">
+        <a href="{{ p.url }}" class="text-inherit no-underline hover:opacity-80">{{ p.title }}</a>
+      </h3>
+      {% if color_option != blank and color_option.values.size > 0 %}
+        <ul class="m-0 mt-3 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+          {% for value in color_option.values %}
+            <li class="m-0 p-0">
+              {% liquid
+                assign i = forloop.index0 | modulo: 4
+                case i
+                  when 0
+                    assign swatch_bg = 'bg-[#bf7f83]'
+                  when 1
+                    assign swatch_bg = 'bg-[#d4c176]'
+                  when 2
+                    assign swatch_bg = 'bg-[#9ea78a]'
+                  else
+                    assign swatch_bg = 'bg-[#88acc8]'
+                endcase
+              %}
+              <span class="inline-block h-5 w-5 shrink-0 rounded-full {{ swatch_bg }} ring-1 ring-black/5" title="{{ value | escape }}" aria-hidden="true"></span>
+              <span class="sr-only">{{ value }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <div class="mt-4 flex flex-1 flex-col justify-end gap-4">
+        <p class="m-0 text-right text-base font-medium leading-none text-neutral-900 md:text-lg">
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <span class="mr-2 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
+          {% endif %}
+          <span>{{ current_variant.price | money }}</span>
+        </p>
+        {% assign related_form_id = 'product-related-form-' | append: p.id | append: '-' | append: fs %}
+        {% form 'product', p, id: related_form_id, class: 'm-0' %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button
+            type="submit"
+            name="add"
+            class="w-full border-0 bg-neutral-800 px-4 py-3 text-center text-sm font-medium uppercase tracking-wide text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+            {% unless current_variant.available %}
+              disabled
+            {% endunless %}
+            aria-label="{{ 'products.add_to_cart_for' | t: title: p.title }}"
+          >
+            {% if current_variant.available %}
+              {{ 'products.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.sold_out' | t }}
+            {% endif %}
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </article>
+{% endif %}

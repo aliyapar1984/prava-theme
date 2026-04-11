@@ -25,6 +25,21 @@
       "home": "Ana sayfa"
     }
   },
+  "products": {
+    "add_to_cart": "Sepete Ekle",
+    "add_to_cart_for": "{{ title }} ürününü sepete ekle",
+    "sold_out": "Tükendi",
+    "no_image": "Görsel yok",
+    "gallery_thumbnails": "Ürün görselleri",
+    "view_image": "Görseli göster",
+    "view_video": "Videoyu göster",
+    "rating_aria": "{{ rating }} üzerinden {{ max }} yıldız",
+    "reviews_count": "değerlendirme",
+    "variant_label": "Varyant seçin",
+    "specs_heading": "Teknik özellikler",
+    "view_360": "360° Görünüm",
+    "view_360_help": "Modeli fare veya dokunuşla döndürebilirsiniz."
+  },
   "templates": {
     "collection": {
       "category_nav_aria": "Kategorilere göz at",
@@ -111,6 +126,10 @@
     "faq": {
       "aria_label": "Destek ve sıkça sorulan sorular",
       "list_label": "Sıkça sorulan sorular"
+    },
+    "product_detail": {
+      "aria_label": "Ürün detayı",
+      "support_region": "Ürün destek soruları"
     },
     "footer": {
       "name": "Altbilgi",
