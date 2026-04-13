@@ -658,6 +658,55 @@ body.mega-menu-open {
   cursor: grabbing !important;
 }
 
+/* PDP ana galeri — mobil: Swiper (slide genişliği CSS); md+: grid, transform kapalı */
+@media (max-width: 767px) {
+  .prava-pdp__gallery-swiper.swiper {
+    cursor: grab;
+  }
+
+  .prava-pdp__gallery-swiper.swiper.swiper-grabbing {
+    cursor: grabbing;
+  }
+
+  /* slidesPerView: auto — genişlik tamamen CSS (Swiper inline width üzerine) */
+  .prava-pdp__gallery-swiper .prava-pdp__gallery-slide.swiper-slide {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 768px) {
+  .prava-pdp__gallery-swiper .swiper-wrapper.prava-pdp__gallery-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 0.75rem;
+    transform: none !important;
+    translate: none !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .prava-pdp__gallery-swiper .prava-pdp__gallery-slide.swiper-slide {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .prava-pdp__gallery-swiper .prava-pdp__gallery-slide.swiper-slide:first-child {
+    grid-column: span 2;
+  }
+}
+
+.prava-pdp__gallery-pagination.swiper-pagination-bullets .swiper-pagination-bullet {
+  background: rgb(38 38 38 / 0.35);
+  opacity: 1;
+}
+
+.prava-pdp__gallery-pagination.swiper-pagination-bullets .swiper-pagination-bullet-active {
+  background: rgb(23 23 23);
+}
+
 .prava-blog-card p.line-clamp-3 {
   display: -webkit-box;
   -webkit-box-orient: vertical;

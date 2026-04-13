@@ -1,8 +1,11 @@
+<script type="application/json" id="ProductJson-{{ section.id }}">
+  {{ product | json }}
+</script>
 {% comment %}
   main-product-detail — Shopify ürün detay (PDP) ana bölümü.
 
   Ne işe yarar?
-  - Sol: medya galerisi (büyük görsel + küçük resim düğmeleri; varyant değişince JS ana görseli güncelleyebilir).
+  - Sol: medya galerisi (tek Swiper DOM; mobil swipe, md+ CSS grid; varyant değişince ilgili medyaya kaydırılır).
   - Sağ: başlık (tek h1), açıklama, taksit metni (Shopify payment_terms), sepete ekle formu, fiyat.
   - Aşağıda tema editörü blokları: özellik kutuları, teknik akordeon, 360/3D veya yer tutucu, benzer ürünler (her biri ayrı ATC formu), destek SSS.
 
@@ -12,13 +15,11 @@
   - Taksit: ayrı küçük form — varyant id’si JS ile senkronlanır (Ajax sepete dahil değil).
 {% endcomment %}
 {% liquid
-  # Seçili varyant + öne çıkan medya (yoksa ürünün varsayılan görseli)
   assign current_variant = product.selected_or_first_available_variant
-  assign featured_media = current_variant.featured_media | default: product.featured_media
 
   # Renk seçeneği (isimde color/colour/renk): swatch ve option1/2/3 eşlemesi için
-  assign color_option_index = nil
-  assign color_option = nil
+  assign color_option_index = null
+  assign color_option = null
   for option in product.options_with_values
     assign on = option.name | downcase
     if on contains 'color' or on contains 'colour' or on contains 'renk'
@@ -29,7 +30,7 @@
   endfor
 
   # Medyada 3D model — model_viewer_tag + CDN stylesheet
-  assign first_model = nil
+  assign first_model = null
   for m in product.media
     if m.media_type == 'model'
       assign first_model = m
@@ -68,81 +69,65 @@
 >
   <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-8 md:pb-24 md:pt-12">
     {% if parent_col != blank %}
-      {% render 'breadcrumbs', current_title: product.title, parent_title: parent_col.title, parent_url: parent_col.url %}
+      {% render 'breadcrumbs',
+        current_title: product.title,
+        parent_title: parent_col.title,
+        parent_url: parent_col.url
+      %}
     {% else %}
       {% render 'breadcrumbs', current_title: product.title %}
     {% endif %}
 
     <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-20">
       {% comment %}
-        Sol sütun — Galeri: ana alan seçili varyantın öne çıkan medyası (görsel/video/embedded).
-        Küçük resimler yalnızca image (ve işaretli video thumb) — tıklanınca JS ana görseli değiştirir; varyant değişince de güncellenir.
+        Sol sütun — Tek Swiper iskeleti: mobilde swipe (slidesPerView auto, boyutlar CSS);
+        md+ breakpoint’te JS devre dışı, wrapper CSS grid (1 + 2 sütun).
       {% endcomment %}
-      <div class="prava-pdp__gallery min-w-0">
-        <div class="overflow-hidden rounded-lg bg-white">
-          {% if featured_media != blank %}
-            {% assign main_alt = featured_media.alt | default: product.title %}
-            {% if featured_media.media_type == 'image' %}
-              <img
-                id="PdpMainImg-{{ section.id }}"
-                src="{{ featured_media | image_url: width: 1400 }}"
-                alt="{{ main_alt | escape }}"
-                width="{{ featured_media.width | default: 1200 }}"
-                height="{{ featured_media.height | default: 1200 }}"
-                class="aspect-square w-full object-contain p-4 md:p-8"
-                loading="eager"
-                decoding="async"
-                data-prava-pdp-main-img
-              >
-            {% elsif featured_media.media_type == 'video' %}
-              {{ featured_media | video_tag: image_size: '1400x', autoplay: false, loop: true, muted: true, controls: true, class: 'aspect-square w-full object-contain' }}
-            {% else %}
-              {{ featured_media | media_tag: image_size: '1400x', class: 'aspect-square w-full object-contain' }}
-            {% endif %}
-          {% else %}
-            <div class="flex aspect-square items-center justify-center bg-neutral-100 text-neutral-500">{{ 'products.no_image' | t }}</div>
-          {% endif %}
-        </div>
-
-        {% if product.media.size > 1 %}
+      <div class="prava-pdp__gallery min-w-0" data-prava-pdp-gallery>
+        {% if product.media.size == 0 %}
+          <div class="overflow-hidden rounded-lg bg-white">
+            <div class="flex aspect-square items-center justify-center bg-neutral-100 text-neutral-500">
+              {{ 'products.no_image' | t }}
+            </div>
+          </div>
+        {% else %}
           <div
-            class="mt-4 flex flex-wrap gap-2"
-            role="group"
+            class="swiper prava-pdp__gallery-swiper w-full overflow-hidden rounded-lg md:overflow-visible"
+            id="PdpGallerySwiper-{{ section.id }}"
+            data-prava-pdp-gallery-swiper
+            role="region"
             aria-label="{{ 'products.gallery_thumbnails' | t }}"
           >
-            {% for media in product.media %}
-              {% if media.media_type == 'image' %}
-                <button
-                  type="button"
-                  class="group relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 border-transparent bg-white p-1 transition-[border-color] hover:border-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 data-[active=true]:border-neutral-900"
-                  data-prava-pdp-thumb
+            <div class="swiper-wrapper prava-pdp__gallery-wrapper">
+              {% for media in product.media %}
+                {% liquid
+                  if forloop.first
+                    assign media_loading = 'eager'
+                  else
+                    assign media_loading = 'lazy'
+                  endif
+                %}
+                <div
+                  class="swiper-slide prava-pdp__gallery-slide !h-auto"
                   data-media-id="{{ media.id }}"
-                  data-src="{{ media | image_url: width: 1400 }}"
-                  data-alt="{{ media.alt | default: product.title | escape }}"
-                  aria-pressed="{% if media.id == featured_media.id %}true{% else %}false{% endif %}"
-                  aria-label="{{ 'products.view_image' | t }} {{ forloop.index }}"
                 >
-                  <img
-                    src="{{ media | image_url: width: 200 }}"
-                    alt=""
-                    class="h-full w-full object-contain"
-                    width="80"
-                    height="80"
-                    loading="lazy"
-                    decoding="async"
+                  <div
+                    class="overflow-hidden rounded-lg bg-white"
+                    data-prava-pdp-media
+                    data-media-id="{{ media.id }}"
                   >
-                </button>
-              {% elsif media.media_type == 'video' %}
-                <button
-                  type="button"
-                  class="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 border-transparent bg-neutral-900 p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800"
-                  data-prava-pdp-thumb-video
-                  aria-label="{{ 'products.view_video' | t }} {{ forloop.index }}"
-                >
-                  <span class="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">▶</span>
-                </button>
-              {% endif %}
-            {% endfor %}
+                    {% render 'pdp-gallery-media',
+                      media: media,
+                      product: product,
+                      loading: media_loading
+                    %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div
+              class="prava-pdp__gallery-pagination swiper-pagination !relative !mt-3 md:!hidden"
+            ></div>
           </div>
         {% endif %}
       </div>
@@ -170,14 +155,21 @@
                 {% assign rating_val = product.metafields.reviews.rating.value.rating | floor %}
                 {% assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5 %}
                 {% for i in (1..scale_max) %}
-                  <span class="text-amber-500" aria-hidden="true">{% if i <= rating_val %}★{% else %}☆{% endif %}</span>
+                  <span class="text-amber-500" aria-hidden="true">
+                    {%- if i <= rating_val %}★{% else %}☆{% endif -%}
+                  </span>
                 {% endfor %}
               </div>
               <span class="text-sm text-neutral-600">
                 <span aria-hidden="true">{{ product.metafields.reviews.rating.value.rating }} / {{ scale_max }}</span>
                 {% if product.metafields.reviews.rating_count != blank %}
-                  <span class="sr-only">{{ product.metafields.reviews.rating_count }} {{ 'products.reviews_count' | t }}</span>
-                  <span class="text-neutral-500" aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
+                  <span class="sr-only">
+                    {{- product.metafields.reviews.rating_count }}
+                    {{ 'products.reviews_count' | t -}}
+                  </span>
+                  <span class="text-neutral-500" aria-hidden="true"
+                    >({{ product.metafields.reviews.rating_count }})</span
+                  >
                 {% endif %}
               </span>
             </div>
@@ -247,12 +239,14 @@
             {% comment %}
               Renk swatch: her renk değeri için o seçenekle eşleşen ilk varyant id’si kullanılır (basit matris; tek seçenekli renk senaryoları için uygundur).
             {% endcomment %}
-            {% if color_option_index != nil and color_option != blank %}
+            {% if color_option_index != null and color_option != blank %}
               <div class="flex flex-col gap-2">
-                <span class="text-sm font-medium text-neutral-800" id="PdpColorLegend-{{ section.id }}">{{ color_option.name | escape }}</span>
+                <span class="text-sm font-medium text-neutral-800" id="PdpColorLegend-{{ section.id }}">
+                  {{- color_option.name | escape -}}
+                </span>
                 <div class="flex flex-wrap gap-2" role="group" aria-labelledby="PdpColorLegend-{{ section.id }}">
                   {% for value in color_option.values %}
-                    {% assign var_for_color = nil %}
+                    {% assign var_for_color = null %}
                     {% for v in product.variants %}
                       {% if color_option_index == 0 and v.option1 == value %}
                         {% assign var_for_color = v %}
@@ -274,7 +268,10 @@
                         aria-pressed="{% if var_for_color.id == current_variant.id %}true{% else %}false{% endif %}"
                         aria-label="{{ value | escape }}"
                       >
-                        <span class="block h-full w-full rounded-full bg-gradient-to-br from-neutral-300 to-neutral-500" aria-hidden="true"></span>
+                        <span
+                          class="block h-full w-full rounded-full bg-gradient-to-br from-neutral-300 to-neutral-500"
+                          aria-hidden="true"
+                        ></span>
                       </button>
                     {% endif %}
                   {% endfor %}
@@ -291,7 +288,9 @@
           <div id="PdpPrice-{{ section.id }}" class="price-display" role="status" aria-live="polite">
             <p class="m-0 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
               {% if current_variant.compare_at_price > current_variant.price %}
-                <span class="mr-2 text-xl font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
+                <span class="mr-2 text-xl font-light text-neutral-500 line-through">
+                  {{- current_variant.compare_at_price | money -}}
+                </span>
               {% endif %}
               <span data-prava-pdp-price>{{ current_variant.price | money }}</span>
             </p>
@@ -344,10 +343,15 @@
     {% comment %}
       "Ürün detayı" alanı: ayarlardan başlık + giriş metni; blok tipi feature_tile = görsel + başlık + kısa metin (4 sütuna kadar grid).
     {% endcomment %}
-    {% if section.settings.details_heading != blank or section.settings.details_intro != blank or section.blocks.size > 0 %}
+    {% if section.settings.details_heading != blank
+      or section.settings.details_intro != blank
+      or section.blocks.size > 0
+    %}
       <div class="mt-20 border-t border-neutral-200/90 pt-16">
         {% if section.settings.details_heading != blank %}
-          <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">{{ section.settings.details_heading | escape }}</h2>
+          <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
+            {{ section.settings.details_heading | escape }}
+          </h2>
         {% endif %}
         {% if section.settings.details_intro != blank %}
           <div class="rte mt-4 max-w-3xl text-base leading-relaxed text-neutral-700">
@@ -398,10 +402,20 @@
         <div class="divide-y divide-neutral-300/90 border-y border-neutral-300/90">
           {% for block in section.blocks %}
             {% if block.type == 'spec_accordion' %}
-              <details class="group py-2" {{ block.shopify_attributes }} {% if block.settings.open %}open{% endif %}>
+              <details
+                class="group py-2"
+                {{ block.shopify_attributes }}
+                {% if block.settings.open %}
+                  open
+                {% endif %}
+              >
                 <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-medium text-neutral-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
                   <span>{{ block.settings.heading | escape }}</span>
-                  <span class="text-xl font-light text-neutral-600 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                  <span
+                    class="text-xl font-light text-neutral-600 transition-transform group-open:rotate-45"
+                    aria-hidden="true"
+                    >+</span
+                  >
                 </summary>
                 <div class="rte pb-6 pr-8 text-sm leading-relaxed text-neutral-700 md:text-base">
                   {{ block.settings.body }}
@@ -468,7 +482,9 @@
         %}
         <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           {% if section.settings.related_heading != blank %}
-            <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">{{ section.settings.related_heading | escape }}</h2>
+            <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
+              {{ section.settings.related_heading | escape }}
+            </h2>
           {% endif %}
           <a
             href="{{ r_cta }}"
@@ -483,7 +499,8 @@
               {% for block in section.blocks %}
                 {% if block.type == 'related_product' and block.settings.product != blank %}
                   <div class="swiper-slide !h-auto">
-                    {% render 'product-card-atc',
+                    {%
+                      render 'product-card-atc',
                       product: block.settings.product,
                       block: block,
                       title_id: 'pdp-rel-' | append: block.id,
@@ -510,9 +527,15 @@
     {% if has_support %}
       <div class="mt-24 rounded-xl bg-[#f0eeeb] px-6 py-10 md:px-12 md:py-14">
         {% if section.settings.support_heading != blank %}
-          <h2 class="text-3xl font-medium text-neutral-900 md:text-4xl">{{ section.settings.support_heading | escape }}</h2>
+          <h2 class="text-3xl font-medium text-neutral-900 md:text-4xl">
+            {{ section.settings.support_heading | escape }}
+          </h2>
         {% endif %}
-        <div class="mt-8 space-y-0 divide-y divide-neutral-300/80" role="region" aria-label="{{ 'sections.product_detail.support_region' | t }}">
+        <div
+          class="mt-8 space-y-0 divide-y divide-neutral-300/80"
+          role="region"
+          aria-label="{{ 'sections.product_detail.support_region' | t }}"
+        >
           {% for block in section.blocks %}
             {% if block.type == 'support_faq' and block.settings.question != blank %}
               <details class="group py-2" {{ block.shopify_attributes }}>

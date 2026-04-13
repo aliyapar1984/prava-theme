@@ -292,6 +292,61 @@
     });
   });
 
+  /* ── Ürün detay: ana galeri — mobilde Swiper (slidesPerView auto, genişlikler CSS); md+ enabled:false + grid CSS ── */
+  document.querySelectorAll('[data-prava-pdp-gallery-swiper]').forEach(function (el) {
+    if (!el.querySelector('.swiper-slide')) return;
+    var pag = el.querySelector('.swiper-pagination');
+    var opts = {
+      slidesPerView: 'auto',
+      /* Genişlik ve aralık CSS’te; JS ile slide boyutu hesaplanmaz */
+      spaceBetween: 0,
+      speed: 400,
+      grabCursor: true,
+      watchOverflow: true,
+      breakpoints: {
+        768: {
+          enabled: false,
+        },
+      },
+    };
+    if (pag) {
+      opts.pagination = { el: pag, clickable: true };
+    }
+    new Swiper(el, opts);
+  });
+
+  /**
+   * Varyant değişince öne çıkan medyaya kaydır; mobilde Swiper aktifken slideTo.
+   * product-detail.js Swiper’dan önce yüklenebilir; bu fonksiyon main.js içinde tanımlanır.
+   */
+  window.PravaPdpNavigateToMedia = function (sectionId, mediaId) {
+    if (!sectionId || mediaId == null || mediaId === '') return;
+    var root = document.querySelector(
+      '[data-prava-pdp][data-section-id="' + sectionId + '"]'
+    );
+    if (!root) return;
+    var idStr = String(mediaId);
+    var cells = root.querySelectorAll(
+      '[data-prava-pdp-media][data-media-id="' + idStr + '"]'
+    );
+    cells.forEach(function (cell) {
+      if (cell.offsetParent !== null) {
+        cell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+    var swEl = root.querySelector('[data-prava-pdp-gallery-swiper]');
+    var sw = swEl && swEl.swiper;
+    if (sw && sw.enabled) {
+      var slides = swEl.querySelectorAll('.swiper-slide');
+      for (var i = 0; i < slides.length; i++) {
+        if (slides[i].getAttribute('data-media-id') === idStr) {
+          sw.slideTo(i, 0);
+          break;
+        }
+      }
+    }
+  };
+
   /* ── Ürün detay: benzer ürünler (sections/main-product-detail — product-card-atc) ── */
   document.querySelectorAll('.prava-pdp-related__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;

@@ -1,7 +1,7 @@
 /**
  * PRAVA ürün detay (PDP) — sections/main-product-detail.liquid ile eşleşir.
  *
- * 1) Varyant UI: fiyat, taksit gizli input, ana görsel, swatch (Dawn’daki product-info.js’e benzer ama hafif).
+ * 1) Varyant UI: fiyat, taksit gizli input, galeri medya kaydırma, swatch (Dawn’daki product-info.js’e benzer ama hafif).
  * 2) Sepete ekle: Dawn’daki product-form.js gibi form gönderimini yakalayıp fetch + FormData ile
  *    routes.cart_add_url’e POST (klasik tam sayfa POST yerine; vitrin / Ajax Cart API ile uyumlu).
  *
@@ -41,8 +41,6 @@
   var submitBtn = document.getElementById('PdpSubmit-' + sectionId);
   /** Taksit formundaki gizli varyant id input’u (installment-variant-*) */
   var installmentInput = document.getElementById('installment-variant-' + sectionId);
-  /** Yalnızca ana medya görsel ise id verilir; video/3D’de bu öğe olmayabilir */
-  var mainImg = document.getElementById('PdpMainImg-' + sectionId);
 
   function findVariant(id) {
     var vid = parseInt(id, 10);
@@ -53,31 +51,16 @@
     return null;
   }
 
-  /** Küçük resimlerde aria-pressed: hangi küçük resmin “aktif” olduğunu erişilebilirlik için işaretler */
-  function setThumbActive(mediaId) {
-    if (!mediaId) return;
-    root.querySelectorAll('[data-prava-pdp-thumb]').forEach(function (btn) {
-      var mid = btn.getAttribute('data-media-id');
-      var on = mid === String(mediaId);
-      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
-  }
-
-  /** Seçilen varyantın featured_image’ına göre ana img src güncellenir */
-  function updateMainImageFromVariant(variant) {
-    if (!mainImg || !variant) return;
-    var img = variant.featured_image;
-    if (!img || !img.src) return;
-    try {
-      var u = new URL(img.src, window.location.href);
-      u.searchParams.set('width', '1400');
-      mainImg.src = u.toString();
-    } catch (err) {
-      mainImg.src = img.src;
-    }
-    mainImg.alt = img.alt || (product && product.title) || '';
-    if (variant.featured_media && variant.featured_media.id) {
-      setThumbActive(variant.featured_media.id);
+  /** Seçilen varyantın öne çıkan medyasına kaydır (grid / mobil Swiper) */
+  function navigateToVariantMedia(variant) {
+    if (!variant) return;
+    var mid =
+      variant.featured_media && variant.featured_media.id
+        ? variant.featured_media.id
+        : null;
+    if (!mid) return;
+    if (typeof window.PravaPdpNavigateToMedia === 'function') {
+      window.PravaPdpNavigateToMedia(sectionId, mid);
     }
   }
 
@@ -91,7 +74,7 @@
       var addL = submitBtn.getAttribute('data-label-add') || 'Sepete ekle';
       var soldL = submitBtn.getAttribute('data-label-sold') || 'Tükendi';
       submitBtn.textContent = variant.available ? addL : soldL;
-      if (variant) updateMainImageFromVariant(variant);
+      if (variant) navigateToVariantMedia(variant);
       return;
     }
 
@@ -123,7 +106,7 @@
     }
 
     if (variant) {
-      updateMainImageFromVariant(variant);
+      navigateToVariantMedia(variant);
     }
 
     root.querySelectorAll('[data-prava-pdp-swatch]').forEach(function (sw) {
@@ -151,20 +134,6 @@
       if (!vid || !select) return;
       select.value = vid;
       select.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-  });
-
-  /** Galeri küçük resim: ana görseli değiştirir; varyantı otomatik değiştirmez */
-  root.querySelectorAll('[data-prava-pdp-thumb]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var src = btn.getAttribute('data-src');
-      var alt = btn.getAttribute('data-alt') || '';
-      if (mainImg && src) {
-        mainImg.src = src;
-        mainImg.alt = alt;
-      }
-      var mid = btn.getAttribute('data-media-id');
-      if (mid) setThumbActive(mid);
     });
   });
 
