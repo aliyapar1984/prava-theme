@@ -33,8 +33,6 @@
     "gallery_thumbnails": "Product images",
     "view_image": "View image",
     "view_video": "View video",
-    "rating_aria": "{{ rating }} out of {{ max }} stars",
-    "reviews_count": "reviews",
     "variant_label": "Choose a variant",
     "specs_heading": "Specifications",
     "view_360": "360° view",

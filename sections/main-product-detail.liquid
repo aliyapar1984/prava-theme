@@ -78,12 +78,15 @@
       {% render 'breadcrumbs', current_title: product.title %}
     {% endif %}
 
-    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-20">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-14 xl:gap-20">
       {% comment %}
         Sol sütun — Tek Swiper iskeleti: mobilde swipe (slidesPerView auto, boyutlar CSS);
         md+ breakpoint’te JS devre dışı, wrapper CSS grid (1 + 2 sütun).
       {% endcomment %}
-      <div class="prava-pdp__gallery min-w-0" data-prava-pdp-gallery>
+      <div
+        class="prava-pdp__gallery min-w-0 lg:sticky lg:top-24 lg:z-[1] lg:self-start"
+        data-prava-pdp-gallery
+      >
         {% if product.media.size == 0 %}
           <div class="overflow-hidden rounded-lg bg-white">
             <div class="flex aspect-square items-center justify-center bg-neutral-100 text-neutral-500">
@@ -133,46 +136,16 @@
       </div>
 
       {% comment %}
-        Sağ sütun — Başlık (SEO: sayfada tek h1), isteğe bağlı satıcı, Shopify Reviews metafield ile yıldız,
-        ürün açıklaması (RTE), ayrı taksit formu, ana sepet formu (varyant + miktar + fiyat + ATC).
+        Sağ sütun — Başlık (SEO: sayfada tek h1), isteğe bağlı satıcı, ürün açıklaması (RTE),
+        ayrı taksit formu, ana sepet formu (varyant + miktar + fiyat + ATC).
       {% endcomment %}
-      <div class="prava-pdp__info flex min-w-0 flex-col">
+      <div class="prava-pdp__info flex min-w-0 flex-col lg:sticky lg:top-24 lg:self-start">
         <header class="border-b border-neutral-200/80 pb-6">
           <h1 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-[34px] md:leading-tight">
             {{ product.title | escape }}
           </h1>
           {% if section.settings.show_vendor and product.vendor != blank %}
             <p class="mt-2 text-sm font-light text-neutral-600">{{ product.vendor | escape }}</p>
-          {% endif %}
-
-          {% if product.metafields.reviews.rating.value != blank %}
-            <div class="mt-4 flex flex-wrap items-center gap-2">
-              <div
-                class="inline-flex items-center gap-0.5"
-                role="img"
-                aria-label="{{ 'products.rating_aria' | t: rating: product.metafields.reviews.rating.value.rating, max: product.metafields.reviews.rating.value.scale_max }}"
-              >
-                {% assign rating_val = product.metafields.reviews.rating.value.rating | floor %}
-                {% assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5 %}
-                {% for i in (1..scale_max) %}
-                  <span class="text-amber-500" aria-hidden="true">
-                    {%- if i <= rating_val %}★{% else %}☆{% endif -%}
-                  </span>
-                {% endfor %}
-              </div>
-              <span class="text-sm text-neutral-600">
-                <span aria-hidden="true">{{ product.metafields.reviews.rating.value.rating }} / {{ scale_max }}</span>
-                {% if product.metafields.reviews.rating_count != blank %}
-                  <span class="sr-only">
-                    {{- product.metafields.reviews.rating_count }}
-                    {{ 'products.reviews_count' | t -}}
-                  </span>
-                  <span class="text-neutral-500" aria-hidden="true"
-                    >({{ product.metafields.reviews.rating_count }})</span
-                  >
-                {% endif %}
-              </span>
-            </div>
           {% endif %}
         </header>
 

@@ -33,8 +33,6 @@
     "gallery_thumbnails": "Ürün görselleri",
     "view_image": "Görseli göster",
     "view_video": "Videoyu göster",
-    "rating_aria": "{{ rating }} üzerinden {{ max }} yıldız",
-    "reviews_count": "değerlendirme",
     "variant_label": "Varyant seçin",
     "specs_heading": "Teknik özellikler",
     "view_360": "360° Görünüm",
