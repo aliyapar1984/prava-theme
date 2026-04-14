@@ -7,12 +7,14 @@
 
   Not: fiyat, Liquid’de variant.price mağaza alt biriminde (ör. kuruş) geldiği için Offer’da bölünür.
   Görsel URL’si CDN’den gelir; https ile mutlak adres üretmek için protokol kontrolü yapılır.
+  Offer.url, seçili varyantla eşleşmesi için ?variant= eklenir (product.selected_or_first_available_variant).
 {% endcomment %}
 {% if product == blank %}
 {% else %}
   {% liquid
     assign cv = product.selected_or_first_available_variant
     assign prod_url = request.origin | append: product.url
+    assign offer_url = prod_url | append: '?variant=' | append: cv.id
     assign img_url = nil
     if product.featured_image
       assign img_url = product.featured_image | image_url: width: 1200
@@ -48,7 +50,7 @@
     "sku": {{ cv.sku | json }}{% endif %},
     "offers": {
       "@type": "Offer",
-      "url": {{ prod_url | json }},
+      "url": {{ offer_url | json }},
       "priceCurrency": {{ cart.currency.iso_code | json }},
       "price": {{ cv.price | divided_by: 100.0 | json }},
       "availability": "{% if cv.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",

@@ -1,0 +1,46 @@
+{% comment %}
+  Renk alternatifleri (aynı seri, farklı ürün URL’leri) için ItemList — ana Product şeması layout’ta kalır.
+{% endcomment %}
+{% assign color_variants = product.metafields.custom.color_variants.value %}
+{% assign has_color_ld = false %}
+{% if color_variants != blank %}
+  {% for variant in color_variants %}
+    {% assign _rp = variant.product_referance.value %}
+    {% if _rp != blank %}
+      {% assign has_color_ld = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% if has_color_ld %}
+  {% liquid
+    assign ld_first = true
+    assign pos = 0
+  %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": {{ 'general.accessibility.color_options' | t | json }},
+      "itemListElement": [
+        {%- for variant in color_variants -%}
+          {%- assign ref_product = variant.product_referance.value -%}
+          {%- if ref_product != blank -%}
+            {%- assign pos = pos | plus: 1 -%}
+            {%- unless ld_first -%},{%- endunless -%}
+            {
+              "@type": "ListItem",
+              "position": {{ pos }},
+              "item": {
+                "@type": "Product",
+                "name": {{ ref_product.title | json }},
+                "url": {{ request.origin | append: ref_product.url | json }}
+              }
+            }
+            {%- assign ld_first = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{% endif %}

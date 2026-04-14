@@ -1,33 +1,16 @@
-<script type="application/json" id="ProductJson-{{ section.id }}">
-  {{ product | json }}
-</script>
 {% comment %}
   main-product-detail — Shopify ürün detay (PDP) ana bölümü.
 
   Ne işe yarar?
-  - Sol: medya galerisi (tek Swiper DOM; mobil swipe, md+ CSS grid; varyant değişince ilgili medyaya kaydırılır).
+  - Sol: medya galerisi (tek Swiper DOM; mobil swipe, md+ CSS grid).
   - Sağ: başlık (tek h1), açıklama, taksit metni (Shopify payment_terms), sepete ekle formu, fiyat.
+  - Renk grupları ayrı ürün URL’leri (metafield: snippets/product-color-variants); sayfada tek Shopify varyantı (gizli id).
   - Aşağıda tema editörü blokları: özellik kutuları, teknik akordeon, 360/3D veya yer tutucu, benzer ürünler (her biri ayrı ATC formu), destek SSS.
 
-  JS eşlemesi (assets/product-detail.js):
-  - [data-prava-pdp] kök; data-section-id ile ProductJson / PdpVariantMeta script id’leri eşleşir.
-  - Sepete ekle: ana form (product_form_id) — gönderim Dawn’daki gibi fetch + FormData ile window.routes.cart_add_url (layout’ta tanımlı).
-  - Taksit: ayrı küçük form — varyant id’si JS ile senkronlanır (Ajax sepete dahil değil).
+  JS (assets/product-detail.js): Ajax sepete ekleme; [data-prava-pdp] + ProductForm-{section.id}.
 {% endcomment %}
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
-
-  # Renk seçeneği (isimde color/colour/renk): swatch ve option1/2/3 eşlemesi için
-  assign color_option_index = null
-  assign color_option = null
-  for option in product.options_with_values
-    assign on = option.name | downcase
-    if on contains 'color' or on contains 'colour' or on contains 'renk'
-      assign color_option_index = forloop.index0
-      assign color_option = option
-      break
-    endif
-  endfor
 
   # Medyada 3D model — model_viewer_tag + CDN stylesheet
   assign first_model = null
@@ -58,7 +41,7 @@
   >
 {%- endif -%}
 
-{% comment %} Varyant/fiyat/görsel senkronu — section id ile script içindeki JSON id’leri eşleşir {% endcomment %}
+{% comment %} Ajax sepete ekleme (product-detail.js) {% endcomment %}
 <script src="{{ 'product-detail.js' | asset_url }}" defer="defer"></script>
 
 <section
@@ -137,7 +120,7 @@
 
       {% comment %}
         Sağ sütun — Başlık (SEO: sayfada tek h1), isteğe bağlı satıcı, ürün açıklaması (RTE),
-        ayrı taksit formu, ana sepet formu (varyant + miktar + fiyat + ATC).
+        ayrı taksit formu, ana sepet formu (gizli varyant id + miktar + fiyat + ATC).
       {% endcomment %}
       <div class="prava-pdp__info flex min-w-0 flex-col lg:sticky lg:top-24 lg:self-start">
         <header class="border-b border-neutral-200/80 pb-6">
@@ -157,7 +140,7 @@
 
         {% comment %}
           Taksit / ödeme koşulları: Shopify payment_terms için ürün formu ayrı bir form etiketi olarak tanımlanmalıdır.
-          Gizli id seçilen varyantı taşır; product-detail.js seçim değişince bu alanı günceller.
+          Gizli id tek satılabilir varyantı taşır (sayfada varyant seçici yok).
         {% endcomment %}
         <div class="mt-6">
           {% assign installment_variant_id = 'installment-variant-' | append: section.id %}
@@ -168,8 +151,8 @@
         </div>
 
         {% comment %}
-          Ana sepet formu: name="id" ile varyant (select veya gizli input), gönder düğmesi name="add".
-          Çoklu varyantta renk swatch’leri aynı select değerini hedefler; yedek olarak doğrudan select kullanılabilir.
+          Ana sepet formu: tek varyant (gizli id), gönder düğmesi name="add".
+          Renk alternatifleri: snippets/product-color-variants (metafield custom.color_variants).
         {% endcomment %}
         {% form 'product', product, id: product_form_id, class: 'mt-8 flex flex-col gap-6' %}
           {% if form.errors %}
@@ -182,90 +165,20 @@
             </div>
           {% endif %}
 
-          {% if product.has_only_default_variant == false %}
-            <div class="flex flex-col gap-3">
-              <label class="text-sm font-medium text-neutral-800" for="PdpVariantSelect-{{ section.id }}">
-                {{ 'products.variant_label' | t }}
-              </label>
-              <select
-                name="id"
-                id="PdpVariantSelect-{{ section.id }}"
-                class="w-full max-w-md rounded-md border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-900 focus-visible:border-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800"
-                data-prava-pdp-variant-select
-              >
-                {% for variant in product.variants %}
-                  <option
-                    value="{{ variant.id }}"
-                    {% if variant == current_variant %}
-                      selected
-                    {% endif %}
-                    {% unless variant.available %}
-                      disabled
-                    {% endunless %}
-                  >
-                    {{ variant.title }} — {{ variant.price | money }}
-                  </option>
-                {% endfor %}
-              </select>
-            </div>
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
 
-            {% comment %}
-              Renk swatch: her renk değeri için o seçenekle eşleşen ilk varyant id’si kullanılır (basit matris; tek seçenekli renk senaryoları için uygundur).
-            {% endcomment %}
-            {% if color_option_index != null and color_option != blank %}
-              <div class="flex flex-col gap-2">
-                <span class="text-sm font-medium text-neutral-800" id="PdpColorLegend-{{ section.id }}">
-                  {{- color_option.name | escape -}}
-                </span>
-                <div class="flex flex-wrap gap-2" role="group" aria-labelledby="PdpColorLegend-{{ section.id }}">
-                  {% for value in color_option.values %}
-                    {% assign var_for_color = null %}
-                    {% for v in product.variants %}
-                      {% if color_option_index == 0 and v.option1 == value %}
-                        {% assign var_for_color = v %}
-                        {% break %}
-                      {% elsif color_option_index == 1 and v.option2 == value %}
-                        {% assign var_for_color = v %}
-                        {% break %}
-                      {% elsif color_option_index == 2 and v.option3 == value %}
-                        {% assign var_for_color = v %}
-                        {% break %}
-                      {% endif %}
-                    {% endfor %}
-                    {% if var_for_color %}
-                      <button
-                        type="button"
-                        class="h-9 w-9 rounded-full border-2 border-neutral-200 bg-white p-0.5 transition-[border-color,box-shadow] hover:border-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 data-[active=true]:border-neutral-900 data-[active=true]:ring-2 data-[active=true]:ring-neutral-400"
-                        data-prava-pdp-swatch
-                        data-variant-id="{{ var_for_color.id }}"
-                        aria-pressed="{% if var_for_color.id == current_variant.id %}true{% else %}false{% endif %}"
-                        aria-label="{{ value | escape }}"
-                      >
-                        <span
-                          class="block h-full w-full rounded-full bg-gradient-to-br from-neutral-300 to-neutral-500"
-                          aria-hidden="true"
-                        ></span>
-                      </button>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-              </div>
-            {% endif %}
-          {% else %}
-            <input type="hidden" name="id" value="{{ current_variant.id }}">
-          {% endif %}
+          {% render 'product-color-variants', product: product, section_id: section.id %}
 
           <input type="hidden" name="quantity" value="1">
 
-          {% comment %} role="status" + aria-live: ekran okuyucu fiyat güncellemesini duyurabilir (JS innerHTML ile güncellenir). {% endcomment %}
-          <div id="PdpPrice-{{ section.id }}" class="price-display" role="status" aria-live="polite">
+          <div id="PdpPrice-{{ section.id }}" class="price-display" role="status">
             <p class="m-0 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
               {% if current_variant.compare_at_price > current_variant.price %}
                 <span class="mr-2 text-xl font-light text-neutral-500 line-through">
                   {{- current_variant.compare_at_price | money -}}
                 </span>
               {% endif %}
-              <span data-prava-pdp-price>{{ current_variant.price | money }}</span>
+              <span>{{ current_variant.price | money }}</span>
             </p>
           </div>
 
@@ -277,9 +190,6 @@
             {% unless current_variant.available %}
               disabled
             {% endunless %}
-            data-prava-pdp-submit
-            data-label-add="{{ 'products.add_to_cart' | t | escape }}"
-            data-label-sold="{{ 'products.sold_out' | t | escape }}"
           >
             {% if current_variant.available %}
               {{ 'products.add_to_cart' | t }}
@@ -558,25 +468,8 @@
     </script>
   {% endif %}
 
-  {% comment %}
-    ProductJson: Shopify ürün nesnesi (varyantların featured_image vb.) — product-detail.js parse eder.
-    PdpVariantMeta: her varyant için sunucuda formatlanmış fiyat metni + stok — JS sayfayı yenilemeden günceller.
-  {% endcomment %}
-  <script type="application/json" id="ProductJson-{{ section.id }}">
-    {{ product | json }}
-  </script>
-  <script type="application/json" id="PdpVariantMeta-{{ section.id }}">
-    {
-      {% for variant in product.variants %}
-        "{{ variant.id }}": {
-          "price": {{ variant.price | money | strip_html | json }},
-          "compare_at_price": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | strip_html | json }}{% else %}null{% endif %},
-          "available": {{ variant.available | json }},
-          "featured_media_id": {% if variant.featured_media %}{{ variant.featured_media.id | json }}{% else %}null{% endif %}
-        }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    }
-  </script>
+  {% render 'product-color-variants-json-ld', product: product %}
+
 </section>
 
 {% schema %}

@@ -1,0 +1,81 @@
+BLACK - P14
+
+Teknik Özellikler;
+Gövde / Çerçeve: Alüminyum
+Ürün Ağırlığı: 11,5 kg
+Maks. Taşıma Kapasitesi: 15 kg
+Koli Ölçüleri: 71 x 51,5 x 51 cm
+Koli Ağırlığı: 12 kg
+Mevcut Renk/Varyantlar: Siyah/Gold | Gri/Silver | Kahverengi/Silver
+Dahil Aksesuarlar: Port Bebe / Oto Koltuğu dahil
+
+Özellikler;
+Çift yönlü puset
+Farklı pozisyonlara ayarlanabilen sırt dayanağı
+Alüminyum gövde
+Açısı ayarlanabilir itme sapı
+Tentede üzerinde güneşlik
+Ekstra dolgulu şilte
+Çift yönlü kullanılabilen oturma ünitesi
+Çıkarılabilir ön bar
+5 noktalı emniyet kemeri
+Çıkarılabilir ön ve arka tekerler
+Katlandığında otomatik kitlenebilme
+Port bebe olarak ayarlanabilen oturma ünitesi
+Port bebe katlanabilir ayak dayanağı
+Taşıma ile birlikte kullanılabilme
+Oto koltuğu sertifikalı taşıma
+Kolay katlanabilme ve taşınabilme
+360 derece dönüp sabitlenebilen ön tekerler
+Maksimum 15 kg taşıma kapasitesi
+
+
+1. Ürün Kimlik ve Satın Alma Alanı (Product Identity)
+Bu bölüm, kullanıcının ürünü tanıdığı ve karar verdiği "ana bilgi" katmanıdır.
+
+Ürün Başlığı ve Kısa Tanım: Marka ismini ve ürünün ana vaadini içeren başlık.
+
+Fiyatlandırma: Güncel fiyat, varsa indirimli fiyat ve taksit seçenekleri bilgisi.
+
+Varyant Yönetimi: Renk, kumaş tipi veya şasi rengi gibi seçeneklerin seçilebilir listesi. (variant renk olsun ama her bir variant farklı urun olsun)
+
+Stok ve Kargo Bilgisi: "Stokta var", "Hızlı gönderim" veya "Ücretsiz kargo" gibi güven veren mikro metinler.
+
+2. Görsel Kanıt ve Yaşam Tarzı (Social Proof & Lifestyle)
+Ürünün sadece stüdyoda değil, gerçek hayatta nasıl durduğunu gösteren içerik alanı.
+
+Lifestyle Galeri: Ürünün dış mekanda, kullanım anında çekilmiş yüksek çözünürlüklü fotoğrafları.
+
+Detay Çekimleri: Tekerlek dokusu, dikiş kalitesi veya katlanma mekanizması gibi "premium" hissettiren detaylar.
+
+3. Fonksiyonel Özellik Grupları (Feature Sets)
+Ürünü rakiplerinden ayıran teknik ve konfor özelliklerinin kategorize edilmesi.
+
+Öne Çıkan Özellik Kartları: (Örn: "Deri Tutma Sapı", "Gelişmiş Süspansiyon") Her biri bir ikon/görsel ve kısa bir açıklama metni içeren bloklar.
+
+Kullanım Avantajları: Ürünün anne/baba ve bebek için sağladığı faydalar (Örn: "Tek elle katlanma", "360 derece dönebilen tekerlekler").
+
+4. Teknik Veri ve Dokümantasyon (Technical Specs)
+Karar verme aşamasında teknik rasyonaliteyi sağlayan bölümler.
+
+Boyut ve Ağırlık Cetveli: Açık hali, kapalı hali ve ürünün net ağırlığı.
+
+Yaş/Kilo Kapasitesi: Ürünün hangi yaş aralığına ve maksimum kaç kiloya uygun olduğu bilgisi.
+
+Kullanım Kılavuzu & Sertifikalar: İndirilebilir PDF kılavuzlar ve güvenlik sertifikası (EN 1888 vb.) logoları.
+
+5. Etkileşimli İçerik Katmanı (Interactive Layer)
+Kullanıcının ürünle bağ kurmasını sağlayan dinamik içerik.
+
+360 Derece Ürün Turu: Ürünü her açıdan incelemeyi sağlayan interaktif görsel seti.
+
+Tanıtım Videosu: Ürünün kurulumunu veya sürüş konforunu gösteren kısa (15-30 sn) video içeriği.
+
+6. Satış Sonrası ve Destek (Trust & Support)
+Kullanıcının satın alma sonrası yaşayacağı süreci netleştiren alan.
+
+Sıkça Sorulan Sorular (Ürüne Özel): Temizlik talimatları, garanti süresi gibi ürüne spesifik sorular.
+
+Benzer/Tamamlayıcı Ürünler: Bu araba ile uyumlu ana kucağı, yağmurluk veya çanta gibi çapraz satış (upsell) ürünleri.
+
+

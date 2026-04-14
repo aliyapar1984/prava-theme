@@ -1,9 +1,8 @@
 /**
  * PRAVA ürün detay (PDP) — sections/main-product-detail.liquid ile eşleşir.
  *
- * 1) Varyant UI: fiyat, taksit gizli input, galeri medya kaydırma, swatch (Dawn’daki product-info.js’e benzer ama hafif).
- * 2) Sepete ekle: Dawn’daki product-form.js gibi form gönderimini yakalayıp fetch + FormData ile
- *    routes.cart_add_url’e POST (klasik tam sayfa POST yerine; vitrin / Ajax Cart API ile uyumlu).
+ * Sepete ekle: form gönderimini yakalayıp fetch + FormData ile routes.cart_add_url’e POST
+ * (Ajax Cart API; vitrin drawer ile uyumlu). Renk vb. ayrı ürün URL’leri — sayfada tek varyant, seçici yok.
  *
  * window.routes: layout/theme.liquid içinde tanımlanır (cart_add_url, cart_url).
  */
@@ -15,127 +14,6 @@
 
   var sectionId = root.getAttribute('data-section-id');
   if (!sectionId) return;
-
-  var productJsonEl = document.getElementById('ProductJson-' + sectionId);
-  var variantMetaEl = document.getElementById('PdpVariantMeta-' + sectionId);
-  if (!productJsonEl || !variantMetaEl) return;
-
-  /** Shopify’ın liquid {{ product | json }} çıktısı — varyant featured_image vb. */
-  var product;
-  try {
-    product = JSON.parse(productJsonEl.textContent);
-  } catch (e) {
-    return;
-  }
-
-  /** Sunucuda formatlanmış fiyat string’leri + stok — sayfa yenilemeden güncelleme için */
-  var variantMeta;
-  try {
-    variantMeta = JSON.parse(variantMetaEl.textContent);
-  } catch (e2) {
-    variantMeta = {};
-  }
-
-  var select = document.getElementById('PdpVariantSelect-' + sectionId);
-  var priceWrap = document.getElementById('PdpPrice-' + sectionId);
-  var submitBtn = document.getElementById('PdpSubmit-' + sectionId);
-  /** Taksit formundaki gizli varyant id input’u (installment-variant-*) */
-  var installmentInput = document.getElementById('installment-variant-' + sectionId);
-
-  function findVariant(id) {
-    var vid = parseInt(id, 10);
-    if (!product || !product.variants) return null;
-    for (var i = 0; i < product.variants.length; i++) {
-      if (product.variants[i].id === vid) return product.variants[i];
-    }
-    return null;
-  }
-
-  /** Seçilen varyantın öne çıkan medyasına kaydır (grid / mobil Swiper) */
-  function navigateToVariantMedia(variant) {
-    if (!variant) return;
-    var mid =
-      variant.featured_media && variant.featured_media.id
-        ? variant.featured_media.id
-        : null;
-    if (!mid) return;
-    if (typeof window.PravaPdpNavigateToMedia === 'function') {
-      window.PravaPdpNavigateToMedia(sectionId, mid);
-    }
-  }
-
-  /** Fiyat HTML’i, taksit input’u, ATC düğmesi, ana görsel, swatch durumları */
-  function updatePriceAndUi(variantId) {
-    var meta = variantMeta[String(variantId)];
-    var variant = findVariant(variantId);
-
-    if (!meta && variant && submitBtn) {
-      submitBtn.disabled = !variant.available;
-      var addL = submitBtn.getAttribute('data-label-add') || 'Sepete ekle';
-      var soldL = submitBtn.getAttribute('data-label-sold') || 'Tükendi';
-      submitBtn.textContent = variant.available ? addL : soldL;
-      if (variant) navigateToVariantMedia(variant);
-      return;
-    }
-
-    if (!meta) return;
-
-    var p = priceWrap ? priceWrap.querySelector('p') : null;
-    if (p) {
-      if (meta.compare_at_price) {
-        p.innerHTML =
-          '<span class="mr-2 text-xl font-light text-neutral-500 line-through">' +
-          meta.compare_at_price +
-          '</span><span data-prava-pdp-price>' +
-          meta.price +
-          '</span>';
-      } else {
-        p.innerHTML = '<span data-prava-pdp-price>' + meta.price + '</span>';
-      }
-    }
-
-    if (installmentInput && variant) {
-      installmentInput.value = String(variant.id);
-    }
-
-    if (submitBtn) {
-      var addL = submitBtn.getAttribute('data-label-add') || 'Sepete ekle';
-      var soldL = submitBtn.getAttribute('data-label-sold') || 'Tükendi';
-      submitBtn.disabled = !meta.available;
-      submitBtn.textContent = meta.available ? addL : soldL;
-    }
-
-    if (variant) {
-      navigateToVariantMedia(variant);
-    }
-
-    root.querySelectorAll('[data-prava-pdp-swatch]').forEach(function (sw) {
-      var vid = sw.getAttribute('data-variant-id');
-      sw.setAttribute('aria-pressed', vid === String(variantId) ? 'true' : 'false');
-    });
-  }
-
-  /** Varyant seçimi: URL’e ?variant= eklenir (paylaşılabilir bağlantı; sayfa yenilenmez) */
-  if (select) {
-    select.addEventListener('change', function () {
-      updatePriceAndUi(select.value);
-      try {
-        var url = new URL(window.location.href);
-        url.searchParams.set('variant', select.value);
-        window.history.replaceState({}, '', url.toString());
-      } catch (err) {}
-    });
-  }
-
-  /** Renk swatch: aynı select’i programatik değiştirip change tetikler */
-  root.querySelectorAll('[data-prava-pdp-swatch]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var vid = btn.getAttribute('data-variant-id');
-      if (!vid || !select) return;
-      select.value = vid;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-  });
 
   /**
    * Dawn product-form.js ile aynı fikir: formu Ajax ile /cart/add’a gönder, JSON yanıtı işle.
