@@ -4,42 +4,59 @@
   Kullanım: {% render 'product-color-variants', product: product, section_id: section.id %}
 {% endcomment %}
 {% assign color_variants = product.metafields.custom.color_variants.value %}
-{% assign _cv_sid = section_id | default: 'pdp' %}
+{% assign cv_sid = section_id | default: 'pdp' %}
 
 {% if color_variants != blank %}
+  {% assign active_color_label = '' %}
+  {% for variant in color_variants %}
+    {% assign ref_product = variant.product_reference.value %}
+    {% if ref_product != blank and ref_product.id == product.id %}
+      {% assign active_color_label = variant.label.value %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
   <div class="color-variants mt-4 flex flex-col gap-2">
-    <span class="text-sm font-medium text-neutral-800" id="ColorVariantsLegend-{{ _cv_sid }}">
-      {{- 'general.accessibility.color_options' | t -}}
-    </span>
+    <div class="flex items-center gap-2 text-sm font-medium text-neutral-800" id="ColorVariantsLegend-{{ cv_sid }}">
+      <span>{{ 'general.accessibility.color_options' | t }}:</span>
+      {% if active_color_label != blank %}
+        <span class="font-normal text-neutral-600">{{ active_color_label | escape }}</span>
+      {% endif %}
+    </div>
     <div
-      class="flex flex-wrap gap-2"
+      class="flex items-center gap-3"
       role="group"
-      aria-labelledby="ColorVariantsLegend-{{ _cv_sid }}"
+      aria-labelledby="ColorVariantsLegend-{{ cv_sid }}"
     >
       {% for variant in color_variants %}
         {% assign label = variant.label.value %}
         {% assign swatch_color = variant.swatch_color.value %}
         {% assign swatch_image = variant.swatch_image.value %}
         {% assign ref_product = variant.product_reference.value %}
+        {% assign is_active = false %}
+        {% if ref_product != blank and ref_product.id == product.id %}
+          {% assign is_active = true %}
+        {% endif %}
 
         {% if ref_product != blank %}
           <a
             href="{{ ref_product.url }}"
-            class="color-swatch group inline-flex max-w-[140px] flex-col items-center gap-1.5 rounded-lg border border-transparent p-1 text-center text-xs text-neutral-800 transition-colors hover:border-neutral-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 {% if ref_product.id == product.id %}is-active border-neutral-900 ring-2 ring-neutral-400{% endif %}"
-            title="{{ label | escape }}"
-            {% if ref_product.id == product.id %}
+            class="color-swatch group relative inline-flex rounded-full p-0.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 {% if is_active %}bg-neutral-200{% else %}hover:bg-neutral-100{% endif %}"
+            data-title="{{ label | escape }}"
+            aria-label="{{ label | escape }}"
+            {% if is_active %}
               aria-current="true"
             {% endif %}
           >
             {% if swatch_image != blank %}
               <span
-                class="relative block h-10 w-10 shrink-0 overflow-hidden rounded-full border border-neutral-200 bg-white"
+                class="relative block h-5 w-5 shrink-0 overflow-hidden rounded-full border transition duration-200 ease-out group-hover:scale-110 group-hover:shadow-sm group-focus-visible:scale-110 group-focus-visible:shadow-sm {% if is_active %}border-neutral-900{% else %}border-neutral-300{% endif %} bg-white"
               >
                 <img
-                  src="{{ swatch_image | image_url: width: 80 }}"
+                  src="{{ swatch_image | image_url: width: 40 }}"
                   alt=""
-                  width="40"
-                  height="40"
+                  width="20"
+                  height="20"
                   class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -47,13 +64,14 @@
               </span>
             {% elsif swatch_color != blank %}
               <span
-                class="swatch__dot relative block h-10 w-10 shrink-0 rounded-full border border-neutral-200"
+                class="swatch__dot relative block h-5 w-5 shrink-0 rounded-full border transition duration-200 ease-out group-hover:scale-110 group-hover:shadow-sm group-focus-visible:scale-110 group-focus-visible:shadow-sm {% if is_active %}border-neutral-900{% else %}border-neutral-300{% endif %}"
                 style="background-color: {{ swatch_color }};"
               ></span>
             {% endif %}
-
             {% if label != blank %}
-              <span class="swatch__label line-clamp-2 leading-tight">{{ label | escape }}</span>
+              <span class="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-neutral-900 px-2 py-1 text-[11px] font-medium text-white shadow-sm group-hover:block group-focus-visible:block">
+                {{ label | escape }}
+              </span>
             {% endif %}
           </a>
         {% endif %}
