@@ -338,62 +338,7 @@
       </div>
     {% endif %}
 
-    {% comment %}
-      Benzer ürünler: blok related_product ile seçilir; her kart snippets/product-card-atc (ayrı form + ATC). Swiper: assets/js/main.js içinde .prava-pdp-related__swiper.
-    {% endcomment %}
-    {% assign related_count = 0 %}
-    {% for block in section.blocks %}
-      {% if block.type == 'related_product' and block.settings.product != blank %}
-        {% assign related_count = related_count | plus: 1 %}
-      {% endif %}
-    {% endfor %}
-    {% if related_count > 0 %}
-      <div class="mt-24">
-        {% liquid
-          assign r_cta = section.settings.related_cta_url | strip
-          if r_cta == blank
-            assign r_cta = routes.all_products_collection_url
-          endif
-          assign r_lbl = section.settings.related_cta_label | strip
-          if r_lbl == blank
-            assign r_lbl = 'sections.bestsellers.cta_all_visible' | t
-          endif
-        %}
-        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          {% if section.settings.related_heading != blank %}
-            <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
-              {{ section.settings.related_heading | escape }}
-            </h2>
-          {% endif %}
-          <a
-            href="{{ r_cta }}"
-            class="shrink-0 text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
-          >
-            {{ r_lbl | escape }}
-          </a>
-        </div>
-        <div class="prava-pdp-related__viewport mt-10">
-          <div class="swiper prava-pdp-related__swiper w-full">
-            <div class="swiper-wrapper">
-              {% for block in section.blocks %}
-                {% if block.type == 'related_product' and block.settings.product != blank %}
-                  <div class="swiper-slide !h-auto">
-                    {%
-                      render 'product-card-atc',
-                      product: block.settings.product,
-                      block: block,
-                      title_id: 'pdp-rel-' | append: block.id,
-                      form_suffix: section.id,
-                      image_loading: 'lazy'
-                    %}
-                  </div>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endif %}
+    {% render 'pdp-collection-recommendations', product: product, heading: section.settings.related_heading, limit: 8 %}
 
     {% render 'product-faq-items',
       product: product,
