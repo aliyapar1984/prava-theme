@@ -1,0 +1,96 @@
+{% comment %}
+  Section: PDP FAQ Items
+  Metafield: custom.faq_items (list.metaobject_reference -> pdp_faq_item)
+  Fields: label (single_line_text), question (single_line_text), answer (rich_text)
+{% endcomment %}
+
+{% assign faq_items = product.metafields.custom.faq_items.value %}
+
+{% if faq_items and faq_items.size > 0 %}
+  <section class="prava-support-faq mt-24 rounded-xl bg-[#f0eeeb] px-6 py-10 md:px-12 md:py-14">
+    <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
+      <div class="w-full shrink-0 lg:max-w-[420px]">
+        {% if heading != blank %}
+          <h2 class="text-3xl font-medium text-neutral-900 md:text-4xl">
+            {{ heading | escape }}
+          </h2>
+        {% endif %}
+        {% if support_image != blank %}
+          <div class="mt-6 overflow-hidden rounded-lg bg-white">
+            <img
+              src="{{ support_image | image_url: width: 900 }}"
+              alt="{{ support_image.alt | default: heading | escape }}"
+              width="900"
+              height="600"
+              class="h-auto w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        {% endif %}
+      </div>
+
+      <div
+        class="prava-support-faq__list min-w-0 flex-1 space-y-0 divide-y divide-neutral-300/80 [&>details:last-child]:border-b-0"
+        role="region"
+        aria-label="{{ 'sections.product_detail.support_region' | t }}"
+      >
+        {% for faq in faq_items %}
+          {% assign question = faq.question.value %}
+          {% assign answer_html = faq.answer | metafield_tag %}
+          {% assign answer_text = answer_html | strip_html | strip %}
+          {% if question != blank %}
+            <div class="pdp-faq__item border-b border-neutral-300/80" id="faq-{{ forloop.index }}">
+              <details class="pdp-faq__details prava-support-faq__item">
+                <summary class="pdp-faq__question flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:gap-4 md:text-lg md:leading-snug">
+                  <span>{{ question | escape }}</span>
+                  <span
+                    class="pdp-faq__icon prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl"
+                    aria-hidden="true"
+                    >+</span
+                  >
+                </summary>
+                {% if answer_text != blank %}
+                  <div class="pdp-faq__answer prava-support-faq__panel prava-support-faq__panel--inner">
+                    <div class="rte pb-5 pl-8 text-sm leading-relaxed text-neutral-600 md:pl-11 md:text-[15px]">
+                      {{ answer_html }}
+                    </div>
+                  </div>
+                {% endif %}
+              </details>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% liquid
+    assign ld_faq_first = true
+  %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for faq in faq_items -%}
+          {%- assign question = faq.question.value -%}
+          {%- assign answer_html = faq.answer | metafield_tag -%}
+          {%- assign answer_text = answer_html | strip_html | strip -%}
+          {%- if question != blank and answer_text != blank -%}
+            {%- unless ld_faq_first -%},{%- endunless -%}
+            {
+              "@type": "Question",
+              "name": {{ question | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ answer_text | json }}
+              }
+            }
+            {%- assign ld_faq_first = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{% endif %}

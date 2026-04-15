@@ -102,11 +102,7 @@
                     data-prava-pdp-media
                     data-media-id="{{ media.id }}"
                   >
-                    {% render 'pdp-gallery-media',
-                      media: media,
-                      product: product,
-                      loading: media_loading
-                    %}
+                    {% render 'pdp-gallery-media', media: media, product: product, loading: media_loading %}
                   </div>
                 </div>
               {% endfor %}
@@ -399,77 +395,14 @@
       </div>
     {% endif %}
 
-    {% comment %} Ürün destek: blok support_faq — soru/cevap; cevaplı çiftler için aşağıda FAQPage JSON-LD de üretilir. {% endcomment %}
-    {% assign has_support = false %}
-    {% for block in section.blocks %}
-      {% if block.type == 'support_faq' %}
-        {% assign has_support = true %}
-        {% break %}
-      {% endif %}
-    {% endfor %}
-    {% if has_support %}
-      <div class="mt-24 rounded-xl bg-[#f0eeeb] px-6 py-10 md:px-12 md:py-14">
-        {% if section.settings.support_heading != blank %}
-          <h2 class="text-3xl font-medium text-neutral-900 md:text-4xl">
-            {{ section.settings.support_heading | escape }}
-          </h2>
-        {% endif %}
-        <div
-          class="mt-8 space-y-0 divide-y divide-neutral-300/80"
-          role="region"
-          aria-label="{{ 'sections.product_detail.support_region' | t }}"
-        >
-          {% for block in section.blocks %}
-            {% if block.type == 'support_faq' and block.settings.question != blank %}
-              <details class="group py-2" {{ block.shopify_attributes }}>
-                <summary class="flex cursor-pointer list-none items-start gap-3 py-4 text-left text-base text-neutral-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
-                  <span class="mt-0.5 text-lg font-light" aria-hidden="true">+</span>
-                  <span>{{ block.settings.question | escape }}</span>
-                </summary>
-                {% if block.settings.answer != blank %}
-                  <div class="rte pb-6 pl-8 text-sm leading-relaxed text-neutral-700 md:pl-11">
-                    {{ block.settings.answer }}
-                  </div>
-                {% endif %}
-              </details>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
+    {% render 'product-faq-items',
+      product: product,
+      heading: section.settings.support_heading,
+      support_image: section.settings.support_image
+    %}
   </div>
 
-  {% comment %} Arama motorları için SSS şeması (yalnızca hem soru hem cevap dolu bloklar). {% endcomment %}
-  {% if has_support %}
-    {% liquid
-      assign ld_faq_first = true
-    %}
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'support_faq' and block.settings.question != blank and block.settings.answer != blank -%}
-              {%- unless ld_faq_first -%},{%- endunless -%}
-              {
-                "@type": "Question",
-                "name": {{ block.settings.question | json }},
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": {{ block.settings.answer | strip_html | strip | json }}
-                }
-              }
-              {%- assign ld_faq_first = false -%}
-            {%- endif -%}
-          {%- endfor -%}
-        ]
-      }
-    </script>
-  {% endif %}
-
   {% render 'product-color-variants-json-ld', product: product %}
-
 </section>
 
 {% schema %}
@@ -576,6 +509,11 @@
       "id": "support_heading",
       "label": "Başlık",
       "default": "Ürün Destek"
+    },
+    {
+      "type": "image_picker",
+      "id": "support_image",
+      "label": "Başlık yanındaki görsel"
     }
   ],
   "blocks": [
@@ -636,23 +574,6 @@
         }
       ]
     },
-    {
-      "type": "support_faq",
-      "name": "Destek sorusu",
-      "settings": [
-        {
-          "type": "text",
-          "id": "question",
-          "label": "Soru",
-          "default": "Bu ürün hangi yaş aralığı için uygundur?"
-        },
-        {
-          "type": "richtext",
-          "id": "answer",
-          "label": "Cevap"
-        }
-      ]
-    }
   ],
   "presets": [
     {
@@ -691,24 +612,6 @@
           "settings": {
             "heading": "Kullanım talimatları",
             "open": false
-          }
-        },
-        {
-          "type": "support_faq",
-          "settings": {
-            "question": "Bu ürün hangi yaş aralığı için uygundur?"
-          }
-        },
-        {
-          "type": "support_faq",
-          "settings": {
-            "question": "Kutuda neler var?"
-          }
-        },
-        {
-          "type": "support_faq",
-          "settings": {
-            "question": "Sorun yaşarsam nasıl destek alırım?"
           }
         }
       ]
