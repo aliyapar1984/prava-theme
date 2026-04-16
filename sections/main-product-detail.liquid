@@ -269,6 +269,8 @@
       </div>
     {% endif %}
 
+    {% render 'pdp-accordion', product: product %}
+
     {% comment %} Teknik özellikler: blok tipi spec_accordion — native <details>/<summary> (klavye ile erişilebilir). {% endcomment %}
     {% assign has_spec = false %}
     {% for block in section.blocks %}
