@@ -134,6 +134,8 @@
           </div>
         {% endif %}
 
+        {% render 'pdp-eligibility', product: product %}
+
         {% comment %}
           Taksit / ödeme koşulları: Shopify payment_terms için ürün formu ayrı bir form etiketi olarak tanımlanmalıdır.
           Gizli id tek satılabilir varyantı taşır (sayfada varyant seçici yok).

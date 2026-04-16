@@ -1,0 +1,84 @@
+{% liquid
+  assign el = product.metafields.eligibility
+
+  assign age_min_months = nil
+  assign age_max_months = nil
+  assign height_min_cm = nil
+  assign height_max_cm = nil
+  assign weight_min_kg = nil
+  assign weight_max_kg = nil
+
+  if el != blank
+    if el.age_min_months and el.age_min_months.value
+      assign age_min_months = el.age_min_months.value
+    endif
+    if el.age_max_months and el.age_max_months.value
+      assign age_max_months = el.age_max_months.value
+    endif
+    if el.height_min_cm and el.height_min_cm.value
+      assign height_min_cm = el.height_min_cm.value
+    endif
+    if el.height_max_cm and el.height_max_cm.value
+      assign height_max_cm = el.height_max_cm.value
+    endif
+    if el.weight_min_kg and el.weight_min_kg.value
+      assign weight_min_kg = el.weight_min_kg.value
+    endif
+    if el.weight_max_kg and el.weight_max_kg.value
+      assign weight_max_kg = el.weight_max_kg.value
+    endif
+  endif
+
+  assign has_age = false
+  assign has_height = false
+  assign has_weight = false
+
+  if age_min_months and age_max_months
+    assign has_age = true
+  endif
+  if height_min_cm and height_max_cm
+    assign has_height = true
+  endif
+  if weight_min_kg and weight_max_kg
+    assign has_weight = true
+  endif
+%}
+
+{% if has_age or has_height or has_weight %}
+  <div class="eligibility-band mt-4 inline-flex w-full items-center justify-between rounded-full bg-[#f3f1ee] px-6 py-3 text-xs font-medium tracking-wide text-neutral-900 md:text-sm">
+    <span class="mr-4 shrink-0 uppercase tracking-[0.16em] text-neutral-700">
+      UYGUNLUK
+    </span>
+    <div class="flex flex-1 flex-wrap items-center justify-end gap-3 md:gap-4">
+      {% if has_age %}
+        <span class="whitespace-nowrap">
+          {{ age_min_months | divided_by: 12 }} - {{ age_max_months | divided_by: 12 }} Y
+        </span>
+      {% endif %}
+
+      {% if has_age %}
+        {% if has_height or has_weight %}
+          <span aria-hidden="true">|</span>
+        {% endif %}
+      {% endif %}
+
+      {% if has_height %}
+        <span class="whitespace-nowrap">
+          {{ height_min_cm }} - {{ height_max_cm }} CM
+        </span>
+      {% endif %}
+
+      {% if has_height and has_weight %}
+        <span aria-hidden="true">|</span>
+      {% endif %}
+
+      {% if has_weight %}
+        <span class="whitespace-nowrap">
+          {{ weight_min_kg | round }} - {{ weight_max_kg | round }} KG
+        </span>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+
