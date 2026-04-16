@@ -31,20 +31,13 @@
     "sold_out": "Sold out",
     "no_image": "No image",
     "gallery_thumbnails": "Product images",
-    "view_image": "View image",
-    "view_video": "View video",
-    "variant_label": "Choose a variant",
-    "specs_heading": "Specifications",
     "view_360": "360° view",
-    "view_360_help": "Drag to rotate the model.",
     "cart_add_error": "Could not add to cart. Refresh the page and try again.",
     "cart_add_network": "Network error. Check your connection and try again."
   },
   "templates": {
     "collection": {
       "category_nav_aria": "Browse categories",
-      "category_heading": "Categories",
-      "sibling_nav_aria": "Categories at the same level",
       "products_region_aria": "Products in this collection",
       "empty": "No products in this collection."
     }
@@ -63,11 +56,7 @@
     "social_youtube": "YouTube",
     "social_accounts_caption": "Follow us on social media",
     "tagline_since": "Since {{ year }}",
-    "copyright": "© {{ year }} {{ shop_name }} — All rights reserved.",
-    "legal_information_society": "Information society services",
-    "legal_cookies": "Cookie policy",
-    "legal_kvkk": "Privacy notice (KVKK)",
-    "legal_nav_aria": "Legal and policies"
+    "copyright": "© {{ year }} {{ shop_name }} — All rights reserved."
   },
   "header": {
     "menu_visible": "Menu",
@@ -81,7 +70,6 @@
     "mega_menu_label": "Main navigation dialog",
     "mega_menu_tabs": "Product categories",
     "mega_menu_close": "Close menu",
-    "mega_feature_alt": "Featured category image",
     "mega_default_cta": "View all",
     "close_visible": "Close"
   },
@@ -90,10 +78,7 @@
       "aria_label": "Featured highlights",
       "video_aria": "Promotional hero video",
       "slide_tabs": "Select a slide",
-      "next_slide": "Next slide",
-      "cta_slide1": "Discover featured strollers and travel systems",
-      "cta_slide2": "View seasonal deals and discounts",
-      "cta_slide3": "Explore the travel system collection"
+      "next_slide": "Next slide"
     },
     "collection_catalog": {
       "aria_label": "Product catalog"
@@ -110,14 +95,12 @@
     },
     "popular": {
       "aria_label": "Popular picks",
-      "feature_alt": "Family with a stroller outdoors",
-      "spotlight_alt": "Gold Chrome stroller product photo"
+      "feature_alt": "Family with a stroller outdoors"
     },
     "bestsellers": {
       "aria_label": "Bestselling products",
       "cta_all": "View all products in the catalog",
-      "cta_all_visible": "View all products",
-      "product_video_decorative": "Product preview video on hover"
+      "cta_all_visible": "View all products"
     },
     "blog": {
       "aria_label": "Blog articles",
@@ -130,6 +113,8 @@
     },
     "product_detail": {
       "aria_label": "Product detail",
+      "related_products_title": "Related products",
+      "support_faq_title": "Product support",
       "support_region": "Product support questions"
     },
     "mini_cart": {

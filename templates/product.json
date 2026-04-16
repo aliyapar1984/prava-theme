@@ -15,12 +15,7 @@
         "show_vendor": false,
         "trust_shipping": "Ücretsiz kargo",
         "trust_return": "Kolay iade",
-        "trust_secure": "Güvenli alışveriş",
-        "related_heading": "Benzer Ürünler",
-        "related_cta_url": "",
-        "related_cta_label": "Tümünü Gör",
-        "support_heading": "Ürün Destek",
-        "support_image": "shopify://shop_images/accent_destek.png"
+        "trust_secure": "Güvenli alışveriş"
       }
     }
   },

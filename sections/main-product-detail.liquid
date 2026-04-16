@@ -204,54 +204,11 @@
 
     {% render 'pdp-accordion', product: product %}
 
-    {% comment %} Teknik özellikler: blok tipi spec_accordion — native <details>/<summary> (klavye ile erişilebilir). {% endcomment %}
-    {% assign has_spec = false %}
-    {% for block in section.blocks %}
-      {% if block.type == 'spec_accordion' %}
-        {% assign has_spec = true %}
-        {% break %}
-      {% endif %}
-    {% endfor %}
-    {% if has_spec %}
-      <div class="mt-16 rounded-xl bg-[#ebe9e6] px-6 py-8 md:px-10 md:py-12">
-        <h2 class="sr-only">{{ 'products.specs_heading' | t }}</h2>
-        <div class="divide-y divide-neutral-300/90 border-y border-neutral-300/90">
-          {% for block in section.blocks %}
-            {% if block.type == 'spec_accordion' %}
-              <details
-                class="group py-2"
-                {{ block.shopify_attributes }}
-                {% if block.settings.open %}
-                  open
-                {% endif %}
-              >
-                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-medium text-neutral-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
-                  <span>{{ block.settings.heading | escape }}</span>
-                  <span
-                    class="text-xl font-light text-neutral-600 transition-transform group-open:rotate-45"
-                    aria-hidden="true"
-                    >+</span
-                  >
-                </summary>
-                <div class="rte pb-6 pr-8 text-sm leading-relaxed text-neutral-700 md:text-base">
-                  {{ block.settings.body }}
-                </div>
-              </details>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
-
     {% render 'pdp-360-viewer', product: product, section_id: section.id %}
 
-    {% render 'pdp-collection-recommendations', product: product, heading: section.settings.related_heading, limit: 8 %}
+    {% render 'pdp-collection-recommendations', product: product, limit: 8 %}
 
-    {% render 'product-faq-items',
-      product: product,
-      heading: section.settings.support_heading,
-      support_image: section.settings.support_image
-    %}
+    {% render 'product-faq-items', product: product %}
   </div>
 
   {% render 'product-color-variants-json-ld', product: product %}
@@ -293,106 +250,12 @@
       "id": "trust_secure",
       "label": "Güvenlik",
       "default": "Güvenli alışveriş"
-    },
-    {
-      "type": "header",
-      "content": "Benzer ürünler"
-    },
-    {
-      "type": "text",
-      "id": "related_heading",
-      "label": "Başlık",
-      "default": "Benzer Ürünler"
-    },
-    {
-      "type": "url",
-      "id": "related_cta_url",
-      "label": "Tümünü gör — bağlantı"
-    },
-    {
-      "type": "text",
-      "id": "related_cta_label",
-      "label": "Tümünü gör — metin",
-      "default": "Tümünü Gör"
-    },
-    {
-      "type": "header",
-      "content": "Ürün destek"
-    },
-    {
-      "type": "text",
-      "id": "support_heading",
-      "label": "Başlık",
-      "default": "Ürün Destek"
-    },
-    {
-      "type": "image_picker",
-      "id": "support_image",
-      "label": "Başlık yanındaki görsel"
     }
   ],
-  "blocks": [
-    {
-      "type": "spec_accordion",
-      "name": "Teknik satır (akordeon)",
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Başlık",
-          "default": "Boyutlar ve ağırlık"
-        },
-        {
-          "type": "richtext",
-          "id": "body",
-          "label": "İçerik"
-        },
-        {
-          "type": "checkbox",
-          "id": "open",
-          "label": "Varsayılan açık",
-          "default": true
-        }
-      ]
-    },
-    {
-      "type": "related_product",
-      "name": "Benzer ürün",
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Ürün"
-        }
-      ]
-    },
-  ],
+  "blocks": [],
   "presets": [
     {
-      "name": "Ürün detay sayfası",
-      "blocks": [
-        {
-          "type": "spec_accordion",
-          "settings": {
-            "heading": "Boyutlar ve ağırlık",
-            "open": true
-          }
-        },
-        {
-          "type": "spec_accordion",
-          "settings": {
-            "heading": "Özellikler",
-            "open": false
-          }
-        },
-        {
-          "type": "spec_accordion",
-          "settings": {
-            "heading": "Kullanım talimatları",
-            "open": false
-          }
-        }
-      ]
+      "name": "Ürün detay sayfası"
     }
   ]
 }

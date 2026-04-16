@@ -31,20 +31,13 @@
     "sold_out": "Tükendi",
     "no_image": "Görsel yok",
     "gallery_thumbnails": "Ürün görselleri",
-    "view_image": "Görseli göster",
-    "view_video": "Videoyu göster",
-    "variant_label": "Varyant seçin",
-    "specs_heading": "Teknik özellikler",
     "view_360": "360° Görünüm",
-    "view_360_help": "Modeli fare veya dokunuşla döndürebilirsiniz.",
     "cart_add_error": "Ürün sepete eklenemedi. Sayfayı yenileyip tekrar deneyin.",
     "cart_add_network": "Bağlantı hatası. İnternetinizi kontrol edip tekrar deneyin."
   },
   "templates": {
     "collection": {
       "category_nav_aria": "Kategorilere göz at",
-      "category_heading": "Kategoriler",
-      "sibling_nav_aria": "Aynı seviyedeki kategoriler",
       "products_region_aria": "Bu koleksiyondaki ürünler",
       "empty": "Bu koleksiyonda ürün yok."
     }
@@ -63,11 +56,7 @@
     "social_youtube": "YouTube",
     "social_accounts_caption": "Sosyal medya hesaplarımız",
     "tagline_since": "{{ year }}'den beri",
-    "copyright": "© {{ year }} {{ shop_name }} — Tüm Hakları Saklıdır.",
-    "legal_information_society": "Bilgi Toplumu Hizmetleri",
-    "legal_cookies": "Çerezler Politikası",
-    "legal_kvkk": "KVKK Aydınlatma Metni",
-    "legal_nav_aria": "Yasal bilgiler ve politikalar"
+    "copyright": "© {{ year }} {{ shop_name }} — Tüm Hakları Saklıdır."
   },
   "header": {
     "menu_visible": "Menü",
@@ -81,7 +70,6 @@
     "mega_menu_label": "Ana site menüsü",
     "mega_menu_tabs": "Ürün kategorileri",
     "mega_menu_close": "Menüyü kapat",
-    "mega_feature_alt": "Öne çıkan kategori görseli",
     "mega_default_cta": "Tüm Ürünler",
     "close_visible": "Kapat"
   },
@@ -90,10 +78,7 @@
       "aria_label": "Öne çıkan vitrin",
       "video_aria": "Tanıtım videosu",
       "slide_tabs": "Slayt seçin",
-      "next_slide": "Sonraki slayt",
-      "cta_slide1": "Öne çıkan ürünleri keşfet",
-      "cta_slide2": "Sezon indirimlerini görüntüle",
-      "cta_slide3": "Travel sistem koleksiyonunu keşfet"
+      "next_slide": "Sonraki slayt"
     },
     "collection_catalog": {
       "aria_label": "Ürün kataloğu"
@@ -110,14 +95,12 @@
     },
     "popular": {
       "aria_label": "Popüler ürünler",
-      "feature_alt": "Açık havada bebek arabasıyla aile",
-      "spotlight_alt": "Gold Chrome bebek arabası ürün görseli"
+      "feature_alt": "Açık havada bebek arabasıyla aile"
     },
     "bestsellers": {
       "aria_label": "En çok satılan ürünler",
       "cta_all": "Katalogdaki tüm ürünleri görüntüle",
-      "cta_all_visible": "Tüm Ürünleri Gör",
-      "product_video_decorative": "Üzerine gelindiğinde ürün önizleme videosu"
+      "cta_all_visible": "Tüm Ürünleri Gör"
     },
     "blog": {
       "aria_label": "Blog yazıları",
@@ -130,6 +113,8 @@
     },
     "product_detail": {
       "aria_label": "Ürün detayı",
+      "related_products_title": "Benzer ürünler",
+      "support_faq_title": "Ürün destek",
       "support_region": "Ürün destek soruları"
     },
     "mini_cart": {
