@@ -1,0 +1,67 @@
+{% liquid
+  assign features = product.metafields.custom.feature_items.value
+  assign subtitle = product.metafields.custom.features_subtitle.value
+  assign has_feature_cards = false
+
+  if features != blank
+    for feature in features
+      if feature.title.value != blank or feature.description.value != blank or feature.image.value != blank
+        assign has_feature_cards = true
+        break
+      endif
+    endfor
+  endif
+%}
+
+{% if has_feature_cards %}
+  <section class="product-features mt-16" aria-label="Ürün Detayı">
+    <div class="features-header mx-auto max-w-3xl text-center">
+      <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">Ürün Detayı</h2>
+      {% if subtitle != blank %}
+        <p class="mt-4 text-base leading-relaxed text-neutral-700">
+          {{ subtitle }}
+        </p>
+      {% endif %}
+    </div>
+
+    <div class="mt-10">
+      <div class="swiper prava-pdp-features__swiper w-full overflow-visible" data-prava-pdp-features-swiper>
+        <div class="swiper-wrapper">
+          {% for feature in features %}
+            {% if feature.title.value != blank or feature.description.value != blank or feature.image.value != blank %}
+              <article class="swiper-slide !h-auto">
+                <div class="feature-card h-full">
+                  {% if feature.image.value != blank %}
+                    <div class="feature-image aspect-[4/5] overflow-hidden rounded-lg bg-white">
+                      <img
+                        src="{{ feature.image.value | image_url: width: 700 }}"
+                        alt="{{ feature.title.value | default: product.title | escape }}"
+                        width="700"
+                        height="875"
+                        class="h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      >
+                    </div>
+                  {% endif %}
+
+                  {% if feature.title.value != blank %}
+                    <h4 class="mt-4 text-[34px] font-medium leading-tight text-neutral-900">
+                      {{ feature.title.value }}
+                    </h4>
+                  {% endif %}
+                  {% if feature.description.value != blank %}
+                    <p class="mt-3 text-base leading-relaxed text-neutral-600">
+                      {{ feature.description.value }}
+                    </p>
+                  {% endif %}
+                </div>
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
+

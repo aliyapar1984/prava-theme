@@ -345,6 +345,36 @@
     });
   });
 
+  /* ── Ürün detay: özellik kartları (metaobject list) ───────────────────── */
+  document.querySelectorAll('[data-prava-pdp-features-swiper]').forEach(function (el) {
+    if (!el.querySelector('.swiper-slide')) return;
+    new Swiper(el, {
+      slidesPerView: 1.12,
+      spaceBetween: 16,
+      speed: 450,
+      grabCursor: true,
+      watchOverflow: true,
+      breakpoints: {
+        520: {
+          slidesPerView: 1.35,
+          spaceBetween: 18,
+        },
+        768: {
+          slidesPerView: 2.15,
+          spaceBetween: 22,
+        },
+        1024: {
+          slidesPerView: 3.05,
+          spaceBetween: 24,
+        },
+        1440: {
+          slidesPerView: 3.25,
+          spaceBetween: 28,
+        },
+      },
+    });
+  });
+
   /* ── En çok satılanlar (yatay Swiper; masaüstünde ~3 kart) ──────────── */
   document.querySelectorAll('.prava-bestsellers__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;

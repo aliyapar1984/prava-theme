@@ -221,53 +221,7 @@
       </div>
     </div>
 
-    {% comment %}
-      "Ürün detayı" alanı: ayarlardan başlık + giriş metni; blok tipi feature_tile = görsel + başlık + kısa metin (4 sütuna kadar grid).
-    {% endcomment %}
-    {% if section.settings.details_heading != blank
-      or section.settings.details_intro != blank
-      or section.blocks.size > 0
-    %}
-      <div class="mt-20 border-t border-neutral-200/90 pt-16">
-        {% if section.settings.details_heading != blank %}
-          <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
-            {{ section.settings.details_heading | escape }}
-          </h2>
-        {% endif %}
-        {% if section.settings.details_intro != blank %}
-          <div class="rte mt-4 max-w-3xl text-base leading-relaxed text-neutral-700">
-            {{ section.settings.details_intro }}
-          </div>
-        {% endif %}
-        <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {% for block in section.blocks %}
-            {% if block.type == 'feature_tile' %}
-              <article class="flex flex-col" {{ block.shopify_attributes }}>
-                {% if block.settings.image != blank %}
-                  <div class="aspect-square overflow-hidden rounded-lg bg-white">
-                    <img
-                      src="{{ block.settings.image | image_url: width: 800 }}"
-                      alt="{{ block.settings.image.alt | default: block.settings.heading | escape }}"
-                      width="600"
-                      height="600"
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    >
-                  </div>
-                {% endif %}
-                {% if block.settings.heading != blank %}
-                  <h3 class="mt-4 text-lg font-medium text-neutral-900">{{ block.settings.heading | escape }}</h3>
-                {% endif %}
-                {% if block.settings.text != blank %}
-                  <p class="mt-2 text-sm leading-relaxed text-neutral-600">{{ block.settings.text | escape }}</p>
-                {% endif %}
-              </article>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
+    {% render 'pdp-feature-items', product: product %}
 
     {% render 'pdp-accordion', product: product %}
 
@@ -371,21 +325,6 @@
     },
     {
       "type": "header",
-      "content": "Ürün detayı bölümü"
-    },
-    {
-      "type": "text",
-      "id": "details_heading",
-      "label": "Özellik alanı başlığı",
-      "default": "Ürün Detayı"
-    },
-    {
-      "type": "richtext",
-      "id": "details_intro",
-      "label": "Özellik alanı giriş metni"
-    },
-    {
-      "type": "header",
       "content": "Güven metinleri (satır altı)"
     },
     {
@@ -467,29 +406,6 @@
   ],
   "blocks": [
     {
-      "type": "feature_tile",
-      "name": "Özellik kutusu",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Görsel"
-        },
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Başlık",
-          "default": "Özellik"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Metin",
-          "default": "Kısa açıklama metni."
-        }
-      ]
-    },
-    {
       "type": "spec_accordion",
       "name": "Teknik satır (akordeon)",
       "settings": [
@@ -528,20 +444,6 @@
     {
       "name": "Ürün detay sayfası",
       "blocks": [
-        {
-          "type": "feature_tile",
-          "settings": {
-            "heading": "Premium kumaş",
-            "text": "Nefes alabilen, kolay temizlenen döşeme."
-          }
-        },
-        {
-          "type": "feature_tile",
-          "settings": {
-            "heading": "Süspansiyon",
-            "text": "Tüm tekerleklerde amortisör desteği."
-          }
-        },
         {
           "type": "spec_accordion",
           "settings": {
