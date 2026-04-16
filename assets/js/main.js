@@ -375,6 +375,38 @@
     });
   });
 
+  /* ── Ürün detay: 360° görsel (@mladenilic/threesixty.js; metafield images_360) ── */
+  document.querySelectorAll('[data-prava-pdp-360]').forEach(function (wrap) {
+    var root = wrap.querySelector('[data-prava-pdp-360-root]');
+    var payload = wrap.querySelector('script.prava-pdp-360__payload');
+    if (!root || !payload) return;
+
+    if (typeof window.ThreeSixty === 'undefined') return;
+    var ThreeSixtyCtor = window.ThreeSixty;
+
+    var urls;
+    try {
+      urls = JSON.parse(payload.textContent || '[]');
+    } catch (e) {
+      return;
+    }
+    if (!Array.isArray(urls) || urls.length === 0) return;
+
+    var w = root.clientWidth || root.offsetWidth || 800;
+    var size = Math.min(800, Math.max(280, w));
+
+    try {
+      new ThreeSixtyCtor(root, {
+        image: urls,
+        width: size,
+        height: size,
+        draggable: true,
+        swipeable: true,
+        keys: true,
+      });
+    } catch (err) {}
+  });
+
   /* ── En çok satılanlar (yatay Swiper; masaüstünde ~3 kart) ──────────── */
   document.querySelectorAll('.prava-bestsellers__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;

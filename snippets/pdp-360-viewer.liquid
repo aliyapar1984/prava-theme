@@ -1,0 +1,48 @@
+{% comment %}
+  Ürün 360° görünüm — product.metafields.custom.images_360 (dosya listesi).
+  JS: @mladenilic/threesixty.js (layout’ta yüklenir; assets/js/main.js init).
+{% endcomment %}
+{% liquid
+  assign frames = product.metafields.custom.images_360.value
+  assign has_frames = false
+  if frames != blank and frames.size > 0
+    assign has_frames = true
+  endif
+%}
+
+{% if has_frames %}
+  <section
+    class="prava-pdp-360 mt-20"
+    data-prava-pdp-360
+    aria-label="{{ 'products.view_360' | t }}"
+  >
+    <h2 class="text-center text-2xl font-medium text-neutral-900 md:text-3xl">
+      {{ 'products.view_360' | t }}
+    </h2>
+
+    <div class="relative mx-auto mt-10 max-w-4xl px-2">
+      {% comment %} Zemin elipsi (tasarım ipucu) {% endcomment %}
+      <div
+        class="pointer-events-none absolute bottom-[8%] left-1/2 z-0 h-[18%] w-[72%] -translate-x-1/2 rounded-[50%] border border-neutral-300/80 bg-neutral-200/30 md:bottom-[6%] md:h-[20%] md:w-[68%]"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        id="Pdp360Viewer-{{ section_id }}"
+        class="viewer-360 relative z-[1] mx-auto aspect-square w-full max-w-2xl overflow-hidden bg-white"
+        data-prava-pdp-360-root
+      ></div>
+
+      <script type="application/json" class="prava-pdp-360__payload" hidden>
+        [
+          {%- for frame in frames -%}
+            {{- frame | image_url: width: 1200 | json -}}
+            {%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      </script>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-neutral-600">⟵ Sürükle ⟶</p>
+  </section>
+{% endif %}

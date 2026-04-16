@@ -703,6 +703,15 @@ body.mega-menu-open {
   opacity: 1;
 }
 
+/* PDP 360° görsel (threesixty.js) */
+.prava-pdp-360 .viewer-360 img,
+.prava-pdp-360 .viewer-360 canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
 .prava-pdp__gallery-pagination.swiper-pagination-bullets .swiper-pagination-bullet-active {
   background: rgb(23 23 23);
 }

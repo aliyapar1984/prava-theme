@@ -5,21 +5,12 @@
   - Sol: medya galerisi (tek Swiper DOM; mobil swipe, md+ CSS grid).
   - Sağ: başlık (tek h1), açıklama, taksit metni (Shopify payment_terms), sepete ekle formu, fiyat.
   - Renk grupları ayrı ürün URL’leri (metafield: snippets/product-color-variants); sayfada tek Shopify varyantı (gizli id).
-  - Aşağıda tema editörü blokları: özellik kutuları, teknik akordeon, 360/3D veya yer tutucu, benzer ürünler (her biri ayrı ATC formu), destek SSS.
+  - Aşağıda: metafield tabanlı özellik slider, accordion (boyutlar/özellikler/güvenlik), isteğe bağlı 360° görsel (threesixty.js), benzer ürünler, destek SSS.
 
   JS (assets/product-detail.js): Ajax sepete ekleme; [data-prava-pdp] + ProductForm-{section.id}.
 {% endcomment %}
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
-
-  # Medyada 3D model — model_viewer_tag + CDN stylesheet
-  assign first_model = null
-  for m in product.media
-    if m.media_type == 'model'
-      assign first_model = m
-      break
-    endif
-  endfor
 
   # Breadcrumb: üst link için ürünün ilk koleksiyonu
   assign parent_col = product.collections.first
@@ -28,18 +19,6 @@
   assign product_form_id = 'ProductForm-' | append: section.id
   assign installment_form_id = 'ProductInstallment-' | append: section.id
 %}
-
-{%- comment -%}
-  3D model varsa: model_viewer bileşeninin stilleri (Shopify CDN). media="print" + onload ile render bloklamadan yükleme.
-{%- endcomment -%}
-{%- if first_model -%}
-  <link
-    rel="stylesheet"
-    href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css"
-    media="print"
-    onload="this.media='all'"
-  >
-{%- endif -%}
 
 {% comment %} Ajax sepete ekleme (product-detail.js) {% endcomment %}
 <script src="{{ 'product-detail.js' | asset_url }}" defer="defer"></script>
@@ -264,37 +243,7 @@
       </div>
     {% endif %}
 
-    {% comment %}
-      360° / 3D: ürün medyasında model varsa Shopify model_viewer_tag; yoksa ve ayar açıksa yer tutucu görsel + metin.
-    {% endcomment %}
-    {% if first_model != blank %}
-      <div class="mt-20">
-        <h2 class="text-center text-2xl font-medium text-neutral-900 md:text-3xl">{{ 'products.view_360' | t }}</h2>
-        <div class="mx-auto mt-8 max-w-3xl [&_model-viewer]:aspect-square [&_model-viewer]:w-full [&_model-viewer]:bg-white">
-          {{ first_model | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true }}
-        </div>
-        <p class="mt-4 text-center text-sm text-neutral-600">{{ 'products.view_360_help' | t }}</p>
-      </div>
-    {% elsif section.settings.show_360_placeholder %}
-      <div class="mt-20 text-center">
-        <h2 class="text-2xl font-medium text-neutral-900 md:text-3xl">{{ 'products.view_360' | t }}</h2>
-        {% if section.settings.placeholder_360_image != blank %}
-          <div class="mx-auto mt-8 max-w-2xl overflow-hidden rounded-xl bg-white">
-            <img
-              src="{{ section.settings.placeholder_360_image | image_url: width: 1200 }}"
-              alt="{{ section.settings.placeholder_360_image.alt | default: product.title | escape }}"
-              width="1200"
-              height="800"
-              class="w-full object-contain"
-              loading="lazy"
-            >
-          </div>
-        {% endif %}
-        {% if section.settings.placeholder_360_text != blank %}
-          <p class="mt-6 text-neutral-600">{{ section.settings.placeholder_360_text | escape }}</p>
-        {% endif %}
-      </div>
-    {% endif %}
+    {% render 'pdp-360-viewer', product: product, section_id: section.id %}
 
     {% render 'pdp-collection-recommendations', product: product, heading: section.settings.related_heading, limit: 8 %}
 
@@ -344,28 +293,6 @@
       "id": "trust_secure",
       "label": "Güvenlik",
       "default": "Güvenli alışveriş"
-    },
-    {
-      "type": "header",
-      "content": "360° / 3D"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_360_placeholder",
-      "label": "3D yoksa yer tutucu göster",
-      "default": true,
-      "info": "Üründe 3D model yoksa açıklama ve isteğe bağlı görsel gösterilir."
-    },
-    {
-      "type": "image_picker",
-      "id": "placeholder_360_image",
-      "label": "Yer tutucu görseli"
-    },
-    {
-      "type": "text",
-      "id": "placeholder_360_text",
-      "label": "Yer tutucu metni",
-      "default": "360° görünüm yakında veya mağazada deneyimleyin."
     },
     {
       "type": "header",
