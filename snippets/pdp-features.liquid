@@ -1,0 +1,175 @@
+{% liquid
+  assign sp = product.metafields.specs
+  assign wh = product.metafields.wheels
+  assign cp = product.metafields.compatibility
+
+  assign has_any_row = false
+
+  if sp != blank and sp.frame_material and sp.frame_material.value != blank
+    assign has_any_row = true
+  endif
+  if sp != blank and sp.harness_points and sp.harness_points.value != blank
+    assign has_any_row = true
+  endif
+  if sp != blank and sp.recline_positions and sp.recline_positions.value != blank
+    assign has_any_row = true
+  endif
+  if sp != blank and sp.recline_degrees and sp.recline_degrees.value != blank
+    assign has_any_row = true
+  endif
+
+  if sp != blank and sp.reversible != blank
+    assign has_any_row = true
+  endif
+  if sp != blank and sp.bassinet_mode != blank
+    assign has_any_row = true
+  endif
+  if sp != blank and sp.folded_auto_lock != blank
+    assign has_any_row = true
+  endif
+  if sp != blank and sp.car_seat_certified != blank
+    assign has_any_row = true
+  endif
+
+  if wh != blank and wh.front_swivel_360 != blank
+    assign has_any_row = true
+  endif
+  if wh != blank and wh.front_lockable != blank
+    assign has_any_row = true
+  endif
+  if wh != blank and wh.suspension != blank
+    assign has_any_row = true
+  endif
+  if wh != blank and wh.single_point_brake != blank
+    assign has_any_row = true
+  endif
+
+  if cp != blank and cp.car_seat_compatible != blank
+    assign has_any_row = true
+  endif
+  if cp != blank and cp.travel_system_ready != blank
+    assign has_any_row = true
+  endif
+  if cp != blank and cp.carry_cot_compatible != blank
+    assign has_any_row = true
+  endif
+%}
+
+{% if has_any_row %}
+  <details class="group py-2">
+    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-xl font-medium uppercase tracking-[0.08em] text-neutral-900 marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:text-2xl">
+      <span>Özellikler</span>
+      <span class="text-xl font-light text-neutral-600 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+    </summary>
+
+    <div class="product-specs border-t border-neutral-300/90 pt-6 pb-2">
+      <table class="specs-table w-full border-collapse">
+        <tbody>
+          {% if sp != blank and sp.frame_material and sp.frame_material.value != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Gövde Malzemesi</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ sp.frame_material.value }}</td>
+            </tr>
+          {% endif %}
+
+          {% if sp != blank and sp.harness_points and sp.harness_points.value != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Emniyet Kemeri</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ sp.harness_points.value }} Nokta</td>
+            </tr>
+          {% endif %}
+
+          {% if sp != blank and sp.recline_positions and sp.recline_positions.value != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Sırt Dayanağı</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">
+                {{ sp.recline_positions.value }} Pozisyon
+                {% if sp.recline_degrees and sp.recline_degrees.value != blank %}
+                  / {{ sp.recline_degrees.value }}°
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+
+          {% if sp != blank and sp.reversible != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Çift Yönlü Kullanım</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if sp.reversible.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if sp != blank and sp.bassinet_mode != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Port Bebe Modu</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if sp.bassinet_mode.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if sp != blank and sp.folded_auto_lock != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Otomatik Kilit</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if sp.folded_auto_lock.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if sp != blank and sp.car_seat_certified != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Oto Koltuğu Sertifikalı</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if sp.car_seat_certified.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if wh != blank and wh.front_swivel_360 != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">360° Dönen Ön Tekerlek</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if wh.front_swivel_360.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if wh != blank and wh.front_lockable != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Tekerlek Kilitlenebilir</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if wh.front_lockable.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if wh != blank and wh.suspension != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Süspansiyon</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if wh.suspension.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if wh != blank and wh.single_point_brake != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Tek Nokta Fren</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if wh.single_point_brake.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if cp != blank and cp.car_seat_compatible != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Oto Koltuğu Uyumlu</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if cp.car_seat_compatible.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if cp != blank and cp.travel_system_ready != blank %}
+            <tr class="border-b border-neutral-300/70">
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Travel System</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if cp.travel_system_ready.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+
+          {% if cp != blank and cp.carry_cot_compatible != blank %}
+            <tr>
+              <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Port Bebe Uyumlu</td>
+              <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if cp.carry_cot_compatible.value %}✓{% else %}—{% endif %}</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+{% endif %}
+
