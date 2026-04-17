@@ -71,7 +71,15 @@
     "mega_menu_tabs": "Ürün kategorileri",
     "mega_menu_close": "Menüyü kapat",
     "mega_default_cta": "Tüm Ürünler",
-    "close_visible": "Kapat"
+    "close_visible": "Kapat",
+    "mini_search_title": "Ürün ara",
+    "mini_search_label": "Arama metni",
+    "mini_search_placeholder": "Ürün ara…",
+    "mini_search_close": "Aramayı kapat",
+    "mini_search_results": "Öneriler",
+    "mini_search_no_results": "Ürün bulunamadı.",
+    "mini_search_error": "Arama yüklenemedi. Tekrar deneyin.",
+    "mini_search_view_all": "Tüm sonuçları gör"
   },
   "sections": {
     "hero": {

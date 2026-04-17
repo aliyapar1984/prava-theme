@@ -71,7 +71,15 @@
     "mega_menu_tabs": "Product categories",
     "mega_menu_close": "Close menu",
     "mega_default_cta": "View all",
-    "close_visible": "Close"
+    "close_visible": "Close",
+    "mini_search_title": "Search products",
+    "mini_search_label": "Search query",
+    "mini_search_placeholder": "Search products…",
+    "mini_search_close": "Close search",
+    "mini_search_results": "Suggestions",
+    "mini_search_no_results": "No products found.",
+    "mini_search_error": "Search could not load. Try again.",
+    "mini_search_view_all": "See all results"
   },
   "sections": {
     "hero": {

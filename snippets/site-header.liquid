@@ -46,9 +46,13 @@
       >
     </a>
     <nav class="flex items-center gap-8 text-[15px] font-semibold tracking-wide lg:gap-10{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}" aria-label="{{ 'header.utility_nav' | t }}">
-      <a
-        href="{{ routes.search_url }}"
-        class="hidden items-center gap-2 py-1 font-light transition-opacity hover:opacity-80 sm:flex{% if header_transparent %} border-b border-white/40{% else %} border-b border-neutral-300{% endif %}"
+      <button
+        type="button"
+        id="mini-search-open"
+        class="inline-flex items-center gap-2 py-1 font-light transition-opacity hover:opacity-80{% if header_transparent %} border-b border-white/40 text-white{% else %} border-b border-neutral-300 text-neutral-900{% endif %}"
+        aria-expanded="false"
+        aria-controls="mini-search-dialog"
+        aria-haspopup="dialog"
         aria-label="{{ 'header.search' | t }}"
       >
         <img
@@ -60,7 +64,7 @@
           aria-hidden="true"
         >
         <span>{{ 'header.search' | t }}</span>
-      </a>
+      </button>
       <a href="{{ routes.account_url }}" class="hidden font-light transition-opacity hover:opacity-80 md:inline">{{ 'header.account' | t }}</a>
       <a
         href="{{ routes.cart_url }}"
@@ -72,6 +76,8 @@
       </a>
     </nav>
   </header>
+
+  {% render 'mini-search' %}
 
   <div id="mega-menu" class="mega-menu" role="dialog" aria-modal="true" aria-label="{{ 'header.mega_menu_label' | t }}" hidden>
     <div class="mega-menu__inner" style="--mega-pad-x: 40px;">

@@ -1,0 +1,68 @@
+{% comment %}
+  Header mini arama — Predictive Search API + debounce (assets/js/main.js).
+{% endcomment %}
+<div
+  id="mini-search"
+  class="mini-search"
+  hidden
+  data-mini-search-root
+>
+  <div class="mini-search__backdrop" data-mini-search-close aria-hidden="true"></div>
+  <div
+    class="mini-search__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'header.mini_search_title' | t }}"
+    id="mini-search-dialog"
+  >
+    <form
+      class="mini-search__form"
+      id="mini-search-form"
+      action="{{ routes.search_url }}"
+      method="get"
+      role="search"
+    >
+      <label class="sr-only" for="mini-search-input">{{ 'header.mini_search_label' | t }}</label>
+      <div class="mini-search__field">
+        <img
+          src="{{ 'icons/search.svg' | asset_url }}"
+          width="18"
+          height="17"
+          alt=""
+          class="mini-search__field-icon"
+          aria-hidden="true"
+        >
+        <input
+          id="mini-search-input"
+          class="mini-search__input"
+          type="search"
+          name="q"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          placeholder="{{ 'header.mini_search_placeholder' | t }}"
+        >
+        <button
+          type="button"
+          class="mini-search__close"
+          data-mini-search-close
+          aria-label="{{ 'header.mini_search_close' | t }}"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+    </form>
+    <div
+      id="mini-search-results"
+      class="mini-search__results"
+      role="region"
+      aria-live="polite"
+      aria-label="{{ 'header.mini_search_results' | t }}"
+    ></div>
+    <div class="mini-search__footer">
+      <a href="{{ routes.search_url }}" id="mini-search-view-all" class="mini-search__view-all" hidden>
+        {{ 'header.mini_search_view_all' | t }}
+      </a>
+    </div>
+  </div>
+</div>

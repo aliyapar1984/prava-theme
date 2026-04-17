@@ -808,8 +808,198 @@
     });
   }
 
+  function escapeHtmlMini(s) {
+    var d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  function initMiniSearch() {
+    var root = document.getElementById('mini-search');
+    var openBtn = document.getElementById('mini-search-open');
+    var input = document.getElementById('mini-search-input');
+    var resultsEl = document.getElementById('mini-search-results');
+    var form = document.getElementById('mini-search-form');
+    var viewAll = document.getElementById('mini-search-view-all');
+    if (!root || !openBtn || !input || !resultsEl) return;
+
+    var debounceMs = 300;
+    var timer = null;
+    var controller = null;
+    var routes = window.routes || {};
+    var suggestPath = routes.predictive_search_url || '/search/suggest';
+    var searchUrl = routes.search_url || '/search';
+    var i18n = window.PRAVA_I18N || {};
+
+    function closeMegaIfOpen() {
+      var mega = document.getElementById('mega-menu');
+      var btnMenu = document.getElementById('btn-menu');
+      if (mega && !mega.hasAttribute('hidden')) {
+        mega.setAttribute('hidden', '');
+        if (btnMenu) btnMenu.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function openSearch() {
+      closeMegaIfOpen();
+      root.removeAttribute('hidden');
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () {
+        input.focus();
+        try {
+          input.select();
+        } catch (e) {}
+      }, 10);
+    }
+
+    function closeSearch() {
+      root.setAttribute('hidden', '');
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      if (controller) {
+        controller.abort();
+        controller = null;
+      }
+    }
+
+    function productImageUrl(p) {
+      var fi = p.featured_image || p.image;
+      if (!fi) return '';
+      if (typeof fi === 'string') return fi;
+      if (fi.url) return fi.url;
+      return '';
+    }
+
+    function productPrice(p) {
+      if (p.price != null && p.price !== '') return String(p.price);
+      if (p.price_min != null && p.price_min !== '') return String(p.price_min);
+      return '';
+    }
+
+    function renderProducts(products) {
+      if (!products || products.length === 0) {
+        resultsEl.innerHTML =
+          '<p class="mini-search__empty">' + escapeHtmlMini(i18n.mini_search_no_results || '') + '</p>';
+        if (viewAll) viewAll.hidden = true;
+        return;
+      }
+      var html = '<ul class="mini-search__list" role="list">';
+      for (var i = 0; i < products.length; i++) {
+        var p = products[i];
+        var url = p.url || '#';
+        var title = p.title || '';
+        var src = productImageUrl(p);
+        var img = '';
+        if (src) {
+          img =
+            '<img src="' +
+            escapeHtmlMini(src) +
+            '" alt="" class="mini-search__thumb" width="48" height="48" loading="lazy">';
+        }
+        var price = productPrice(p);
+        html += '<li><a class="mini-search__item" href="' + escapeHtmlMini(url) + '">';
+        html += img;
+        html += '<span class="mini-search__meta"><span class="mini-search__title">' + escapeHtmlMini(title) + '</span>';
+        if (price) {
+          html += '<span class="mini-search__price">' + escapeHtmlMini(price) + '</span>';
+        }
+        html += '</span></a></li>';
+      }
+      html += '</ul>';
+      resultsEl.innerHTML = html;
+      if (viewAll) {
+        viewAll.hidden = false;
+        var q = input.value.trim();
+        viewAll.href = searchUrl + (q ? '?q=' + encodeURIComponent(q) : '');
+      }
+    }
+
+    function runSearch(raw) {
+      var query = (raw || '').trim();
+      if (query.length < 2) {
+        resultsEl.innerHTML = '';
+        if (viewAll) viewAll.hidden = true;
+        return;
+      }
+      if (controller) controller.abort();
+      controller = new AbortController();
+      var sp = new URLSearchParams();
+      sp.set('q', query);
+      sp.set('resources[type]', 'product');
+      sp.set('resources[limit]', '10');
+      var fetchUrl = suggestPath + (suggestPath.indexOf('?') >= 0 ? '&' : '?') + sp.toString();
+
+      fetch(fetchUrl, {
+        signal: controller.signal,
+        headers: {
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error('predictive_search_http');
+          return r.json();
+        })
+        .then(function (data) {
+          var products = [];
+          if (
+            data &&
+            data.resources &&
+            data.resources.results &&
+            data.resources.results.products
+          ) {
+            products = data.resources.results.products;
+          }
+          renderProducts(products);
+        })
+        .catch(function (err) {
+          if (err && err.name === 'AbortError') return;
+          resultsEl.innerHTML =
+            '<p class="mini-search__empty mini-search__empty--error">' +
+            escapeHtmlMini(i18n.mini_search_error || '') +
+            '</p>';
+          if (viewAll) viewAll.hidden = true;
+        });
+    }
+
+    openBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      openSearch();
+    });
+
+    root.querySelectorAll('[data-mini-search-close]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        closeSearch();
+      });
+    });
+
+    input.addEventListener('input', function () {
+      var v = input.value;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        runSearch(v);
+      }, debounceMs);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !root.hasAttribute('hidden')) {
+        e.preventDefault();
+        closeSearch();
+        openBtn.focus();
+      }
+    });
+
+    if (form) {
+      form.addEventListener('submit', function () {
+        closeSearch();
+      });
+    }
+  }
+
   initIntroLineReveal();
   initIntroFigureReveal();
   initParallaxEffects();
   initSupportFaqAccordion();
+  initMiniSearch();
 })();
