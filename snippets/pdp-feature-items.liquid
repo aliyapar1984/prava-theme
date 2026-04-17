@@ -25,7 +25,7 @@
     </div>
 
     <div class="mt-10">
-      <div class="swiper prava-pdp-features__swiper w-full overflow-visible" data-prava-pdp-features-swiper>
+      <div class="swiper prava-pdp-features__swiper w-full xl:overflow-visible" data-prava-pdp-features-swiper>
         <div class="swiper-wrapper">
           {% for feature in features %}
             {% if feature.title.value != blank or feature.description.value != blank or feature.image.value != blank %}
@@ -64,4 +64,3 @@
     </div>
   </section>
 {% endif %}
-
