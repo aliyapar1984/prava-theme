@@ -3,9 +3,10 @@
   JS: @mladenilic/threesixty.js (layout’ta yüklenir; assets/js/main.js init).
 {% endcomment %}
 {% liquid
-  assign frames = product.metafields.custom.images_360.value
+  assign images_360 = product.metafields.custom.images_360.value
+  assign sorted_images = images_360 | sort: 'image.src'
   assign has_frames = false
-  if frames != blank and frames.size > 0
+  if sorted_images != blank and sorted_images.size > 0
     assign has_frames = true
   endif
 %}
@@ -20,7 +21,7 @@
       {{ 'products.view_360' | t }}
     </h2>
 
-    <div class="relative mx-auto mt-10 max-w-4xl px-2">
+    <div class="relative mx-auto mt-10 max-w-4xl bg-white px-2">
       {% comment %} Zemin elipsi (tasarım ipucu) {% endcomment %}
       <div
         class="pointer-events-none absolute bottom-[8%] left-1/2 z-0 h-[18%] w-[72%] -translate-x-1/2 rounded-[50%] border border-neutral-300/80 bg-neutral-200/30 md:bottom-[6%] md:h-[20%] md:w-[68%]"
@@ -29,17 +30,23 @@
 
       <div
         id="Pdp360Viewer-{{ section_id }}"
-        class="viewer-360 relative z-[1] mx-auto aspect-square w-full max-w-2xl overflow-hidden bg-white"
+        class="viewer-360 relative z-[1] mx-auto aspect-[3/4] w-full max-w-[720px] overflow-hidden bg-white"
         data-prava-pdp-360-root
       ></div>
 
       <script type="application/json" class="prava-pdp-360__payload" hidden>
-        [
-          {%- for frame in frames -%}
-            {{- frame | image_url: width: 1200 | json -}}
-            {%- unless forloop.last -%},{%- endunless -%}
+        {%- capture frames_payload -%}
+          {%- assign has_written_item = false -%}
+          {%- for file in sorted_images -%}
+            {%- assign img = file.image | default: file -%}
+            {%- if img != blank -%}
+              {%- if has_written_item -%},{%- endif -%}
+              {{- img | image_url: width: 1200 | json -}}
+              {%- assign has_written_item = true -%}
+            {%- endif -%}
           {%- endfor -%}
-        ]
+        {%- endcapture -%}
+        [{{- frames_payload | strip -}}]
       </script>
     </div>
 

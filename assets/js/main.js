@@ -392,14 +392,18 @@
     }
     if (!Array.isArray(urls) || urls.length === 0) return;
 
-    var w = root.clientWidth || root.offsetWidth || 800;
-    var size = Math.min(800, Math.max(280, w));
+    var BASE_WIDTH = 720;
+    var BASE_HEIGHT = 960;
+    var RATIO = BASE_HEIGHT / BASE_WIDTH;
+    var w = root.clientWidth || root.offsetWidth || BASE_WIDTH;
+    var stageWidth = Math.min(BASE_WIDTH, Math.max(240, w));
+    var stageHeight = Math.round(stageWidth * RATIO);
 
     try {
       new ThreeSixtyCtor(root, {
         image: urls,
-        width: size,
-        height: size,
+        width: stageWidth,
+        height: stageHeight,
         draggable: true,
         swipeable: true,
         keys: true,
