@@ -1,6 +1,6 @@
 {% comment %}
   Ürün 360° görünüm — product.metafields.custom.images_360 (dosya listesi).
-  JS: @mladenilic/threesixty.js (layout’ta yüklenir; assets/js/main.js init).
+  JS: Cloudimage 360 View (layout’ta yüklenir; assets/js/main.js init).
 {% endcomment %}
 {% liquid
   assign images_360 = product.metafields.custom.images_360.value
@@ -30,8 +30,9 @@
 
       <div
         id="Pdp360Viewer-{{ section_id }}"
-        class="viewer-360 relative z-[1] mx-auto aspect-[3/4] w-full max-w-[720px] overflow-hidden bg-white"
+        class="cloudimage-360 prava-ci360 relative z-[1] mx-auto w-full max-w-[720px] overflow-hidden bg-white"
         data-prava-pdp-360-root
+        style="aspect-ratio: 3 / 4;"
       ></div>
 
       <script type="application/json" class="prava-pdp-360__payload" hidden>
@@ -49,7 +50,5 @@
         [{{- frames_payload | strip -}}]
       </script>
     </div>
-
-    <p class="mt-6 text-center text-sm text-neutral-600">⟵ Sürükle ⟶</p>
   </section>
 {% endif %}

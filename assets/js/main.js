@@ -375,14 +375,15 @@
     });
   });
 
-  /* ── Ürün detay: 360° görsel (@mladenilic/threesixty.js; metafield images_360) ── */
+  /* ── Ürün detay: 360° görsel (Cloudimage 360 View; metafield images_360) ── */
   document.querySelectorAll('[data-prava-pdp-360]').forEach(function (wrap) {
     var root = wrap.querySelector('[data-prava-pdp-360-root]');
     var payload = wrap.querySelector('script.prava-pdp-360__payload');
     if (!root || !payload) return;
 
-    if (typeof window.ThreeSixty === 'undefined') return;
-    var ThreeSixtyCtor = window.ThreeSixty;
+    /* CDN: window.CI360 tekil örnek (constructor değil) */
+    var ci360 = typeof window.CI360 !== 'undefined' ? window.CI360 : null;
+    if (!ci360 || typeof ci360.init !== 'function') return;
 
     var urls;
     try {
@@ -392,21 +393,26 @@
     }
     if (!Array.isArray(urls) || urls.length === 0) return;
 
-    var BASE_WIDTH = 720;
-    var BASE_HEIGHT = 960;
-    var RATIO = BASE_HEIGHT / BASE_WIDTH;
-    var w = root.clientWidth || root.offsetWidth || BASE_WIDTH;
-    var stageWidth = Math.min(BASE_WIDTH, Math.max(240, w));
-    var stageHeight = Math.round(stageWidth * RATIO);
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
 
     try {
-      new ThreeSixtyCtor(root, {
-        image: urls,
-        width: stageWidth,
-        height: stageHeight,
+      ci360.init(root, {
+        imageListX: urls,
+        amountX: urls.length,
+        aspectRatio: '3/4',
         draggable: true,
         swipeable: true,
+        pinchZoom: true,
         keys: true,
+        inertia: true,
+        fullscreen: true,
+        zoomMax: isMobile ? 2.5 : 4,
+        lazyload: true,
+        hints: false,
+        initialIconShown: true,
+        bottomCircle: true,
       });
     } catch (err) {}
   });
