@@ -1,0 +1,188 @@
+{% comment %}
+  Blog yazısı detay — templates/article.json
+{% endcomment %}
+<section
+  class="article-main bg-white text-neutral-900"
+  aria-label="{{ 'sections.article_main.aria_label' | t }}"
+>
+  <div class="mx-auto max-w-[820px] px-10 pb-16 pt-12 md:pb-24 md:pt-16">
+    {% render 'breadcrumbs',
+      current_title: article.title,
+      parent_title: blog.title,
+      parent_url: blog.url
+    %}
+
+    <article itemscope itemtype="https://schema.org/BlogPosting">
+      <header class="border-b border-neutral-200/90 pb-8">
+        <h1 class="text-3xl font-medium leading-tight tracking-tight text-neutral-900 md:text-4xl" itemprop="headline">
+          {{ article.title | escape }}
+        </h1>
+        <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-neutral-600">
+          <time
+            class="font-light"
+            datetime="{{ article.published_at | date: '%Y-%m-%d' }}"
+            itemprop="datePublished"
+          >
+            {{ article.published_at | time_tag: format: 'date' }}
+          </time>
+          {% if section.settings.show_author and article.author != blank %}
+            <span class="text-neutral-400" aria-hidden="true">·</span>
+            <span class="font-light" itemprop="author">{{ article.author | escape }}</span>
+          {% endif %}
+        </div>
+        {% if article.tags.size > 0 %}
+          <ul class="mt-4 flex flex-wrap gap-2" aria-label="{{ 'templates.article.tags_label' | t }}">
+            {% for tag in article.tags %}
+              <li>
+                <a
+                  href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                  class="inline-flex rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-700 transition-colors hover:border-neutral-400"
+                >
+                  {{ tag | escape }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </header>
+
+      {% if article.image != blank %}
+        <div class="article-main__hero mt-10 overflow-hidden rounded-sm bg-neutral-100">
+          <img
+            src="{{ article.image | image_url: width: 1600 }}"
+            alt="{{ article.image.alt | default: article.title | escape }}"
+            width="{{ article.image.width }}"
+            height="{{ article.image.height }}"
+            class="h-auto w-full object-cover"
+            loading="eager"
+            itemprop="image"
+          >
+        </div>
+      {% endif %}
+
+      <div
+        class="article-main__body rte mt-10 text-base leading-relaxed text-neutral-800 md:text-lg [&_a]:text-neutral-900 [&_a]:underline [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-medium [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-medium [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6"
+        itemprop="articleBody"
+      >
+        {{ article.content }}
+      </div>
+
+      <p class="mt-12 border-t border-neutral-200/90 pt-8">
+        <a
+          href="{{ blog.url }}"
+          class="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 underline underline-offset-4 transition-opacity hover:opacity-70"
+        >
+          <span aria-hidden="true">←</span>
+          {{ 'templates.article.back_to_blog' | t: title: blog.title }}
+        </a>
+      </p>
+
+      {% if blog.comments_enabled? and article.comments_enabled? %}
+        <div id="article-comments" class="mt-16 border-t border-neutral-200/90 pt-12">
+          <h2 class="text-xl font-medium text-neutral-900">{{ 'templates.article.comments_title' | t }}</h2>
+
+          {% paginate article.comments by 25 %}
+            {% if article.comments.size > 0 %}
+              <ul class="mt-6 space-y-6" role="list">
+                {% for comment in article.comments %}
+                  <li class="rounded-sm border border-neutral-200/80 bg-neutral-50/80 p-4 md:p-5">
+                    <p class="m-0 text-sm font-medium text-neutral-900">{{ comment.author }}</p>
+                    <p class="mt-1 text-xs text-neutral-500">
+                      {{ comment.created_at | time_tag: format: 'date_at_time' }}
+                    </p>
+                    <div class="article-main__comment-body rte mt-3 text-sm text-neutral-700">
+                      {{ comment.content }}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+            {% if paginate.pages > 1 %}
+              <nav class="mt-8 flex flex-wrap justify-center gap-2" aria-label="{{ 'general.pagination.nav_aria' | t }}">
+                {% if paginate.previous %}
+                  <a href="{{ paginate.previous.url }}" class="text-sm text-neutral-700 underline">{{ 'general.pagination.previous' | t }}</a>
+                {% endif %}
+                {% if paginate.next %}
+                  <a href="{{ paginate.next.url }}" class="text-sm text-neutral-700 underline">{{ 'general.pagination.next' | t }}</a>
+                {% endif %}
+              </nav>
+            {% endif %}
+          {% endpaginate %}
+
+          {% form 'new_comment', article, class: 'article-main__comment-form mt-10 space-y-4' %}
+            <h3 class="text-lg font-medium text-neutral-900">{{ 'templates.article.comment_form_title' | t }}</h3>
+            {% if form.errors %}
+              <div class="rounded border border-red-200 bg-red-50 p-4 text-sm text-red-900" role="alert">
+                {{ form.errors | default_errors }}
+              </div>
+            {% endif %}
+            {% if blog.moderated? %}
+              <p class="text-sm text-neutral-600">{{ 'templates.article.comment_moderated' | t }}</p>
+            {% endif %}
+            <div>
+              <label class="mb-1 block text-sm font-medium text-neutral-800" for="CommentAuthor-{{ section.id }}">
+                {{- 'templates.article.comment_name' | t -}}
+              </label>
+              <input
+                type="text"
+                name="comment[author]"
+                id="CommentAuthor-{{ section.id }}"
+                value="{{ form.author }}"
+                class="w-full rounded border border-neutral-300 px-3 py-2 text-sm text-neutral-900"
+                required
+              >
+            </div>
+            <div>
+              <label class="mb-1 block text-sm font-medium text-neutral-800" for="CommentEmail-{{ section.id }}">
+                {{- 'templates.article.comment_email' | t -}}
+              </label>
+              <input
+                type="email"
+                name="comment[email]"
+                id="CommentEmail-{{ section.id }}"
+                value="{{ form.email }}"
+                class="w-full rounded border border-neutral-300 px-3 py-2 text-sm text-neutral-900"
+                required
+              >
+            </div>
+            <div>
+              <label class="mb-1 block text-sm font-medium text-neutral-800" for="CommentBody-{{ section.id }}">
+                {{- 'templates.article.comment_message' | t -}}
+              </label>
+              <textarea
+                name="comment[body]"
+                id="CommentBody-{{ section.id }}"
+                rows="5"
+                class="w-full rounded border border-neutral-300 px-3 py-2 text-sm text-neutral-900"
+                required
+              >{{ form.body }}</textarea>
+            </div>
+            <button
+              type="submit"
+              class="inline-flex border border-neutral-900 bg-neutral-900 px-6 py-3 text-sm font-medium uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+            >
+              {{ 'templates.article.comment_submit' | t }}
+            </button>
+          {% endform %}
+        </div>
+      {% endif %}
+    </article>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "section-article-main",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author name",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

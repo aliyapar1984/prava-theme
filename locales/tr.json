@@ -40,6 +40,26 @@
       "category_nav_aria": "Kategorilere göz at",
       "products_region_aria": "Bu koleksiyondaki ürünler",
       "empty": "Bu koleksiyonda ürün yok."
+    },
+    "blog": {
+      "posts_region_aria": "Blog yazıları",
+      "empty": "Henüz yazı yok."
+    },
+    "404": {
+      "title": "Sayfa bulunamadı",
+      "subtext": "Aradığınız sayfa yok veya taşınmış olabilir.",
+      "link_home": "Ana sayfaya dön"
+    },
+    "article": {
+      "back_to_blog": "{{ title }} — tüm yazılar",
+      "tags_label": "Etiketler",
+      "comments_title": "Yorumlar",
+      "comment_form_title": "Yorum yazın",
+      "comment_moderated": "Yorumlar yayınlanmadan önce incelenir.",
+      "comment_name": "Ad",
+      "comment_email": "E-posta",
+      "comment_message": "Mesaj",
+      "comment_submit": "Gönder"
     }
   },
   "footer": {
@@ -114,6 +134,16 @@
       "aria_label": "Blog yazıları",
       "cta_all": "Tüm blog yazılarını görüntüle",
       "cta_all_visible": "Tüm Blog Yazıları"
+    },
+    "blog_listing": {
+      "aria_label": "Blog",
+      "rss": "RSS beslemesi"
+    },
+    "article_main": {
+      "aria_label": "Blog yazısı"
+    },
+    "not_found": {
+      "aria_label": "Sayfa bulunamadı"
     },
     "faq": {
       "aria_label": "Destek ve sıkça sorulan sorular",

@@ -1,0 +1,143 @@
+{% comment %}
+  Blog liste — tüm bloglar için varsayılan şablon (templates/blog.json).
+{% endcomment %}
+<section
+  class="blog-listing bg-white text-neutral-900"
+  aria-label="{{ 'sections.blog_listing.aria_label' | t }}"
+>
+  <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 md:pb-24 md:pt-16">
+    {% render 'breadcrumbs', current_title: blog.title %}
+
+    <header class="mb-8 md:mb-10">
+      <h1 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
+        {{ blog.title | escape }}
+      </h1>
+      {% if section.settings.show_rss %}
+        <a
+          href="{{ blog.url | append: '.atom' }}"
+          class="mt-4 inline-flex text-sm font-light text-neutral-600 underline underline-offset-4 transition-opacity hover:text-neutral-900"
+          rel="alternate"
+          type="application/atom+xml"
+        >
+          {{ 'sections.blog_listing.rss' | t }}
+        </a>
+      {% endif %}
+    </header>
+
+    {% if section.settings.intro != blank %}
+      <div class="blog-listing__intro rte mb-10 max-w-3xl text-base leading-relaxed text-neutral-700 md:text-lg">
+        {{ section.settings.intro }}
+      </div>
+    {% endif %}
+
+    <div aria-label="{{ 'templates.blog.posts_region_aria' | t }}">
+      {% paginate blog.articles by section.settings.articles_per_page %}
+        {% if blog.articles.size == 0 %}
+          <p class="text-base text-neutral-600">{{ 'templates.blog.empty' | t }}</p>
+        {% else %}
+          <div
+            class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 xl:grid-cols-3"
+          >
+            {% for article in blog.articles %}
+              {% liquid
+                assign eager = false
+                if forloop.index <= 3
+                  assign eager = true
+                endif
+              %}
+              {% if eager %}
+                {% render 'blog-article-card',
+                  article: article,
+                  title_id: 'blog-list-' | append: article.id,
+                  image_loading: 'eager'
+                %}
+              {% else %}
+                {% render 'blog-article-card',
+                  article: article,
+                  title_id: 'blog-list-' | append: article.id,
+                  image_loading: 'lazy'
+                %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if paginate.pages > 1 %}
+          <nav
+            class="mt-14 flex flex-wrap items-center justify-center gap-2"
+            aria-label="{{ 'general.pagination.nav_aria' | t }}"
+          >
+            {% if paginate.previous %}
+              <a
+                href="{{ paginate.previous.url }}"
+                class="rounded border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-800 transition-opacity hover:opacity-70"
+              >
+                {{ 'general.pagination.previous' | t }}
+              </a>
+            {% endif %}
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a
+                  href="{{ part.url }}"
+                  class="min-w-[2.5rem] rounded border border-neutral-200 px-3 py-2 text-center text-sm text-neutral-800 transition-opacity hover:opacity-70"
+                >
+                  {{- part.title -}}
+                </a>
+              {% else %}
+                {% if part.title == paginate.current_page %}
+                  <span
+                    class="min-w-[2.5rem] rounded border border-neutral-900 bg-neutral-900 px-3 py-2 text-center text-sm font-medium text-white"
+                    aria-current="page"
+                  >
+                    {{- part.title -}}
+                  </span>
+                {% else %}
+                  <span class="min-w-[2.5rem] px-2 py-2 text-center text-sm text-neutral-400">{{ part.title }}</span>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if paginate.next %}
+              <a
+                href="{{ paginate.next.url }}"
+                class="rounded border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-800 transition-opacity hover:opacity-70"
+              >
+                {{ 'general.pagination.next' | t }}
+              </a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog listing",
+  "tag": "section",
+  "class": "section-blog-listing",
+  "settings": [
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "min": 6,
+      "max": 24,
+      "step": 1,
+      "default": 12,
+      "label": "Posts per page"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Introduction (optional)",
+      "info": "Shown below the blog title."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rss",
+      "label": "Show RSS feed link",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

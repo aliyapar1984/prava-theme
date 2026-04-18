@@ -1,0 +1,95 @@
+{% comment %}
+  Sayfa bulunamadı — templates/404.json (section type: not-found)
+{% endcomment %}
+<section
+  class="not-found bg-white text-neutral-900"
+  aria-label="{{ 'sections.not_found.aria_label' | t }}"
+>
+  <div class="mx-auto max-w-xl px-10 py-20 text-center md:py-28">
+    {% if section.settings.show_code %}
+      <p class="m-0 text-6xl font-semibold tabular-nums text-neutral-200 md:text-8xl" aria-hidden="true">
+        {{ section.settings.code | default: '404' | escape }}
+      </p>
+    {% endif %}
+
+    <h1 class="{% if section.settings.show_code %}mt-4{% else %}mt-0{% endif %} text-2xl font-medium tracking-tight text-neutral-900 md:text-3xl">
+      {% if section.settings.heading != blank %}
+        {{ section.settings.heading | escape }}
+      {% else %}
+        {{ 'templates.404.title' | t }}
+      {% endif %}
+    </h1>
+
+    <p class="mt-4 text-base leading-relaxed text-neutral-600 md:text-lg">
+      {% if section.settings.subtext != blank %}
+        {{ section.settings.subtext | escape }}
+      {% else %}
+        {{ 'templates.404.subtext' | t }}
+      {% endif %}
+    </p>
+
+    <div class="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4">
+      <a
+        href="{{ routes.root_url }}"
+        class="inline-flex min-h-[48px] items-center justify-center border border-neutral-300 bg-white px-6 py-3 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-50"
+      >
+        {{ 'templates.404.link_home' | t }}
+      </a>
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        class="inline-flex min-h-[48px] items-center justify-center border border-neutral-900 bg-neutral-900 px-6 py-3 text-sm font-medium uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+      >
+        {{ 'sections.mini_cart.continue_shopping' | t }}
+      </a>
+      {% if section.settings.show_search_link %}
+        <a
+          href="{{ routes.search_url }}"
+          class="inline-flex min-h-[48px] items-center justify-center px-6 py-3 text-sm font-medium text-neutral-700 underline underline-offset-4 transition-opacity hover:opacity-70 sm:ml-0"
+        >
+          {{ 'header.search' | t }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "section",
+  "class": "section-not-found",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_code",
+      "label": "Show large status code",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Code text",
+      "default": "404",
+      "info": "Shown when large status code is enabled."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (optional)",
+      "info": "Leave blank to use the theme translation."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Description (optional)",
+      "info": "Leave blank to use the theme translation."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search_link",
+      "label": "Show search link",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

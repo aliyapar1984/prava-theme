@@ -65,7 +65,14 @@
         >
         <span>{{ 'header.search' | t }}</span>
       </button>
-      <a href="{{ routes.account_url }}" class="hidden font-light transition-opacity hover:opacity-80 md:inline">{{ 'header.account' | t }}</a>
+      {% comment %}
+        New Customer Accounts: Shopify <shopify-account>. Liquid: {% if customer %}; JS: document.documentElement.dataset.customerSignedIn
+      {% endcomment %}
+      {% if shop.customer_accounts_enabled %}
+        <div class="header-nav-account hidden items-center justify-center md:flex" title="{{ 'header.account' | t }}">
+          <shopify-account menu="customer-account-main-menu"></shopify-account>
+        </div>
+      {% endif %}
       <a
         href="{{ routes.cart_url }}"
         id="cart-icon-bubble"

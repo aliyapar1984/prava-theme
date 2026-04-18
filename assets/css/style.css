@@ -238,6 +238,20 @@
   will-change: transform, opacity;
 }
 
+/* ── Shopify hesap bileşeni (New Customer Accounts) ─────────────────── */
+.header-nav-account shopify-account {
+  --shopify-account-avatar-size: 40px;
+}
+
+#site-header[data-header-theme='transparent'] .header-nav-account shopify-account::part(signed-out-avatar) {
+  color: #fff;
+  filter: brightness(0) invert(1);
+}
+
+#site-header[data-header-theme='solid'] .header-nav-account shopify-account::part(signed-out-avatar) {
+  color: #171717;
+}
+
 /* ── Header mini arama (predictive search + debounce) ───────────────── */
 .mini-search {
   position: fixed;

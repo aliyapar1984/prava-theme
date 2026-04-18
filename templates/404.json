@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "not-found",
+      "settings": {
+        "show_code": true,
+        "code": "404",
+        "show_search_link": true
+      }
+    }
+  },
+  "order": ["main"]
+}

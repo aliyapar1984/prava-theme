@@ -40,6 +40,26 @@
       "category_nav_aria": "Browse categories",
       "products_region_aria": "Products in this collection",
       "empty": "No products in this collection."
+    },
+    "blog": {
+      "posts_region_aria": "Blog posts",
+      "empty": "No posts yet."
+    },
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you’re looking for doesn’t exist or has been moved.",
+      "link_home": "Back to home"
+    },
+    "article": {
+      "back_to_blog": "Back to {{ title }}",
+      "tags_label": "Tags",
+      "comments_title": "Comments",
+      "comment_form_title": "Write a comment",
+      "comment_moderated": "Comments are reviewed before they appear.",
+      "comment_name": "Name",
+      "comment_email": "Email",
+      "comment_message": "Message",
+      "comment_submit": "Post comment"
     }
   },
   "footer": {
@@ -114,6 +134,16 @@
       "aria_label": "Blog articles",
       "cta_all": "View all blog posts",
       "cta_all_visible": "All blog posts"
+    },
+    "blog_listing": {
+      "aria_label": "Blog",
+      "rss": "RSS feed"
+    },
+    "article_main": {
+      "aria_label": "Article"
+    },
+    "not_found": {
+      "aria_label": "Page not found"
     },
     "faq": {
       "aria_label": "Support and frequently asked questions",
