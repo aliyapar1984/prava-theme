@@ -147,6 +147,12 @@
     "landing_blog_rail": {
       "type": "landing-blog-rail",
       "blocks": {
+        "post_zRUtm4": {
+          "type": "post",
+          "settings": {
+            "article": "stroller-guides/moduler-bebek-arabasi-nasil-secilir-2026"
+          }
+        },
         "RailPost1": {
           "type": "post",
           "settings": {
@@ -155,6 +161,7 @@
         }
       },
       "block_order": [
+        "post_zRUtm4",
         "RailPost1"
       ],
       "settings": {
