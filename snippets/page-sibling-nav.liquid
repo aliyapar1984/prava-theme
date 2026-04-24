@@ -1,0 +1,142 @@
+{% comment %}
+  Footer menüsünde bu sayfanın bulunduğu seviyedeki kardeş linkler.
+  Mobil: <details> ile açılır kapanır; masaüstünde yan sütun (details açık tutulur).
+  Parametre: section_id (benzersiz details id için)
+{% endcomment %}
+{%- liquid
+  assign side_menu = linklists.footer
+  assign found_nav = false
+-%}
+{%- capture nav_inner -%}
+  {%- if side_menu.links.size > 0 -%}
+    {%- for col in side_menu.links -%}
+      {%- if found_nav -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- if col.active -%}
+        <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          {{- 'templates.page.sibling_nav_label' | t -}}
+        </p>
+        <ul class="space-y-2 border-l border-neutral-200 pl-4" role="list">
+          {%- for sib in side_menu.links -%}
+            <li>
+              <a
+                href="{{ sib.url }}"
+                class="block text-sm font-light text-neutral-700 transition-colors hover:text-neutral-900{% if sib.active %} font-medium text-neutral-900{% endif %}"
+                {% if sib.active %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- sib.title | escape -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- assign found_nav = true -%}
+      {%- elsif col.links.size > 0 -%}
+        {%- for child in col.links -%}
+          {%- if found_nav -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- if child.active -%}
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+              {{- col.title | escape -}}
+            </p>
+            <ul class="space-y-2 border-l border-neutral-200 pl-4" role="list">
+              {%- for sib in col.links -%}
+                <li>
+                  <a
+                    href="{{ sib.url }}"
+                    class="block text-sm font-light text-neutral-700 transition-colors hover:text-neutral-900{% if sib.active %} font-medium text-neutral-900{% endif %}"
+                    {% if sib.active %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- sib.title | escape -}}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+            {%- assign found_nav = true -%}
+          {%- elsif child.links.size > 0 -%}
+            {%- for gc in child.links -%}
+              {%- if found_nav -%}
+                {%- continue -%}
+              {%- endif -%}
+              {%- if gc.active -%}
+                <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  {{- col.title | escape -}}
+                </p>
+                <p class="mb-3 text-sm font-medium text-neutral-800">
+                  {{- child.title | escape -}}
+                </p>
+                <ul class="space-y-2 border-l border-neutral-200 pl-4" role="list">
+                  {%- for sib in child.links -%}
+                    <li>
+                      <a
+                        href="{{ sib.url }}"
+                        class="block text-sm font-light text-neutral-700 transition-colors hover:text-neutral-900{% if sib.active %} font-medium text-neutral-900{% endif %}"
+                        {% if sib.active %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{- sib.title | escape -}}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                {%- assign found_nav = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- if found_nav -%}
+  <aside class="main-page__sibling-aside mb-8 shrink-0 lg:mb-0">
+    <details
+      id="main-page-sibling-nav-{{ section_id }}"
+      class="group overflow-hidden rounded-lg border border-neutral-200/90 bg-neutral-50/80 lg:border-0 lg:bg-transparent lg:overflow-visible"
+    >
+      <summary
+        class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 text-sm font-medium text-neutral-900 outline-none marker:hidden [&::-webkit-details-marker]:hidden lg:sr-only"
+      >
+        <span>{{ 'templates.page.sibling_nav_aria' | t }}</span>
+        <svg
+          class="h-4 w-4 shrink-0 text-neutral-500 transition-transform duration-200 group-open:rotate-180 lg:hidden"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </summary>
+      <nav
+        class="border-t border-neutral-200/80 px-4 pb-4 pt-3 lg:border-0 lg:px-0 lg:pb-0 lg:pt-0 lg:sticky lg:top-28"
+        aria-label="{{ 'templates.page.sibling_nav_aria' | t }}"
+      >
+        {{- nav_inner -}}
+      </nav>
+    </details>
+  </aside>
+  <script>
+    (function () {
+      var el = document.getElementById('main-page-sibling-nav-{{ section_id }}');
+      if (!el) return;
+      var mq = window.matchMedia('(min-width: 1024px)');
+      function sync() {
+        el.open = mq.matches;
+      }
+      sync();
+      mq.addEventListener('change', sync);
+    })();
+  </script>
+{%- endif -%}

@@ -50,6 +50,10 @@
       "subtext": "Aradığınız sayfa yok veya taşınmış olabilir.",
       "link_home": "Ana sayfaya dön"
     },
+    "page": {
+      "sibling_nav_aria": "İlgili sayfalar",
+      "sibling_nav_label": "Sayfalar"
+    },
     "article": {
       "back_to_blog": "{{ title }} — tüm yazılar",
       "tags_label": "Etiketler",
@@ -141,6 +145,9 @@
     },
     "article_main": {
       "aria_label": "Blog yazısı"
+    },
+    "main_page": {
+      "aria_label": "Sayfa"
     },
     "not_found": {
       "aria_label": "Sayfa bulunamadı"

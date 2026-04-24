@@ -50,6 +50,10 @@
       "subtext": "The page you’re looking for doesn’t exist or has been moved.",
       "link_home": "Back to home"
     },
+    "page": {
+      "sibling_nav_aria": "Related pages",
+      "sibling_nav_label": "Pages"
+    },
     "article": {
       "back_to_blog": "Back to {{ title }}",
       "tags_label": "Tags",
@@ -141,6 +145,9 @@
     },
     "article_main": {
       "aria_label": "Article"
+    },
+    "main_page": {
+      "aria_label": "Page"
     },
     "not_found": {
       "aria_label": "Page not found"
