@@ -49,89 +49,92 @@
     class="prava-bestsellers-card flex h-full flex-col bg-[#f2f2f0]{% if use_group %} group{% endif %}"
     {% if block %}{{ block.shopify_attributes }}{% endif %}
   >
-    <div class="relative flex aspect-[1/1] w-full items-center justify-center overflow-hidden">
-      <a href="{{ p.url }}" class="relative z-0 block h-full w-full">
+    <a
+      href="{{ p.url }}"
+      class="flex h-full flex-col text-left text-inherit no-underline outline-none transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+      aria-labelledby="{{ uid }}"
+    >
+      <div class="prava-swiper-card__media relative flex aspect-[1/1] w-full items-center justify-center overflow-hidden">
         {% if main_img != blank %}
           <img
             src="{{ main_img | image_url: width: 1040 }}"
             alt="{{ main_img.alt | default: p.title | escape }}"
-            class="h-full w-full object-contain{% if use_group %} transition-opacity duration-500 ease-out group-hover:opacity-0{% endif %}"
+            class="relative z-0 block h-full w-full object-contain{% if use_group %} transition-opacity duration-500 ease-out group-hover:opacity-0{% endif %}"
             width="{{ main_img.width | default: 520 }}"
             height="{{ main_img.height | default: 640 }}"
             loading="{{ img_loading }}"
             decoding="async"
-            aria-labelledby="{{ uid }}"
           >
         {% endif %}
-      </a>
-      {% if has_hover_image %}
-        <img
-          src="{{ hover_image | image_url: width: 1040 }}"
-          alt=""
-          class="absolute inset-0 z-[1] h-full w-full object-cover object-bottom opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
-          width="520"
-          height="640"
-          loading="lazy"
-          decoding="async"
-          aria-hidden="true"
-        >
-      {% endif %}
-      {% if has_hover_video %}
-        <video
-          class="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
-          playsinline
-          muted
-          loop
-          preload="none"
-          data-bestseller-hover-video
-          aria-hidden="true"
-          tabindex="-1"
-        >
-          <source src="{{ hover_vid | escape }}" type="video/mp4">
-        </video>
-      {% endif %}
-    </div>
-    <div class="flex flex-1 flex-col px-[30px] py-[30px]">
-      <h3 id="{{ uid }}" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
-        <a href="{{ p.url }}" class="text-inherit no-underline hover:opacity-80">{{ p.title }}</a>
-      </h3>
-      {% if p.type != blank %}
-        <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">{{ p.type }}</p>
-      {% endif %}
-      <div class="mt-6 flex items-center justify-between gap-4">
-        {% if color_option != blank and color_option.values.size > 0 %}
-          <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
-            {% for value in color_option.values %}
-              <li class="m-0 p-0">
-                {% liquid
-                  assign i = forloop.index0 | modulo: 4
-                  case i
-                    when 0
-                      assign swatch_bg = 'bg-[#bf7f83]'
-                    when 1
-                      assign swatch_bg = 'bg-[#d4c176]'
-                    when 2
-                      assign swatch_bg = 'bg-[#9ea78a]'
-                    else
-                      assign swatch_bg = 'bg-[#88acc8]'
-                  endcase
-                %}
-                <span class="inline-block h-5 w-5 shrink-0 rounded-full {{ swatch_bg }} ring-1 ring-black/5" title="{{ value | escape }}" aria-hidden="true"></span>
-                <span class="sr-only">{{ value }}</span>
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <span class="min-w-0 flex-1" aria-hidden="true"></span>
+        {% if has_hover_image %}
+          <img
+            src="{{ hover_image | image_url: width: 1040 }}"
+            alt=""
+            class="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover object-bottom opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+            width="520"
+            height="640"
+            loading="lazy"
+            decoding="async"
+            aria-hidden="true"
+          >
         {% endif %}
-        <p class="shrink-0 text-right text-base leading-none md:text-lg">
-          {% if current_variant.compare_at_price > current_variant.price %}
-            <span class="mr-2 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
-          {% endif %}
-          <span class="font-medium text-neutral-900">{{ current_variant.price | money }}</span>
-        </p>
+        {% if has_hover_video %}
+          <video
+            class="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+            playsinline
+            muted
+            loop
+            preload="none"
+            data-bestseller-hover-video
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <source src="{{ hover_vid | escape }}" type="video/mp4">
+          </video>
+        {% endif %}
       </div>
-    </div>
+      <div class="flex flex-1 flex-col px-[30px] py-[30px]">
+        <h3 id="{{ uid }}" class="text-lg font-medium leading-snug tracking-tight text-neutral-900 md:text-xl">
+          {{ p.title }}
+        </h3>
+        {% if p.type != blank %}
+          <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">{{ p.type }}</p>
+        {% endif %}
+        <div class="mt-6 flex items-center justify-between gap-4">
+          {% if color_option != blank and color_option.values.size > 0 %}
+            <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+              {% for value in color_option.values %}
+                <li class="m-0 p-0">
+                  {% liquid
+                    assign i = forloop.index0 | modulo: 4
+                    case i
+                      when 0
+                        assign swatch_bg = 'bg-[#bf7f83]'
+                      when 1
+                        assign swatch_bg = 'bg-[#d4c176]'
+                      when 2
+                        assign swatch_bg = 'bg-[#9ea78a]'
+                      else
+                        assign swatch_bg = 'bg-[#88acc8]'
+                    endcase
+                  %}
+                  <span class="inline-block h-5 w-5 shrink-0 rounded-full {{ swatch_bg }} ring-1 ring-black/5" title="{{ value | escape }}" aria-hidden="true"></span>
+                  <span class="sr-only">{{ value }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <span class="min-w-0 flex-1" aria-hidden="true"></span>
+          {% endif %}
+          <p class="shrink-0 text-right text-base leading-none md:text-lg">
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <span class="mr-2 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="font-medium text-neutral-900">{{ current_variant.price | money }}</span>
+          </p>
+        </div>
+      </div>
+    </a>
   </article>
 {% elsif request.design_mode and block %}
   <article

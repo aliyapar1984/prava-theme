@@ -1,18 +1,18 @@
-<section class="prava-support-faq bg-white text-neutral-900 px-10 pt-44 pb-44" aria-label="{{ 'sections.faq.aria_label' | t }}">
-  <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-10 py-5 max-w-[1200px]">
+<section class="prava-support-faq bg-white text-neutral-900 px-0 lg:px-10 pt-16 lg:pt-24 pb-10 lg:pb-24" aria-label="{{ 'sections.faq.aria_label' | t }}">
+  <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-5 lg:px-10 py-5 lg:py-10 max-w-[1200px]">
     {% if section.settings.support_texture_image != blank %}
-      <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:200px_center] bg-[length:230px_auto] opacity-20" style="background-image: url('{{ section.settings.support_texture_image | image_url: width: 800 }}');" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:top_right] lg:bg-[position:200px_center] bg-[length:230px_auto] opacity-20" style="background-image: url('{{ section.settings.support_texture_image | image_url: width: 800 }}');" aria-hidden="true"></div>
     {% endif %}
     <div class="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center">
       <div class="prava-support-faq__intro relative z-[1] w-full shrink-0 lg:max-w-[min(100%,420px)] xl:max-w-[480px]">
         <div class="pointer-events-none absolute -right-8 bottom-0 left-0 top-0 overflow-visible opacity-[0.12] lg:-right-4" aria-hidden="true"></div>
         {% if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank %}
-          <h2 id="faq-support-heading" class="relative font-semibold text-neutral-800 text-[50px] leading-none">
+          <h2 id="faq-support-heading" class="relative font-semibold text-neutral-800 text-4xl lg:text-[50px] leading-none text-center lg:text-left">
             {% if section.settings.heading_line_1 != blank %}
-              <span class="block">{{ section.settings.heading_line_1 | escape }}</span>
+              <span class="inline-block lg:block">{{ section.settings.heading_line_1 | escape }}</span>
             {% endif %}
             {% if section.settings.heading_line_2 != blank %}
-              <span class="mt-1 block md:mt-2">{{ section.settings.heading_line_2 | escape }}</span>
+              <span class="mt-1 inline-block lg:block md:mt-2">{{ section.settings.heading_line_2 | escape }}</span>
             {% endif %}
           </h2>
         {% endif %}

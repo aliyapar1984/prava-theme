@@ -261,6 +261,25 @@
 
   }
 
+  /* Yatay Swiper: SVG imleç yalnızca watchOverflow ile kilitli değilken (CSS: .prava-swiper--scrollable) */
+  var PRAVA_SWIPER_SCROLLABLE_ON = {
+    init: function () {
+      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
+    },
+    resize: function () {
+      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
+    },
+    breakpoint: function () {
+      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
+    },
+    lock: function () {
+      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
+    },
+    unlock: function () {
+      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
+    },
+  };
+
   /* ── Kategori rayı (hero altı; ~3 tam + 4. kısmi) ───────────────────── */
   document.querySelectorAll('.prava-category-rail__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
@@ -271,6 +290,7 @@
       /* CSS cursor:url !important Swiper inline cursor’ı geçer; grab/grabbing sınıfları çalışır */
       grabCursor: true,
       watchOverflow: true,
+      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -303,6 +323,7 @@
       speed: 400,
       grabCursor: true,
       watchOverflow: true,
+      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         768: {
           enabled: false,
@@ -324,6 +345,7 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
+      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -354,6 +376,7 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
+      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -426,6 +449,7 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
+      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -480,6 +504,7 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
+      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         480: {
           spaceBetween: 16,
