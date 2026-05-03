@@ -29,31 +29,37 @@
 {% if coll != blank or is_placeholder %}
   <div class="swiper-slide !h-auto" {{ block.shopify_attributes }}>
     <article class="prava-category-card flex h-full flex-col">
-      <div class="prava-category-card__media aspect-square w-full overflow-hidden rounded-sm bg-[#F0F1EC] flex items-center justify-center">
-        {% if card_image != blank %}
-          <img
-            src="{{ card_image | image_url: width: 1040 }}"
-            width="520"
-            height="520"
-            alt="{{ display_title | escape }}"
-            class="mega-menu__visual-img h-full w-full object-cover"
-            loading="{{ loading }}"
-            {% if display_title != blank %}aria-labelledby="{{ title_id }}"{% endif %}
-          >
-        {% elsif is_placeholder %}
-          <span class="px-4 text-center text-sm text-neutral-500">{{ 'sections.category_rail.placeholder_title' | t }}</span>
-        {% endif %}
-      </div>
-      <h3 id="{{ title_id }}" class="mt-10 text-left text-[30px] font-normal leading-snug tracking-tight text-neutral-900 lg:text-3xl">
-        {{ display_title }}
-      </h3>
       {% unless is_placeholder %}
         <a
           href="{{ link_url }}"
-          class="mt-3 inline-block w-max text-left text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          class="flex h-full flex-col text-left text-inherit no-underline outline-none transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
           aria-label="{{ 'sections.category_rail.cta_named' | t: title: display_title }}"
         >
-          {{ cta_text }}
+      {% endunless %}
+        <div class="prava-category-card__media prava-swiper-card__media aspect-square w-full overflow-hidden rounded-sm bg-[#F0F1EC] flex items-center justify-center">
+          {% if card_image != blank %}
+            <img
+              src="{{ card_image | image_url: width: 1040 }}"
+              width="520"
+              height="520"
+              alt="{{ display_title | escape }}"
+              class="mega-menu__visual-img h-full w-full object-cover"
+              loading="{{ loading }}"
+              {% if display_title != blank %}aria-labelledby="{{ title_id }}"{% endif %}
+            >
+          {% elsif is_placeholder %}
+            <span class="px-4 text-center text-sm text-neutral-500">{{ 'sections.category_rail.placeholder_title' | t }}</span>
+          {% endif %}
+        </div>
+        <h3 id="{{ title_id }}" class="mt-6 lg:mt-10 text-left text-xl lg:text-[30px] font-normal leading-snug tracking-tight text-neutral-900 lg:text-3xl">
+          {{ display_title }}
+        </h3>
+        {% unless is_placeholder %}
+          <span class="mt-3 inline-block w-max text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px]">
+            {{ cta_text }}
+          </span>
+        {% endunless %}
+      {% unless is_placeholder %}
         </a>
       {% endunless %}
     </article>

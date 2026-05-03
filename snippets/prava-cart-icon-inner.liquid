@@ -5,6 +5,15 @@
 {% liquid
   assign th = transparent_header | default: false
 %}
+
+<span class="hidden font-light lg:block{% if th %} text-white{% else %} text-neutral-900{% endif %}">{{ 'header.cart' | t }}</span>
+<span class="sr-only" data-prava-cart-count-aria>
+  {%- if cart.item_count > 0 -%}
+    {{- 'header.cart_count' | t: count: cart.item_count -}}
+  {%- else -%}
+    {{- 'header.cart' | t -}}
+  {%- endif -%}
+</span>
 <span class="relative inline-flex items-center">
   <img
     src="{{ 'icons/basket.svg' | asset_url }}"
@@ -26,13 +35,5 @@
         99+
       {%- endif -%}
     </span>
-  {%- endif -%}
-</span>
-<span class="font-light{% if th %} text-white{% else %} text-neutral-900{% endif %}">{{ 'header.cart' | t }}</span>
-<span class="sr-only" data-prava-cart-count-aria>
-  {%- if cart.item_count > 0 -%}
-    {{- 'header.cart_count' | t: count: cart.item_count -}}
-  {%- else -%}
-    {{- 'header.cart' | t -}}
   {%- endif -%}
 </span>

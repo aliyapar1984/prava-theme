@@ -43,11 +43,13 @@
 
     applyKaraoke(0, chars);
 
+    // Tetikleyici metin kutusu: bölümde görsel olduğu için section ile "bottom center"
+    // çok geç tamamlanıyordu; kaydırma metin alanında bitince karaoke da bitsin.
     karaokeTrigger = ScrollTrigger.create({
-      trigger: section,
-      start: 'top 72%',
-      end: 'bottom center',
-      scrub: 0.65,
+      trigger: root,
+      start: 'top 82%',
+      end: 'bottom 58%',
+      scrub: 0.45,
       onUpdate: function (self) {
         applyKaraoke(self.progress, chars);
       },
