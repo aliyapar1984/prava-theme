@@ -1,7 +1,7 @@
 <section class="prava-blog-rail relative bg-[#F2F2F0] text-neutral-900 overflow-hidden" aria-label="{{ 'sections.blog.aria_label' | t }}" style="--pbr-pad-x: 40px;">
-  <div class="mx-auto px-[var(--pbr-pad-x)] py-28 pr-0">
+  <div class="relative mx-auto px-[var(--pbr-pad-x)] py-28 pr-0">
     {% if section.settings.blog_texture_image != blank %}
-      <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:100px_bottom] bg-[length:800px_auto] opacity-10" style="background-image: url('{{ section.settings.blog_texture_image | image_url: width: 1600 }}');" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-0 z-0 bg-no-repeat bg-[position:100px_bottom] bg-[length:800px_auto] opacity-10" style="background-image: url('{{ section.settings.blog_texture_image | image_url: width: 1600 }}');" aria-hidden="true"></div>
     {% endif %}
     {% liquid
       assign cta_href = section.settings.cta_url | strip
@@ -16,7 +16,7 @@
         assign cta_visible = 'sections.blog.cta_all_visible' | t
       endif
     %}
-    <div class="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-14 xl:gap-20">
+    <div class="relative z-[1] flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-14 xl:gap-20">
       <div class="prava-blog-rail__intro relative z-[1] w-full max-w-xl shrink-0 lg:max-w-[min(100%,400px)] xl:max-w-[640px] pl-[40px]">
         <div class="pointer-events-none absolute -left-4 -right-4 bottom-0 top-8 overflow-hidden opacity-[0.08] lg:left-0 lg:right-auto lg:w-[120%]" aria-hidden="true">
           {% if section.settings.blog_intro_decoration_image != blank %}
@@ -122,7 +122,8 @@
     {
       "type": "image_picker",
       "id": "blog_texture_image",
-      "label": "Arka plan dokusu (hafif)"
+      "label": "Arka plan dokusu (hafif)",
+      "info": "İçerik → Dosyalar’dan seçin (accent_destek vb.). Ana sayfa şablonunda varsayılan atanabilir."
     },
     {
       "type": "image_picker",

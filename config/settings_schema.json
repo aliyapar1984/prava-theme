@@ -39,7 +39,7 @@
         "type": "image_picker",
         "id": "footer_watermark_image",
         "label": "Footer — arka plan görseli",
-        "info": "Alt bilgi alanındaki dekoratif / filigran görseli."
+        "info": "İçerik → Dosyalar’dan yükleyin; accent_destek gibi /cdn/shop/files/… adresi üretilir (tema assets /cdn/shop/t/…/assets/ değil)."
       }
     ]
   },

@@ -7,12 +7,12 @@
   endif
 %}
 {% if header_transparent %}
-  <div class="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[120px] bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true"></div>
+  <div id="site-header-gradient" class="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[120px] bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true"></div>
 {% endif %}
 
   <header
     id="site-header"
-    class="z-[100] flex h-[88px] shrink-0 items-center justify-between px-10 transition-[background-color,box-shadow] duration-200{% if header_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full border-b border-neutral-200/80 bg-white shadow-sm{% endif %}"
+    class="prava-site-header z-[100] flex h-[88px] shrink-0 items-center justify-between px-10{% if header_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full border-b border-neutral-200/80 bg-white shadow-sm{% endif %}"
     style="--header-pad-x: 40px;"
     role="banner"
     data-header-theme="{% if header_transparent %}transparent{% else %}solid{% endif %}"
@@ -67,10 +67,22 @@
       </button>
       {% comment %}
         New Customer Accounts: Shopify <shopify-account>. Liquid: {% if customer %}; JS: document.documentElement.dataset.customerSignedIn
-      {% endcomment %}
+      
       {% if shop.customer_accounts_enabled %}
         <div class="header-nav-account hidden items-center justify-center md:flex" title="{{ 'header.account' | t }}">
           <shopify-account menu="customer-account-main-menu"></shopify-account>
+        </div>
+      {% endcomment %}
+      {% if shop.customer_accounts_enabled %}
+        <div class="header-nav-account hidden items-center justify-center md:flex">
+          <shopify-account menu="customer-account-main-menu">
+            <div
+              slot="signed-out-avatar"
+              class="inline-flex items-center py-1 text-[15px] font-light tracking-wide transition-opacity hover:opacity-80{% if header_transparent %} border-white/40 text-white{% else %} border-neutral-300 text-neutral-900{% endif %}"
+            >
+              <span>{{ 'header.account' | t }}</span>
+            </div>
+          </shopify-account>
         </div>
       {% endif %}
       <a

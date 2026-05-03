@@ -240,17 +240,45 @@
 }
 
 /* ── Shopify hesap bileşeni (New Customer Accounts) ─────────────────── */
-.header-nav-account shopify-account {
-  --shopify-account-avatar-size: 40px;
+.header-nav-account shopify-account::part(signed-out-avatar) {
+  width: max-content;
+  height: auto;
+  min-height: 44px;
+  filter: none;
 }
 
 #site-header[data-header-theme='transparent'] .header-nav-account shopify-account::part(signed-out-avatar) {
   color: #fff;
-  filter: brightness(0) invert(1);
 }
 
 #site-header[data-header-theme='solid'] .header-nav-account shopify-account::part(signed-out-avatar) {
   color: #171717;
+}
+
+/* ── Header: aşağı scroll’da yukarı kayar, yukarı scroll’da geri gelir ─── */
+header#site-header.prava-site-header {
+  transition-property: transform, background-color, box-shadow;
+  transition-duration: 0.38s, 0.2s, 0.2s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), ease, ease;
+}
+
+header#site-header.prava-site-header.is-concealed-by-scroll {
+  transform: translate3d(0, -100%, 0);
+}
+
+#site-header-gradient {
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#site-header-gradient.is-concealed-by-scroll {
+  transform: translate3d(0, -100%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header#site-header.prava-site-header,
+  #site-header-gradient {
+    transition-duration: 0.01ms;
+  }
 }
 
 /* ── Header mini arama (predictive search + debounce) ───────────────── */

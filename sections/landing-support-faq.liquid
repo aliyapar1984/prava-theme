@@ -1,5 +1,5 @@
-<section class="prava-support-faq bg-white text-neutral-900 px-10 pt-44 pb-10" aria-label="{{ 'sections.faq.aria_label' | t }}">
-  <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-10 py-5">
+<section class="prava-support-faq bg-white text-neutral-900 px-10 pt-44 pb-44" aria-label="{{ 'sections.faq.aria_label' | t }}">
+  <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-10 py-5 max-w-[1200px]">
     {% if section.settings.support_texture_image != blank %}
       <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:200px_center] bg-[length:230px_auto] opacity-20" style="background-image: url('{{ section.settings.support_texture_image | image_url: width: 800 }}');" aria-hidden="true"></div>
     {% endif %}

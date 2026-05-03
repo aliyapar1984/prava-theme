@@ -615,6 +615,59 @@
     });
   }
 
+  /* ── Header: aşağı kaydırınca gizle, yukarı kaydırınca göster (animasyonlu) ─ */
+  function initHeaderScrollConceal() {
+    var header = document.getElementById('site-header');
+    if (!header) return;
+
+    var gradient = document.getElementById('site-header-gradient');
+    var miniSearchRoot = document.getElementById('mini-search');
+    var scrollThreshold = 12;
+    var deltaMin = 5;
+    var lastY = window.scrollY || document.documentElement.scrollTop || 0;
+    var concealed = false;
+    var rafId = 0;
+
+    function setConcealed(on) {
+      if (concealed === on) return;
+      concealed = on;
+      var fn = on ? 'add' : 'remove';
+      header.classList[fn]('is-concealed-by-scroll');
+      if (gradient) gradient.classList[fn]('is-concealed-by-scroll');
+    }
+
+    function mustStayVisible() {
+      if (document.body.classList.contains('mega-menu-open')) return true;
+      if (miniSearchRoot && !miniSearchRoot.hasAttribute('hidden')) return true;
+      return false;
+    }
+
+    function onScrollFrame() {
+      rafId = 0;
+      if (mustStayVisible()) {
+        setConcealed(false);
+        lastY = window.scrollY || document.documentElement.scrollTop || 0;
+        return;
+      }
+      var y = window.scrollY || document.documentElement.scrollTop || 0;
+      if (y < scrollThreshold) {
+        setConcealed(false);
+      } else {
+        var delta = y - lastY;
+        if (delta > deltaMin) setConcealed(true);
+        else if (delta < -deltaMin) setConcealed(false);
+      }
+      lastY = y;
+    }
+
+    function onScroll() {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(onScrollFrame);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
   /*
    * Intro metin: PointC CodePen (MWQJWqJ) tarzı — satır mask, scroll’da scaleX:0, origin sağ.
    * https://codepen.io/PointC/pen/MWQJWqJ — SplitText/ScrollSmoother yok, manuel satır.
@@ -1002,4 +1055,5 @@
   initParallaxEffects();
   initSupportFaqAccordion();
   initMiniSearch();
+  initHeaderScrollConceal();
 })();

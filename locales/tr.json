@@ -87,7 +87,7 @@
     "menu_open": "Navigasyon menüsünü aç",
     "utility_nav": "Üst yardımcı bağlantılar",
     "home": "Anasayfa — {{ shop_name }}",
-    "search": "Ara",
+    "search": "Arama",
     "cart": "Sepet",
     "cart_count": "Sepet, {{ count }} ürün",
     "account": "Hesabım",
