@@ -1,0 +1,31 @@
+{% comment %}
+  Dil formu POST /localization — doğru çalışınca sunucu return_to adresine yönlendirir.
+  type="submit" + onclick bazen locale_code boş gidebiliyor; type="button" + submit() daha güvenilir.
+{% endcomment %}
+{% if localization.available_languages.size > 1 %}
+  {% liquid
+    assign lang_return = request.path
+    if lang_return == blank
+      assign lang_return = '/'
+    endif
+  %}
+  {%- form 'localization', id: 'LanguageSwitcherForm', return_to: lang_return -%}
+    <input type="hidden" name="locale_code" id="LocaleCode" value="">
+
+    {%- for language in localization.available_languages -%}
+      {%- unless language.iso_code == localization.language.iso_code -%}
+        <button
+          type="button"
+          class="language-switcher__btn"
+          onclick='document.getElementById("LocaleCode").value = {{ language.iso_code | json }}; document.getElementById("LanguageSwitcherForm").submit();'
+          aria-label="Switch to {{ language.endonym_name | escape }}"
+        >
+          {%- if language.iso_code == 'tr' -%}🇹🇷 TR
+          {%- elsif language.iso_code == 'en' -%}🇬🇧 EN
+          {%- else -%}{{ language.iso_code | upcase }}
+          {%- endif -%}
+        </button>
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endform -%}
+{% endif %}
