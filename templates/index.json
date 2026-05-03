@@ -53,6 +53,7 @@
           "settings": {
             "collection": "cift-yonlu-bebek-arabalari",
             "custom_title": "",
+            "custom_image": "shopify://shop_images/prava-p06-comfort-bebek-arabasi-2020-gri-01_03_56509541-5d5c-455f-a1d6-2165080417f1.png",
             "cta_label": ""
           }
         },
@@ -61,6 +62,7 @@
           "settings": {
             "collection": "travel-sistem-bebek-arabalari",
             "custom_title": "",
+            "custom_image": "shopify://shop_images/prava-p11-dream-bebek-arabasi-2020-kahverengi-01_03_ae19a10d-6233-42aa-a731-7ff0d385aa0f.png",
             "cta_label": ""
           }
         },
@@ -106,28 +108,28 @@
         "bestsellers_product_1": {
           "type": "product_card",
           "settings": {
-            "product": "prava-avion-p17-travel-sistem-bebek-arabasi",
+            "product": "gold-chrome-bebek-arabasi-p14",
             "hover_video_url": ""
           }
         },
         "bestsellers_product_2": {
           "type": "product_card",
           "settings": {
-            "product": "prava-p09-pars-aluminyum-baston-fume-bebek-arabasi",
+            "product": "prava-ekostar-baston-bebek-arabasi-bej",
             "hover_video_url": ""
           }
         },
         "bestsellers_product_3": {
           "type": "product_card",
           "settings": {
-            "product": "prava-p09-pars-aluminyum-baston-siyah-bebek-arabasi",
+            "product": "prava-ekostar-baston-bebek-arabasi-bej",
             "hover_video_url": ""
           }
         },
         "bestsellers_product_4": {
           "type": "product_card",
           "settings": {
-            "product": "prava-p15-travel-sistem-gri-bebek-arabasi",
+            "product": "prava-ekostar-baston-bebek-arabasi-mavi",
             "hover_video_url": ""
           }
         }
