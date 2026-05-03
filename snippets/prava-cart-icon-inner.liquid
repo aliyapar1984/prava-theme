@@ -6,7 +6,7 @@
   assign th = transparent_header | default: false
 %}
 
-<span class="font-light{% if th %} text-white{% else %} text-neutral-900{% endif %}">{{ 'header.cart' | t }}</span>
+<span class="hidden font-light lg:block{% if th %} text-white{% else %} text-neutral-900{% endif %}">{{ 'header.cart' | t }}</span>
 <span class="sr-only" data-prava-cart-count-aria>
   {%- if cart.item_count > 0 -%}
     {{- 'header.cart_count' | t: count: cart.item_count -}}

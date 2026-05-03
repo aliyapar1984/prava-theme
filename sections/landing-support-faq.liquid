@@ -3,7 +3,7 @@
     {% if section.settings.support_texture_image != blank %}
       <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:200px_center] bg-[length:230px_auto] opacity-20" style="background-image: url('{{ section.settings.support_texture_image | image_url: width: 800 }}');" aria-hidden="true"></div>
     {% endif %}
-    <div class="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center gap-24">
+    <div class="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center">
       <div class="prava-support-faq__intro relative z-[1] w-full shrink-0 lg:max-w-[min(100%,420px)] xl:max-w-[480px]">
         <div class="pointer-events-none absolute -right-8 bottom-0 left-0 top-0 overflow-visible opacity-[0.12] lg:-right-4" aria-hidden="true"></div>
         {% if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank %}

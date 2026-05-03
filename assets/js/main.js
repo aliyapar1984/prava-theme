@@ -471,34 +471,29 @@
     });
   });
 
-  /* ── Blog rayı: 1 tam + ~½ kart (slidesPerView ~1.45–1.55) ───────────── */
+  /* ── Blog rayı: slidesPerView 'auto' + slayt genişliği CSS (300px) ───── */
   document.querySelectorAll('.prava-blog-rail__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
     new Swiper(el, {
-      slidesPerView: 1.15,
+      slidesPerView: 'auto',
       spaceBetween: 14,
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
       breakpoints: {
         480: {
-          slidesPerView: 1.35,
           spaceBetween: 16,
         },
         640: {
-          slidesPerView: 1.85,
           spaceBetween: 18,
         },
         768: {
-          slidesPerView: 2.15,
           spaceBetween: 20,
         },
         1024: {
-          slidesPerView: 2.45,
           spaceBetween: 22,
         },
         1280: {
-          slidesPerView: 2.5,
           spaceBetween: 24,
         },
       },

@@ -12,7 +12,7 @@
 
   <header
     id="site-header"
-    class="prava-site-header z-[100] flex h-[88px] shrink-0 items-center justify-between px-10{% if header_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full border-b border-neutral-200/80 bg-white shadow-sm{% endif %}"
+    class="prava-site-header z-[100] flex h-[64px] lg:h-[88px] shrink-0 items-center justify-between px-4 lg:px-10 transition-[background-color,box-shadow] duration-200{% if header_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full border-b border-neutral-200/80 bg-white shadow-sm{% endif %}"
     style="--header-pad-x: 40px;"
     role="banner"
     data-header-theme="{% if header_transparent %}transparent{% else %}solid{% endif %}"
@@ -34,9 +34,9 @@
         class="shrink-0{% unless header_transparent %} brightness-0{% endunless %}"
         aria-hidden="true"
       >
-      <span aria-hidden="true">{{ 'header.menu_visible' | t }}</span>
+      <span class="hidden lg:block" aria-hidden="true">{{ 'header.menu_visible' | t }}</span>
     </button>
-    <a href="{{ routes.root_url }}" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-label="{{ 'header.home' | t: shop_name: shop.name }}">
+    <a href="{{ routes.root_url }}" class="absolute left-40 lg:left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-label="{{ 'header.home' | t: shop_name: shop.name }}">
       <img
         src="{{ 'icons/prava_logo.svg' | asset_url }}"
         width="120"
@@ -45,11 +45,11 @@
         class="h-[22px] w-auto{% unless header_transparent %} brightness-0{% endunless %}"
       >
     </a>
-    <nav class="flex items-center gap-8 text-[15px] font-semibold tracking-wide lg:gap-10{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}" aria-label="{{ 'header.utility_nav' | t }}">
+    <nav class="flex items-center gap-1 text-[15px] font-semibold tracking-wide lg:gap-10{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}" aria-label="{{ 'header.utility_nav' | t }}">
       <button
         type="button"
         id="mini-search-open"
-        class="inline-flex items-center gap-2 py-1 font-light transition-opacity hover:opacity-80{% if header_transparent %} border-b border-white/40 text-white{% else %} border-b border-neutral-300 text-neutral-900{% endif %}"
+        class="inline-flex items-center gap-2 py-1 font-light transition-opacity hover:opacity-80{% if header_transparent %} lg:border-b border-white/40 text-white{% else %} border-b border-neutral-300 text-neutral-900{% endif %}"
         aria-expanded="false"
         aria-controls="mini-search-dialog"
         aria-haspopup="dialog"
@@ -57,13 +57,13 @@
       >
         <img
           src="{{ 'icons/search.svg' | asset_url }}"
-          width="18"
-          height="17"
+          width="20"
+          height="19"
           alt=""
-          class="{% unless header_transparent %}brightness-0{% endunless %}"
+          class="h-[19px] w-5 shrink-0 lg:h-[17px] lg:w-[18px]{% unless header_transparent %} brightness-0{% endunless %}"
           aria-hidden="true"
         >
-        <span>{{ 'header.search' | t }}</span>
+        <span class="hidden lg:block">{{ 'header.search' | t }}</span>
       </button>
       {% comment %}
         New Customer Accounts: Shopify <shopify-account>. Liquid: {% if customer %}; JS: document.documentElement.dataset.customerSignedIn
@@ -74,13 +74,22 @@
         </div>
       {% endcomment %}
       {% if shop.customer_accounts_enabled %}
-        <div class="header-nav-account hidden items-center justify-center md:flex">
+        <div class="header-nav-account flex items-center justify-center">
           <shopify-account menu="customer-account-main-menu">
             <div
               slot="signed-out-avatar"
-              class="inline-flex items-center py-1 text-[15px] font-light tracking-wide transition-opacity hover:opacity-80{% if header_transparent %} border-white/40 text-white{% else %} border-neutral-300 text-neutral-900{% endif %}"
+              class="inline-flex items-center gap-2 py-1 text-[15px] font-light tracking-wide transition-opacity hover:opacity-80{% if header_transparent %} border-white/40 text-white{% else %} border-neutral-300 text-neutral-900{% endif %}"
             >
-              <span>{{ 'header.account' | t }}</span>
+              <img
+                src="{{ 'icons/account.svg' | asset_url }}"
+                width="32"
+                height="32"
+                alt=""
+                class="h-8 w-8 shrink-0 lg:hidden{% if header_transparent %} {% endif %}{% unless header_transparent %} brightness-0{% endunless %}"
+                aria-hidden="true"
+                data-test-id="header_account"
+              >
+              <span class="hidden lg:block">{{ 'header.account' | t }}</span>
             </div>
           </shopify-account>
         </div>
@@ -103,7 +112,7 @@
       <div class="mega-menu__bar">
         <button type="button" class="mega-menu__close pl-2" id="mega-menu-close" aria-label="{{ 'header.mega_menu_close' | t }}">
           <svg class="mega-menu__close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          <span class="text-base font-semibold" aria-hidden="true">{{ 'header.close_visible' | t }}</span>
+          <span class="hidden lg:block text-base font-semibold" aria-hidden="true">{{ 'header.close_visible' | t }}</span>
         </button>
         <div class="mega-menu__logo" id="mega-menu-logo">
           <img src="{{ 'icons/prava_logo.svg' | asset_url }}" width="120" height="22" alt="{{ shop.name | escape }}" class="h-[22px] w-auto invert">

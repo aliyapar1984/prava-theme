@@ -667,7 +667,7 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
 
 .mega-menu__subitem {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   padding: 16px 18px;
   border-radius: 12px;
@@ -867,9 +867,12 @@ body.mega-menu-open {
   cursor: grabbing !important;
 }
 
-/* Blog rayı — beyaz kartlar, 1 + ½ slayt görünümü */
+/* Blog rayı — sabit slayt genişliği (Swiper slidesPerView: 'auto' ile uyumlu) */
 .prava-blog-rail__swiper .swiper-slide {
   height: auto;
+  width: 300px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .prava-blog-rail__swiper .swiper-wrapper {
@@ -917,6 +920,38 @@ body.mega-menu-open {
     width: 100% !important;
     max-width: 100%;
     box-sizing: border-box;
+  }
+
+  .mega-menu__col--list {
+    padding: 20px 20px 20px 20px;
+  }
+
+  .mega-menu__subtitle {
+    font-size: 16px;
+  }
+
+  .mega-menu__bar {
+    height: 60px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .mega-menu__tabs-wrap {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .mega-menu__tabs {
+    gap: 0 15px;
+    padding-top: 10px;
+  }
+
+  .mega-menu__tab {
+    padding: 5px 0 10px;
+  }
+
+  .mega-menu__footer-cta {
+    width: 100%;
   }
 }
 
