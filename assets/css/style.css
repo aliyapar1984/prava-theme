@@ -911,6 +911,7 @@ body.mega-menu-open {
   }
 }
 
+
 @media (min-width: 768px) {
   .prava-pdp__gallery-swiper .swiper-wrapper.prava-pdp__gallery-wrapper {
     display: grid;
