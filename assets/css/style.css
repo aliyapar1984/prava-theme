@@ -908,6 +908,7 @@ body.mega-menu-open {
 
   .mega-menu__footer-cta {
     width: 100%;
+    object-fit: cover;
   }
 }
 
