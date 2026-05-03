@@ -1,8 +1,8 @@
 <section id="intro-karaoke-section" class="prava-intro-split bg-white text-neutral-900" aria-label="{{ 'sections.intro.aria_label' | t }}" style="--pis-pad-x: 40px;">
-  <div class="mx-auto max-w-[1680px] px-[var(--pis-pad-x)] py-24">
-    <div class="flex flex-col items-stretch gap-12 md:flex-row md:items-center md:justify-between md:gap-14 lg:gap-20">
+  <div class="mx-auto max-w-[1680px] px-5 lg:px-[var(--pis-pad-x)] py-16 lg:py-24">
+    <div class="flex flex-col items-stretch md:flex-row md:items-center md:justify-between md:gap-14 lg:gap-20">
       <div class="prava-intro-split__copy md:min-w-0 flex-[1_1_80%]">
-        <div id="intro-karaoke-root" class="prava-intro-split__text intro-karaoke max-w-[800px] text-left text-[clamp(3rem,4.05vw+0.85rem,2.25rem)] font-normal leading-[1.25] tracking-tight text-neutral-800">
+        <div id="intro-karaoke-root" class="prava-intro-split__text intro-karaoke max-w-[800px] text-left text-[clamp(1.55rem,3.15vw+0.45rem,1.95rem)] md:text-[clamp(2.25rem,4.05vw+0.85rem,3rem)] font-normal leading-[1.25] tracking-tight text-neutral-800">
           {% if section.settings.intro_text != blank %}
             {{ section.settings.intro_text | escape }}
           {% elsif request.design_mode %}
