@@ -117,14 +117,13 @@
                             width="48"
                             height="48"
                             loading="lazy"
-                            class="h-[32px] w-auto"
                           >
                         </span>
                       {% endif %}
                       <span class="mega-menu__subtext">
                         <span class="mega-menu__subtitle">{{ child.title | escape }}</span>
                         {% if child_meta and child_meta.aciklama.value != blank %}
-                          <span class="mega-menu__subdesc hidden lg:block">{{ child_meta.aciklama.value }}</span>
+                          <span class="mega-menu__subdesc">{{ child_meta.aciklama.value }}</span>
                         {% endif %}
                       </span>
                     </a>
@@ -146,7 +145,7 @@
               </ul>
             {% endif %}
           </div>
-          <div class="mega-menu__col mega-menu__col--visual hidden lg:block">
+          <div class="mega-menu__col mega-menu__col--visual">
             <div class="mega-menu__visual">
               {% if panel_visual != blank %}
                 <img

@@ -1,5 +1,5 @@
 <section class="prava-bestsellers bg-white text-neutral-900" aria-label="{{ 'sections.bestsellers.aria_label' | t }}" style="--pbs-pad-x: 40px;">
-  <div class="mx-auto max-w-[1680px] px-5 lg:px-[var(--pbs-pad-x)] pt-16 lg:pt-44 pb-10 lg:pb-24">
+  <div class="mx-auto max-w-[1680px] px-[var(--pbs-pad-x)] pt-44 pb-24">
     {% liquid
       assign cta_href = section.settings.cta_url | strip
       if cta_href == blank
@@ -10,15 +10,15 @@
         assign cta_visible = 'sections.bestsellers.cta_all_visible' | t
       endif
     %}
-    <div class="flex flex-col gap-3 lg:gap-6 sm:flex-row sm:items-end sm:justify-between">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
       {% if section.settings.heading != blank %}
-        <h2 class="font-semibold lg:font-medium tracking-tight text-neutral-900 text-4xl lg:text-[40px]">
+        <h2 class="font-medium tracking-tight text-neutral-900 text-[40px]">
           {{ section.settings.heading | escape }}
         </h2>
       {% endif %}
       <a
         href="{{ cta_href }}"
-        class="shrink-0 text-left text-base lg:text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:text-right"
+        class="shrink-0 text-left text-lg font-light text-neutral-800 underline decoration-neutral-800 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:text-right"
         aria-label="{{ 'sections.bestsellers.cta_all' | t }}"
       >
         {{ cta_visible }}

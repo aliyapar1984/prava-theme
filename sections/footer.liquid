@@ -11,12 +11,12 @@
   class="site-footer mt-auto bg-[#F5F5F0] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]"
   role="contentinfo"
   aria-label="{{ 'footer.aria_label' | t }}"
-  style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %}background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}'); background-repeat: no-repeat; background-position: bottom; background-size: 100% auto;{% endif %}"
+  style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %} background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}');{% endif %}"
 >
-  <div class="mx-auto px-5 lg:px-20 pb-6 pt-10 lg:pt-20">
-    <div class="grid grid-cols-1 gap-0 lg:gap-14 md:grid-cols-2 xl:grid-cols-4">
+  <div class="mx-auto px-20 pb-6 pt-20">
+    <div class="grid grid-cols-1 gap-14 md:grid-cols-2 xl:grid-cols-4">
       {% if section.settings.newsletter_enable or section.settings.show_social %}
-        <div class="site-footer__col site-footer__col--news lg:max-w-[300px]">
+        <div class="site-footer__col site-footer__col--news max-w-[300px]">
           {% if section.settings.newsletter_enable %}
             <h3 class="text-lg font-bold uppercase text-[#333333]">{{ newsletter_heading }}</h3>
             {% form 'customer', class: 'mt-6' %}
@@ -64,58 +64,35 @@
                 </a>
               </li>
             </ul>
-            <p class="mt-3 mb-10 lg:mb-0 text-[10px] font-normal uppercase tracking-wide text-neutral-500">{{ 'footer.social_accounts_caption' | t }}</p>
+            <p class="mt-3 text-[10px] font-normal uppercase tracking-wide text-neutral-500">{{ 'footer.social_accounts_caption' | t }}</p>
           {% endif %}
         </div>
       {% endif %}
 
       {%- if footer_menu.links.size > 0 -%}
         {% for link in footer_menu.links %}
-          <nav class="site-footer__col px-0 lg:px-1" aria-label="{{ link.title | escape }}">
+          <nav class="site-footer__col px-10" aria-label="{{ link.title | escape }}">
             {% if link.links.size > 0 %}
-              <details
-                id="site-footer-nav-{{ section.id }}-{{ forloop.index }}"
-                class="site-footer__nav-details group border-b border-[#333333]/18 lg:border-0"
-              >
-                <summary
-                  class="flex cursor-pointer list-none items-center justify-between gap-3 py-3 text-base lg:text-lg font-bold uppercase text-[#333333] outline-none marker:hidden [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-[#333333]/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F5F5F0] lg:pointer-events-none lg:cursor-default lg:py-0 lg:focus-visible:ring-0"
-                >
-                  <span>{{ link.title | escape }}</span>
-                  <svg
-                    class="h-5 w-5 shrink-0 text-[#333333] transition-transform duration-200 group-open:rotate-180 lg:hidden"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </summary>
-                <ul class="mt-0 space-y-3 border-t border-[#333333]/12 pb-4 pt-4 text-base font-normal text-[#333333] lg:mt-6 lg:border-t-0 lg:pb-0 lg:pt-0">
-                  {% for child_link in link.links %}
-                    <li>
-                      <a
-                        href="{{ child_link.url }}"
-                        class="transition-opacity hover:opacity-70{% if child_link.active %} font-medium{% endif %}"
-                        {% if child_link.current %}aria-current="page"{% endif %}
-                      >
-                        {{- child_link.title | escape -}}
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </details>
+              <h3 class="text-lg font-bold uppercase text-[#333333]">{{ link.title | escape }}</h3>
+              <ul class="mt-6 space-y-3 text-base font-normal text-[#333333]">
+                {% for child_link in link.links %}
+                  <li>
+                    <a
+                      href="{{ child_link.url }}"
+                      class="transition-opacity hover:opacity-70{% if child_link.active %} font-medium{% endif %}"
+                      {% if child_link.current %}aria-current="page"{% endif %}
+                    >
+                      {{- child_link.title | escape -}}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
             {% elsif link.url != blank %}
-              <h3 class="border-b border-[#333333]/18 py-3 text-lg font-bold uppercase text-[#333333] lg:border-0 lg:py-0">
+              <h3 class="text-lg font-bold uppercase text-[#333333]">
                 <a href="{{ link.url }}" class="transition-opacity hover:opacity-70{% if link.active %} font-medium{% endif %}">{{ link.title | escape }}</a>
               </h3>
             {% else %}
-              <h3 class="border-b border-[#333333]/18 py-3 text-lg font-bold uppercase text-[#333333] lg:border-0 lg:py-0">{{ link.title | escape }}</h3>
+              <h3 class="text-lg font-bold uppercase text-[#333333]">{{ link.title | escape }}</h3>
             {% endif %}
           </nav>
         {% endfor %}
@@ -140,7 +117,7 @@
       {%- endfor -%}
     </div>
 
-    {% comment %} <div class="relative overflow-hidden text-center mt-24">
+    <div class="relative overflow-hidden text-center mt-24">
       <div class="relative z-[1] flex flex-col items-center mb-5">
         <img
           src="{{ 'icons/logo-prava.svg' | asset_url }}"
@@ -158,13 +135,13 @@
         %}
         <p class="mt-5 text-base font-medium">{{ 'footer.tagline_since' | t: year: tag_yr }}</p>
       </div>
-    </div> {% endcomment %}
+    </div>
 
-    <div class="site-footer__legal lg:mt-4 flex flex-col gap-6 lg:border-t border-[#333333]/18 pt-8 lg:mt-56 md:flex-row md:items-center md:justify-between md:gap-8 text-center lg:text-left">
+    <div class="site-footer__legal mt-4 flex flex-col gap-6 border-t border-[#333333]/18 pt-8 md:mt-6 md:flex-row md:items-center md:justify-between md:gap-8">
       <p class="text-xs text-[#333333]/85 md:text-sm"><b>{{ 'footer.copyright' | t: year: footer_year, shop_name: shop.name }}</b></p>
       {%- if footer_bottom_menu.links.size > 0 -%}
         <nav aria-label="{{ footer_bottom_menu.title | escape }}">
-          <ul class="flex flex-wrap items-center justify-center lg:justify-end gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
+          <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:justify-end md:text-sm">
             {% for link in footer_bottom_menu.links %}
               <li>
                 <a
@@ -181,23 +158,6 @@
       {%- endif -%}
     </div>
   </div>
-  <script>
-    (function () {
-      var footer = document.querySelector('.site-footer');
-      if (!footer) return;
-      var nodes = footer.querySelectorAll('.site-footer__nav-details');
-      if (!nodes.length) return;
-      var mq = window.matchMedia('(min-width: 1024px)');
-      function sync() {
-        var open = mq.matches;
-        nodes.forEach(function (el) {
-          el.open = open;
-        });
-      }
-      sync();
-      mq.addEventListener('change', sync);
-    })();
-  </script>
 </footer>
 
 {% schema %}

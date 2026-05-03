@@ -240,45 +240,17 @@
 }
 
 /* ── Shopify hesap bileşeni (New Customer Accounts) ─────────────────── */
-.header-nav-account shopify-account::part(signed-out-avatar) {
-  width: max-content;
-  height: auto;
-  min-height: 44px;
-  filter: none;
+.header-nav-account shopify-account {
+  --shopify-account-avatar-size: 40px;
 }
 
 #site-header[data-header-theme='transparent'] .header-nav-account shopify-account::part(signed-out-avatar) {
   color: #fff;
+  filter: brightness(0) invert(1);
 }
 
 #site-header[data-header-theme='solid'] .header-nav-account shopify-account::part(signed-out-avatar) {
   color: #171717;
-}
-
-/* ── Header: aşağı scroll’da yukarı kayar, yukarı scroll’da geri gelir ─── */
-header#site-header.prava-site-header {
-  transition-property: transform, background-color, box-shadow;
-  transition-duration: 0.38s, 0.2s, 0.2s;
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), ease, ease;
-}
-
-header#site-header.prava-site-header.is-concealed-by-scroll {
-  transform: translate3d(0, -100%, 0);
-}
-
-#site-header-gradient {
-  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-#site-header-gradient.is-concealed-by-scroll {
-  transform: translate3d(0, -100%, 0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  header#site-header.prava-site-header,
-  #site-header-gradient {
-    transition-duration: 0.01ms;
-  }
 }
 
 /* ── Header mini arama (predictive search + debounce) ───────────────── */
@@ -667,7 +639,7 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
 
 .mega-menu__subitem {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   padding: 16px 18px;
   border-radius: 12px;
@@ -803,52 +775,36 @@ body.mega-menu-open {
 }
 
 /*
- * Ortak kaydırmalı imleç: main.js tetiklemesi ile .prava-swiper--scrollable
- * (watchOverflow ile kilit yoksa). PDP galerisi, çok satanlar, blog, kategori, özellik şeridi…
+ * Kategori rayı: tarayıcı native cursor (sürüklerken de fareyle birlikte hareket eder).
+ * grabCursor kapalı — Swiper’ın inline cursor’ı bunu ezmesin.
  */
-.prava-swiper--scrollable.swiper {
+.prava-category-rail__swiper.swiper {
   cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
 }
 
-.prava-swiper--scrollable.swiper.swiper-grabbing {
+.prava-category-rail__swiper.swiper.swiper-grabbing {
   cursor: grabbing !important;
 }
 
-.prava-swiper--scrollable .swiper-wrapper,
-.prava-swiper--scrollable .swiper-slide,
-.prava-swiper--scrollable .swiper-slide img {
+.prava-category-rail__swiper .swiper-wrapper,
+.prava-category-rail__swiper .swiper-slide,
+.prava-category-rail__swiper img {
   cursor: inherit !important;
 }
 
-.prava-swiper--scrollable a {
+.prava-category-rail__swiper a {
   cursor: pointer !important;
 }
 
-.prava-swiper--scrollable button,
-.prava-swiper--scrollable .swiper-pagination-bullet {
-  cursor: pointer !important;
+/* Yerel önizleme: imleç SVG için kök yolu (Safari’de SVG yoksa grab kullanılır) */
+.prava-category-rail__swiper.swiper {
+  cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
 }
-
-/* Görsel kutusu — yalnızca kaydırma mümkünken */
-.prava-swiper--scrollable a .prava-swiper-card__media,
-.prava-swiper--scrollable a .prava-swiper-card__media *,
-.prava-swiper--scrollable a .prava-category-card__media,
-.prava-swiper--scrollable a .prava-category-card__media *,
-.prava-swiper--scrollable a.prava-blog-card .prava-swiper-card__media,
-.prava-swiper--scrollable a.prava-blog-card .prava-swiper-card__media *,
-.prava-swiper--scrollable .prava-pdp__gallery-slide .prava-swiper-card__media,
-.prava-swiper--scrollable .prava-pdp__gallery-slide .prava-swiper-card__media *,
-.prava-swiper--scrollable .feature-card .prava-swiper-card__media,
-.prava-swiper--scrollable .feature-card .prava-swiper-card__media * {
-  cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, pointer !important;
-}
-
-.prava-swiper--scrollable.swiper.swiper-grabbing .swiper-slide,
-.prava-swiper--scrollable.swiper.swiper-grabbing .swiper-slide * {
+.prava-category-rail__swiper.swiper.swiper-grabbing {
   cursor: grabbing !important;
 }
 
-/* En çok satılanlar — kart yüksekliği */
+/* En çok satılanlar — kategori rayı ile aynı kart yüksekliği + sürükleme imleci */
 .prava-bestsellers__swiper .swiper-slide {
   height: auto;
 }
@@ -857,57 +813,82 @@ body.mega-menu-open {
   align-items: stretch;
 }
 
-/* Blog rayı — sabit slayt genişliği (Swiper slidesPerView: 'auto' ile uyumlu) */
+.prava-bestsellers__swiper.swiper {
+  cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
+}
+
+.prava-bestsellers__swiper.swiper.swiper-grabbing {
+  cursor: grabbing !important;
+}
+
+.prava-bestsellers__swiper .swiper-wrapper,
+.prava-bestsellers__swiper .swiper-slide,
+.prava-bestsellers__swiper img {
+  cursor: inherit !important;
+}
+
+.prava-bestsellers__swiper a {
+  cursor: pointer !important;
+}
+
+.prava-bestsellers__swiper.swiper {
+  cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
+}
+
+.prava-bestsellers__swiper.swiper.swiper-grabbing {
+  cursor: grabbing !important;
+}
+
+/* Blog rayı — beyaz kartlar, 1 + ½ slayt görünümü */
 .prava-blog-rail__swiper .swiper-slide {
   height: auto;
-  width: 300px;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .prava-blog-rail__swiper .swiper-wrapper {
   align-items: stretch;
 }
 
+.prava-blog-rail__swiper.swiper {
+  cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
+}
+
+.prava-blog-rail__swiper.swiper.swiper-grabbing {
+  cursor: grabbing !important;
+}
+
+.prava-blog-rail__swiper .swiper-wrapper,
+.prava-blog-rail__swiper .swiper-slide,
+.prava-blog-rail__swiper img {
+  cursor: inherit !important;
+}
+
+.prava-blog-rail__swiper a.prava-blog-card {
+  cursor: pointer !important;
+}
+
+.prava-blog-rail__swiper.swiper {
+  cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
+}
+
+.prava-blog-rail__swiper.swiper.swiper-grabbing {
+  cursor: grabbing !important;
+}
+
 /* PDP ana galeri — mobil: Swiper (slide genişliği CSS); md+: grid, transform kapalı */
 @media (max-width: 767px) {
+  .prava-pdp__gallery-swiper.swiper {
+    cursor: grab;
+  }
+
+  .prava-pdp__gallery-swiper.swiper.swiper-grabbing {
+    cursor: grabbing;
+  }
+
   /* slidesPerView: auto — genişlik tamamen CSS (Swiper inline width üzerine) */
   .prava-pdp__gallery-swiper .prava-pdp__gallery-slide.swiper-slide {
     width: 100% !important;
     max-width: 100%;
     box-sizing: border-box;
-  }
-
-  .mega-menu__col--list {
-    padding: 20px 20px 20px 20px;
-  }
-
-  .mega-menu__subtitle {
-    font-size: 16px;
-  }
-
-  .mega-menu__bar {
-    height: 60px;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .mega-menu__tabs-wrap {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  
-  .mega-menu__tabs {
-    gap: 0 15px;
-    padding-top: 10px;
-  }
-
-  .mega-menu__tab {
-    padding: 5px 0 10px;
-  }
-
-  .mega-menu__footer-cta {
-    width: 100%;
   }
 }
 

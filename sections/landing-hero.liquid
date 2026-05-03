@@ -128,7 +128,7 @@
             %}
             <div class="absolute inset-0 bg-black/15 z-[1] pointer-events-none"></div>
             <div class="hero-slide-content absolute inset-0 z-[2] flex {{ v_items }} {{ h_outer }} {{ layout_extra }}">
-              <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-5 lg:px-10 pt-[88px] {{ text_align_cls }} {{ copy_margin }} will-change-transform">
+              <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-10 pt-[88px] {{ text_align_cls }} {{ copy_margin }} will-change-transform">
                 {% if block.settings.title != blank %}
                   <h2 class="max-w-[16ch] {{ text_align_cls }} text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight {{ title_clr }}">
                     {{ block.settings.title | newline_to_br }}
@@ -158,7 +158,7 @@
 
   {% if section.blocks.size > 0 %}
     {% if show_pag or show_nav %}
-      <div class="pointer-events-auto absolute bottom-5 lg:bottom-[6vh] left-5 lg:left-10 z-[90] flex items-center gap-3 md:gap-4" id="hero-thumb-bar" role="tablist" aria-label="{{ 'sections.hero.slide_tabs' | t }}">
+      <div class="pointer-events-auto absolute bottom-[6vh] z-[90] flex items-center gap-3 md:gap-4" style="left: 40px;" id="hero-thumb-bar" role="tablist" aria-label="{{ 'sections.hero.slide_tabs' | t }}">
         {% if show_pag %}
           <div id="hero-pagination-custom" class="flex items-center gap-3 md:gap-4"></div>
         {% endif %}

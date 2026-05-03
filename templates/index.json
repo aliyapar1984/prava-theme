@@ -169,8 +169,7 @@
         "description": "<p>Bebek arabaları, güvenlik ve konfor hakkında güncel yazılar; yolculuklarınızı daha keyifli hale getirecek ipuçları burada.</p>",
         "cta_url": "",
         "cta_blog": "",
-        "cta_label": "",
-        "blog_texture_image": "shopify://shop_images/article_blog_bg.png"
+        "cta_label": ""
       }
     },
     "landing_support_faq": {

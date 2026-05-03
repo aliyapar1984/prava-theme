@@ -22,10 +22,9 @@
   <a
     href="{{ post.url }}"
     class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
-    aria-labelledby="{{ uid }}"
     {% if block %}{{ block.shopify_attributes }}{% endif %}
   >
-    <div class="prava-swiper-card__media aspect-[1/1] w-full overflow-hidden bg-neutral-100">
+    <div class="aspect-[1/1] w-full overflow-hidden bg-neutral-100">
       {% if post.image != blank %}
         <img
           src="{{ post.image | image_url: width: 900 }}"
@@ -35,6 +34,7 @@
           height="400"
           loading="{{ img_loading }}"
           decoding="async"
+          aria-labelledby="{{ uid }}"
         >
       {% endif %}
     </div>

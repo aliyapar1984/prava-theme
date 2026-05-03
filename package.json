@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "shopify theme dev --path .",
+    "pull": "shopify theme pull --path .",
     "push": "shopify theme push --path .",
     "login": "shopify auth login",
     "shopify": "shopify"

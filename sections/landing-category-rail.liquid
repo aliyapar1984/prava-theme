@@ -1,7 +1,7 @@
 <section class="prava-category-rail bg-white text-neutral-900 overflow-hidden" aria-label="{{ 'sections.category_rail.aria_label' | t }}" style="--pcr-pad-x: 40px;">
-  <div class="mx-auto max-w-[1680px] px-5 lg:px-[var(--pcr-pad-x)] pb-10 pt-16 lg:pb-16 lg:pt-44">
+  <div class="mx-auto max-w-[1680px] px-[var(--pcr-pad-x)] pb-16 pt-44">
     {% if section.settings.heading != blank %}
-      <h2 class="text-center text-4xl font-semibold tracking-tight text-neutral-900 lg:text-[80px]">
+      <h2 class="text-center text-2xl font-semibold tracking-tight text-neutral-900 lg:text-[80px]">
         {{ section.settings.heading | escape }}
       </h2>
     {% endif %}
@@ -10,7 +10,7 @@
         {{ section.settings.description }}
       </div>
     {% endif %}
-    <div class="prava-category-rail__viewport mt-12 lg:mt-20">
+    <div class="prava-category-rail__viewport mt-20">
       <div class="swiper prava-category-rail__swiper w-full overflow-visible">
         <div class="swiper-wrapper">
           {% for block in section.blocks %}

@@ -261,25 +261,6 @@
 
   }
 
-  /* Yatay Swiper: SVG imleç yalnızca watchOverflow ile kilitli değilken (CSS: .prava-swiper--scrollable) */
-  var PRAVA_SWIPER_SCROLLABLE_ON = {
-    init: function () {
-      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
-    },
-    resize: function () {
-      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
-    },
-    breakpoint: function () {
-      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
-    },
-    lock: function () {
-      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
-    },
-    unlock: function () {
-      this.el.classList.toggle('prava-swiper--scrollable', !this.isLocked);
-    },
-  };
-
   /* ── Kategori rayı (hero altı; ~3 tam + 4. kısmi) ───────────────────── */
   document.querySelectorAll('.prava-category-rail__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
@@ -290,7 +271,6 @@
       /* CSS cursor:url !important Swiper inline cursor’ı geçer; grab/grabbing sınıfları çalışır */
       grabCursor: true,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -323,7 +303,6 @@
       speed: 400,
       grabCursor: true,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         768: {
           enabled: false,
@@ -345,7 +324,6 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -376,7 +354,6 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -449,7 +426,6 @@
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         520: {
           slidesPerView: 1.35,
@@ -495,30 +471,34 @@
     });
   });
 
-  /* ── Blog rayı: slidesPerView 'auto' + slayt genişliği CSS (300px) ───── */
+  /* ── Blog rayı: 1 tam + ~½ kart (slidesPerView ~1.45–1.55) ───────────── */
   document.querySelectorAll('.prava-blog-rail__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
     new Swiper(el, {
-      slidesPerView: 'auto',
+      slidesPerView: 1.15,
       spaceBetween: 14,
       speed: 450,
       grabCursor: true,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         480: {
+          slidesPerView: 1.35,
           spaceBetween: 16,
         },
         640: {
+          slidesPerView: 1.85,
           spaceBetween: 18,
         },
         768: {
+          slidesPerView: 2.15,
           spaceBetween: 20,
         },
         1024: {
+          slidesPerView: 2.45,
           spaceBetween: 22,
         },
         1280: {
+          slidesPerView: 2.5,
           spaceBetween: 24,
         },
       },
@@ -633,59 +613,6 @@
         });
       });
     });
-  }
-
-  /* ── Header: aşağı kaydırınca gizle, yukarı kaydırınca göster (animasyonlu) ─ */
-  function initHeaderScrollConceal() {
-    var header = document.getElementById('site-header');
-    if (!header) return;
-
-    var gradient = document.getElementById('site-header-gradient');
-    var miniSearchRoot = document.getElementById('mini-search');
-    var scrollThreshold = 12;
-    var deltaMin = 5;
-    var lastY = window.scrollY || document.documentElement.scrollTop || 0;
-    var concealed = false;
-    var rafId = 0;
-
-    function setConcealed(on) {
-      if (concealed === on) return;
-      concealed = on;
-      var fn = on ? 'add' : 'remove';
-      header.classList[fn]('is-concealed-by-scroll');
-      if (gradient) gradient.classList[fn]('is-concealed-by-scroll');
-    }
-
-    function mustStayVisible() {
-      if (document.body.classList.contains('mega-menu-open')) return true;
-      if (miniSearchRoot && !miniSearchRoot.hasAttribute('hidden')) return true;
-      return false;
-    }
-
-    function onScrollFrame() {
-      rafId = 0;
-      if (mustStayVisible()) {
-        setConcealed(false);
-        lastY = window.scrollY || document.documentElement.scrollTop || 0;
-        return;
-      }
-      var y = window.scrollY || document.documentElement.scrollTop || 0;
-      if (y < scrollThreshold) {
-        setConcealed(false);
-      } else {
-        var delta = y - lastY;
-        if (delta > deltaMin) setConcealed(true);
-        else if (delta < -deltaMin) setConcealed(false);
-      }
-      lastY = y;
-    }
-
-    function onScroll() {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(onScrollFrame);
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
   }
 
   /*
@@ -1075,5 +1002,4 @@
   initParallaxEffects();
   initSupportFaqAccordion();
   initMiniSearch();
-  initHeaderScrollConceal();
 })();
