@@ -99,6 +99,7 @@
     "mini_search_title": "Search products",
     "mini_search_label": "Search query",
     "mini_search_placeholder": "Search products…",
+    "mini_search_clear": "Clear",
     "mini_search_close": "Close search",
     "mini_search_results": "Suggestions",
     "mini_search_no_results": "No products found.",

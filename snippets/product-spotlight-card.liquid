@@ -2,6 +2,10 @@
   assign spotlight_product = product
   assign title_id = aria_title_id | default: 'product-spotlight-title'
   assign article_extra = article_class | strip
+  assign enable_scroll_motion = true
+  if scroll_motion == false
+    assign enable_scroll_motion = false
+  endif
   assign current_variant = nil
   assign card_image = nil
 
@@ -22,8 +26,8 @@
   endif
 %}
 {% if spotlight_product != blank %}
-  <article class="product-spotlight-card {{ article_extra }}" data-product-spotlight>
-    <div class="product-spotlight-card__motion" data-product-spotlight-motion>
+  <article class="product-spotlight-card {{ article_extra }}"{% if enable_scroll_motion %} data-product-spotlight{% endif %}>
+    <div class="product-spotlight-card__motion"{% if enable_scroll_motion %} data-product-spotlight-motion{% endif %}>
     <div class="aspect-[1/1] w-full bg-product-color">
       {% if card_image != blank %}
         <a href="{{ spotlight_product.url }}" class="block h-full w-full">
@@ -84,8 +88,8 @@
     </div>
   </article>
 {% elsif request.design_mode %}
-  <article class="product-spotlight-card border border-dashed border-neutral-300 bg-neutral-50 p-8 {{ article_extra }}" data-product-spotlight>
-    <div class="product-spotlight-card__motion" data-product-spotlight-motion>
+  <article class="product-spotlight-card border border-dashed border-neutral-300 bg-neutral-50 p-8 {{ article_extra }}"{% if enable_scroll_motion %} data-product-spotlight{% endif %}>
+    <div class="product-spotlight-card__motion"{% if enable_scroll_motion %} data-product-spotlight-motion{% endif %}>
       <p class="m-0 text-sm text-neutral-500">Ürün seçin (tema ayarları).</p>
     </div>
   </article>

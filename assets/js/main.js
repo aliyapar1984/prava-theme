@@ -748,7 +748,7 @@
 
     function mustStayVisible() {
       if (document.body.classList.contains('mega-menu-open')) return true;
-      if (miniSearchRoot && !miniSearchRoot.hasAttribute('hidden')) return true;
+      if (miniSearchRoot && miniSearchRoot.classList.contains('mini-search--open')) return true;
       return false;
     }
 
@@ -1018,6 +1018,7 @@
     var resultsEl = document.getElementById('mini-search-results');
     var form = document.getElementById('mini-search-form');
     var viewAll = document.getElementById('mini-search-view-all');
+    var clearInputBtn = document.getElementById('mini-search-clear-input');
     if (!root || !openBtn || !input || !resultsEl) return;
 
     var debounceMs = 300;
@@ -1033,11 +1034,22 @@
       if (m && !m.hasAttribute('hidden')) closeMegaMenu();
     }
 
+    function syncClearInputVisibility() {
+      if (!clearInputBtn) return;
+      if (input.value.trim()) {
+        clearInputBtn.removeAttribute('hidden');
+      } else {
+        clearInputBtn.setAttribute('hidden', '');
+      }
+    }
+
     function openSearch() {
       closeMegaIfOpen();
-      root.removeAttribute('hidden');
+      root.classList.add('mini-search--open');
+      root.setAttribute('aria-hidden', 'false');
       openBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      syncClearInputVisibility();
       setTimeout(function () {
         input.focus();
         try {
@@ -1047,7 +1059,8 @@
     }
 
     function closeSearch() {
-      root.setAttribute('hidden', '');
+      root.classList.remove('mini-search--open');
+      root.setAttribute('aria-hidden', 'true');
       openBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
       if (controller) {
@@ -1167,7 +1180,23 @@
       });
     });
 
+    if (clearInputBtn) {
+      clearInputBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        input.value = '';
+        resultsEl.innerHTML = '';
+        if (viewAll) viewAll.hidden = true;
+        if (controller) {
+          controller.abort();
+          controller = null;
+        }
+        syncClearInputVisibility();
+        input.focus();
+      });
+    }
+
     input.addEventListener('input', function () {
+      syncClearInputVisibility();
       var v = input.value;
       clearTimeout(timer);
       timer = setTimeout(function () {
@@ -1176,7 +1205,7 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !root.hasAttribute('hidden')) {
+      if (e.key === 'Escape' && root.classList.contains('mini-search--open')) {
         e.preventDefault();
         closeSearch();
         openBtn.focus();
