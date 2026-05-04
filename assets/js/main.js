@@ -301,11 +301,11 @@
           spaceBetween: 20,
         },
         1024: {
-          slidesPerView: 3.28,
+          slidesPerView: 3.1,
           spaceBetween: 24,
         },
         1440: {
-          slidesPerView: 3.35,
+          slidesPerView: 3.1,
           spaceBetween: 28,
         },
       },
@@ -529,24 +529,90 @@
   var mega = document.getElementById('mega-menu');
   var btnMenu = document.getElementById('btn-menu');
   var btnClose = document.getElementById('mega-menu-close');
+  var megaBackdrop = document.getElementById('mega-menu-backdrop');
   var footerDiscover = document.getElementById('mega-footer-discover');
   var footerCta = document.getElementById('mega-footer-cta');
+  var megaCloseDelayMs = 380;
+  var megaHoverLeaveTimer = null;
 
-  function openMegaMenu() {
+  function isMegaDesktopHover() {
+    return typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 1024px)').matches;
+  }
+
+  function cancelMegaHoverLeaveClose() {
+    if (megaHoverLeaveTimer) {
+      clearTimeout(megaHoverLeaveTimer);
+      megaHoverLeaveTimer = null;
+    }
+  }
+
+  function scheduleMegaHoverLeaveClose() {
+    if (!isMegaDesktopHover()) return;
+    if (!mega || mega.hasAttribute('hidden')) return;
+    cancelMegaHoverLeaveClose();
+    megaHoverLeaveTimer = setTimeout(function () {
+      megaHoverLeaveTimer = null;
+      if (mega && !mega.hasAttribute('hidden')) closeMegaMenu();
+    }, 220);
+  }
+
+  function isMegaHoverOpenLocked() {
+    return mega && mega._megaHoverOpenLockUntil && Date.now() < mega._megaHoverOpenLockUntil;
+  }
+
+  function megaDrawerUsesMotion() {
+    return (
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(min-width: 1024px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+  }
+
+  function openMegaMenu(skipFocus) {
     if (!mega || !btnMenu) return;
+    if (skipFocus && isMegaHoverOpenLocked()) return;
+    cancelMegaHoverLeaveClose();
+    if (mega._megaCloseTimer) {
+      clearTimeout(mega._megaCloseTimer);
+      mega._megaCloseTimer = null;
+    }
     mega.removeAttribute('hidden');
     btnMenu.setAttribute('aria-expanded', 'true');
     document.body.classList.add('mega-menu-open');
+    mega.classList.remove('mega-menu--open');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        mega.classList.add('mega-menu--open');
+      });
+    });
     syncFooterFromPanel(getActivePanelIndex());
-    if (btnClose) btnClose.focus();
+    if (btnClose && !skipFocus) {
+      if (megaDrawerUsesMotion()) {
+        setTimeout(function () {
+          btnClose.focus();
+        }, 60);
+      } else {
+        btnClose.focus();
+      }
+    }
   }
 
   function closeMegaMenu() {
     if (!mega || !btnMenu) return;
-    mega.setAttribute('hidden', '');
-    btnMenu.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('mega-menu-open');
-    btnMenu.focus();
+    if (mega.hasAttribute('hidden')) return;
+    cancelMegaHoverLeaveClose();
+    var delay = megaDrawerUsesMotion() ? megaCloseDelayMs : 0;
+    /* Kapatma + animasyon bitene kadar hover ile yeniden açmayı engelle (imleç hâlâ ikondayken tetiklenen mouseenter) */
+    mega._megaHoverOpenLockUntil = Date.now() + delay + 420;
+    mega.classList.remove('mega-menu--open');
+    if (mega._megaCloseTimer) clearTimeout(mega._megaCloseTimer);
+    mega._megaCloseTimer = setTimeout(function () {
+      mega._megaCloseTimer = null;
+      mega.setAttribute('hidden', '');
+      btnMenu.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('mega-menu-open');
+      btnMenu.focus();
+    }, delay);
   }
 
   function getActivePanelIndex() {
@@ -593,11 +659,35 @@
     }
 
     btnMenu.addEventListener('click', function () {
-      if (mega.hasAttribute('hidden')) openMegaMenu();
+      if (mega.hasAttribute('hidden')) openMegaMenu(false);
       else closeMegaMenu();
     });
 
+    btnMenu.addEventListener('mouseenter', function () {
+      if (!isMegaDesktopHover()) return;
+      cancelMegaHoverLeaveClose();
+      if (mega.hasAttribute('hidden')) openMegaMenu(true);
+    });
+
+    btnMenu.addEventListener('mouseleave', function () {
+      if (!isMegaDesktopHover()) return;
+      if (mega.hasAttribute('hidden')) mega._megaHoverOpenLockUntil = 0;
+      scheduleMegaHoverLeaveClose();
+    });
+
+    mega.addEventListener('mouseenter', function () {
+      if (!isMegaDesktopHover()) return;
+      cancelMegaHoverLeaveClose();
+    });
+
+    mega.addEventListener('mouseleave', function () {
+      if (!isMegaDesktopHover()) return;
+      scheduleMegaHoverLeaveClose();
+    });
+
     if (btnClose) btnClose.addEventListener('click', closeMegaMenu);
+
+    if (megaBackdrop) megaBackdrop.addEventListener('click', closeMegaMenu);
 
     document.querySelectorAll('.mega-menu__tab').forEach(function (tab) {
       tab.addEventListener('click', function () {
@@ -868,6 +958,40 @@
     });
   }
 
+  /* Öne çıkan ürün kartı — yalnızca desktop (lg+): scroll scrub, sadece dikey kayma */
+  function initProductSpotlightScrollReveal() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.matchMedia({
+      '(min-width: 1024px)': function () {
+        document.querySelectorAll('[data-product-spotlight]').forEach(function (card) {
+          var motion = card.querySelector('[data-product-spotlight-motion]');
+          if (!motion) return;
+
+          /* Geniş dikey ofset + kısa scroll aralığı: hareket viewport’a girerken yoğunlaşır, daha belirgin */
+          gsap.fromTo(
+            motion,
+            { yPercent: 36 },
+            {
+              yPercent: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top bottom',
+                end: 'top 38%',
+                scrub: 0.65,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        });
+      },
+    });
+  }
+
   function initSupportFaqAccordion() {
     document.querySelectorAll('.prava-support-faq__list').forEach(function (list) {
       list.querySelectorAll('details.prava-support-faq__item').forEach(function (el) {
@@ -905,12 +1029,8 @@
     var i18n = window.PRAVA_I18N || {};
 
     function closeMegaIfOpen() {
-      var mega = document.getElementById('mega-menu');
-      var btnMenu = document.getElementById('btn-menu');
-      if (mega && !mega.hasAttribute('hidden')) {
-        mega.setAttribute('hidden', '');
-        if (btnMenu) btnMenu.setAttribute('aria-expanded', 'false');
-      }
+      var m = document.getElementById('mega-menu');
+      if (m && !m.hasAttribute('hidden')) closeMegaMenu();
     }
 
     function openSearch() {
@@ -1073,6 +1193,7 @@
   initIntroLineReveal();
   initIntroFigureReveal();
   initParallaxEffects();
+  initProductSpotlightScrollReveal();
   initSupportFaqAccordion();
   initMiniSearch();
   initHeaderScrollConceal();

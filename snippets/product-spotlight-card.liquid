@@ -23,7 +23,8 @@
 %}
 {% if spotlight_product != blank %}
   <article class="product-spotlight-card {{ article_extra }}" data-product-spotlight>
-    <div class="aspect-[1/1] w-full bg-[#e7e4df]">
+    <div class="product-spotlight-card__motion" data-product-spotlight-motion>
+    <div class="aspect-[1/1] w-full bg-product-color">
       {% if card_image != blank %}
         <a href="{{ spotlight_product.url }}" class="block h-full w-full">
           <img
@@ -80,9 +81,12 @@
         </div>
       </div>
     </div>
+    </div>
   </article>
 {% elsif request.design_mode %}
   <article class="product-spotlight-card border border-dashed border-neutral-300 bg-neutral-50 p-8 {{ article_extra }}" data-product-spotlight>
-    <p class="m-0 text-sm text-neutral-500">Ürün seçin (tema ayarları).</p>
+    <div class="product-spotlight-card__motion" data-product-spotlight-motion>
+      <p class="m-0 text-sm text-neutral-500">Ürün seçin (tema ayarları).</p>
+    </div>
   </article>
 {% endif %}

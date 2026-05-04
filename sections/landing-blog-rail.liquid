@@ -1,5 +1,5 @@
-<section class="prava-blog-rail relative bg-[#F2F2F0] text-neutral-900 overflow-hidden" aria-label="{{ 'sections.blog.aria_label' | t }}" style="--pbr-pad-x: 40px;">
-  <div class="relative mx-auto px-5 lg:px-[var(--pbr-pad-x)] py-16 lg:py-28 pr-0">
+<section class="prava-blog-rail relative bg-[#cad7b9] text-neutral-900 overflow-hidden" aria-label="{{ 'sections.blog.aria_label' | t }}" style="--pbr-pad-x: 40px;">
+  <div class="relative mx-auto px-5 lg:px-[var(--pbr-pad-x)] lg:pr-0 py-16 lg:py-28 pr-0">
     {% if section.settings.blog_texture_image != blank %}
       <div class="pointer-events-none absolute inset-0 z-0 bg-no-repeat bg-[position:100px_bottom] bg-[length:800px_auto] opacity-10" style="background-image: url('{{ section.settings.blog_texture_image | image_url: width: 1600 }}');" aria-hidden="true"></div>
     {% endif %}
@@ -42,10 +42,10 @@
         {% endif %}
         <a
           href="{{ cta_href }}"
-          class="relative mt-8 inline-flex items-center gap-2 text-base font-light text-neutral-900 underline decoration-neutral-900 underline-offset-[5px] transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          class="relative mt-8 inline-flex items-center gap-2 text-base font-light text-neutral-900 transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
           aria-label="{{ 'sections.blog.cta_all' | t }}"
         >
-          {{ cta_visible }}
+          <span class="underline decoration-neutral-900 underline-offset-[5px]">{{ cta_visible }}</span>
           <span aria-hidden="true" class="text-lg leading-none">→</span>
         </a>
       </div>

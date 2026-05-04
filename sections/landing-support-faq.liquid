@@ -1,5 +1,5 @@
-<section class="prava-support-faq bg-white text-neutral-900 px-0 lg:px-10 pt-16 lg:pt-24 pb-10 lg:pb-24" aria-label="{{ 'sections.faq.aria_label' | t }}">
-  <div class="relative mx-auto overflow-hidden bg-[#F7F5F5] px-5 lg:px-10 py-5 lg:py-10 max-w-[1200px]">
+<section class="prava-support-faq bg-custom-color text-neutral-900 px-0 lg:px-10 pt-16 lg:pt-24 pb-10 lg:pb-24" aria-label="{{ 'sections.faq.aria_label' | t }}">
+  <div class="relative mx-auto overflow-hidden bg-product-color px-5 lg:px-10 py-5 lg:py-10 max-w-[1200px]">
     {% if section.settings.support_texture_image != blank %}
       <div class="pointer-events-none absolute inset-0 bg-no-repeat bg-[position:top_right] lg:bg-[position:200px_center] bg-[length:230px_auto] opacity-20" style="background-image: url('{{ section.settings.support_texture_image | image_url: width: 800 }}');" aria-hidden="true"></div>
     {% endif %}
@@ -29,7 +29,7 @@
         <p class="sr-only">{{ 'sections.faq.list_label' | t }}</p>
         {% for block in section.blocks %}
           {% if block.settings.question != blank %}
-            <details class="prava-support-faq__item border-b border-neutral-200/90" {{ block.shopify_attributes }}>
+            <details class="prava-support-faq__item border-b border-[#d9d3c8]" {{ block.shopify_attributes }}>
               <summary class="flex cursor-pointer list-none items-start gap-3 py-5 pr-2 text-left text-base font-normal text-neutral-800 outline-none transition-colors hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:gap-4 md:text-lg md:leading-snug">
                 <span class="prava-support-faq__icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center text-lg font-light leading-none text-neutral-700 transition-transform duration-200 md:text-xl" aria-hidden="true">+</span>
                 <span>{{ block.settings.question | escape }}</span>

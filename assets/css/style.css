@@ -304,7 +304,7 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
 .mini-search__backdrop {
   position: absolute;
   inset: 0;
-  background: rgb(0 0 0 / 0.45);
+  background: rgb(255 255 255 / 0.45);
   cursor: pointer;
 }
 
@@ -487,6 +487,8 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
   position: fixed;
   inset: 0;
   z-index: 200;
+  display: flex;
+  flex-direction: column;
   background: #ffffff;
   color: #171717;
   font-size: 14px;
@@ -498,6 +500,10 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
   display: none !important;
 }
 
+.mega-menu__backdrop {
+  display: none;
+}
+
 .mega-menu__inner {
   --mega-pad-x: 40px;
   display: flex;
@@ -505,6 +511,50 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
   height: 100%;
   max-height: 100dvh;
   overflow: hidden;
+  background: #ffffff;
+}
+
+@media (min-width: 1024px) {
+  .mega-menu {
+    flex-direction: row;
+    align-items: stretch;
+    background: transparent;
+  }
+
+  .mega-menu__backdrop {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(255, 255, 255, 0.58);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.38s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mega-menu.mega-menu--open .mega-menu__backdrop {
+    opacity: 1;
+  }
+
+  .mega-menu__inner {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 50vw;
+    width: 50vw;
+    max-width: none;
+    box-shadow: 16px 0 48px rgba(0, 0, 0, 0.08);
+    transform: translateX(-100%);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  .mega-menu.mega-menu--open .mega-menu__inner {
+    transform: translateX(0);
+  }
 }
 
 .mega-menu__bar {
@@ -632,8 +682,8 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
 
 @media (min-width: 1024px) {
   .mega-menu__panel-grid {
-    grid-template-columns: 3fr 2fr;
-    min-height: min(100vh, calc(100dvh - 88px - 57px - 81px));
+    grid-template-columns: 1fr;
+    min-height: min(85vh, calc(100dvh - 88px - 57px - 81px));
   }
 }
 
@@ -651,7 +701,10 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
 
 @media (min-width: 1024px) {
   .mega-menu__col--visual {
-    padding: 0;
+    align-self: stretch;
+    border-top: 1px solid #e5e5e5;
+    padding: 20px var(--mega-pad-x, 40px) 28px;
+    min-height: 0;
   }
 }
 
@@ -735,6 +788,14 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
   object-fit: contain;
 }
 
+@media (min-width: 1024px) {
+  .mega-menu__visual-img {
+    /* max-height: min(220px, 28vh); */
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
 .mega-menu__footer {
   flex-shrink: 0;
   display: flex;
@@ -791,6 +852,18 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
 
 body.mega-menu-open {
   overflow: hidden;
+}
+
+/* Popüler bölümü — öne çıkan ürün kartı scroll ile aşağıdan yukarı (GSAP hedefi) */
+.product-spotlight-card__motion {
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-menu__inner,
+  .mega-menu__backdrop {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* PRAVA — Kategori rayı (prava-category-rail) */
@@ -860,7 +933,7 @@ body.mega-menu-open {
 /* Blog rayı — sabit slayt genişliği (Swiper slidesPerView: 'auto' ile uyumlu) */
 .prava-blog-rail__swiper .swiper-slide {
   height: auto;
-  width: 300px;
+  width: 400px;
   max-width: 100%;
   box-sizing: border-box;
 }

@@ -8,7 +8,7 @@
 {% assign footer_menu = linklists['footer'] %}
 {% assign footer_bottom_menu = linklists['footer-bottom-menu'] %}
 <footer
-  class="site-footer mt-auto bg-[#F5F5F0] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]"
+  class="site-footer mt-auto bg-product-color border-t border-[#cccccc] bg-no-repeat bg-bottom bg-[length:100%_auto] text-[#333333] z-[50]"
   role="contentinfo"
   aria-label="{{ 'footer.aria_label' | t }}"
   style="--footer-pad-x: 40px;{% if settings.footer_watermark_image != blank %}background-image: url('{{ settings.footer_watermark_image | image_url: width: 2400 }}'); background-repeat: no-repeat; background-position: bottom; background-size: 100% auto;{% endif %}"
@@ -22,7 +22,7 @@
             {% form 'customer', class: 'mt-6' %}
               <input type="hidden" name="contact[tags]" value="newsletter">
               <label class="sr-only" for="footer-newsletter-email-{{ section.id }}">{{ 'footer.newsletter_email_label' | t }}</label>
-              <div class="site-footer__field flex overflow-hidden rounded-lg bg-[#E6E6E1]">
+              <div class="site-footer__field flex overflow-hidden rounded-lg bg-[#f4f4f4]">
                 <input
                   id="footer-newsletter-email-{{ section.id }}"
                   name="contact[email]"
@@ -160,7 +160,7 @@
       </div>
     </div> {% endcomment %}
 
-    <div class="site-footer__legal lg:mt-4 flex flex-col gap-6 lg:border-t border-[#333333]/18 pt-8 lg:mt-56 md:flex-row md:items-center md:justify-between md:gap-8 text-center lg:text-left">
+    <div class="site-footer__legal lg:mt-4 flex flex-col gap-6 lg:border-t border-[#cccccc] pt-8 lg:mt-56 md:flex-row md:items-center md:justify-between md:gap-8 text-center lg:text-left">
       <p class="text-xs text-[#333333]/85 md:text-sm"><b>{{ 'footer.copyright' | t: year: footer_year, shop_name: shop.name }}</b></p>
       {%- if footer_bottom_menu.links.size > 0 -%}
         <nav aria-label="{{ footer_bottom_menu.title | escape }}">
