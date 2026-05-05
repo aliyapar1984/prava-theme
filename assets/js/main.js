@@ -1085,64 +1085,51 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
+    /*
+     * Performans stratejisi:
+     * Her bölüm için statik gradient içeren bir <div.prava-bg-overlay> DOM'a enjekte edilir.
+     * GSAP yalnızca bu elementin `opacity` değerini (0 → 1) animate eder.
+     * opacity animasyonu compositor thread'de çalışır: repaint yok, style recalc yok,
+     * renk interpolasyonu yok. Baz renk sabit backgroundColor ile sağlanır.
+     */
     var bgConfigs = [
       {
         selector: '#blog-rail-bg-section',
-        start: 'rgb(242, 239, 234)',
-        stop1: 'rgb(231, 229, 224)',
-        stop2: 'rgb(175, 132, 126)',
+        base: '#f2efea',
+        gradient: 'linear-gradient(135deg, #e7e5e0 0%, #af847e 100%)',
       },
       {
         selector: '.site-footer',
-        start: 'rgb(242, 239, 234)',
-        stop1: 'rgb(231, 229, 224)',
-        stop2: 'rgb(213, 200, 52)',
+        base: '#f2efea',
+        gradient: 'linear-gradient(135deg, #e7e5e0 0%, #d5c834 100%)',
       },
       {
         selector: '#popular-split-bg-section',
-        start: 'rgb(242, 239, 234)',
-        stop1: 'rgb(231, 226, 214)',
-        stop2: 'rgb(215, 212, 185)',
+        base: '#f2efea',
+        gradient: 'linear-gradient(135deg, #e7e2d6 0%, #d7d4b9 100%)',
       },
     ];
-
-    
 
     bgConfigs.forEach(function (cfg) {
       var bgSection = document.querySelector(cfg.selector);
       if (!bgSection) return;
-      var isFooter = cfg.selector === '.site-footer';
 
-      if (!isFooter) {
-        bgSection.style.backgroundColor = cfg.start;
-        bgSection.style.backgroundImage = 'linear-gradient(135deg, ' + cfg.start + ' 0%, ' + cfg.start + ' 100%)';
-        bgSection.style.backgroundSize = '100% 200%';
-        bgSection.style.backgroundPosition = '0% 100%';
-      } else {
-        bgSection.style.setProperty('--footer-grad-c1', cfg.start);
-        bgSection.style.setProperty('--footer-grad-c2', cfg.start);
-        bgSection.style.setProperty('--footer-grad-y', '100%');
-      }
+      bgSection.style.backgroundColor = cfg.base;
 
-      ScrollTrigger.create({
-        trigger: bgSection,
-        start: 'top 88%',
-        end: 'bottom 42%',
-        scrub: 0.5,
-        onUpdate: function (self) {
-          var p = gsap.utils.clamp(0, 1, self.progress);
-          if (isFooter) {
-            var fc1 = gsap.utils.interpolate(cfg.start, cfg.stop1, p);
-            var fc2 = gsap.utils.interpolate(cfg.start, cfg.stop2, p);
-            bgSection.style.setProperty('--footer-grad-c1', fc1);
-            bgSection.style.setProperty('--footer-grad-c2', fc2);
-            bgSection.style.setProperty('--footer-grad-y', (100 - p * 100) + '%');
-          } else {
-            var c1 = gsap.utils.interpolate(cfg.start, cfg.stop1, p);
-            var c2 = gsap.utils.interpolate(cfg.start, cfg.stop2, p);
-            bgSection.style.backgroundImage = 'linear-gradient(135deg, ' + c1 + ' 0%, ' + c2 + ' 100%)';
-            bgSection.style.backgroundPosition = '0% ' + (100 - p * 100) + '%';
-          }
+      var overlay = document.createElement('div');
+      overlay.className = 'prava-bg-overlay';
+      overlay.style.backgroundImage = cfg.gradient;
+      overlay.setAttribute('aria-hidden', 'true');
+      bgSection.insertBefore(overlay, bgSection.firstChild);
+
+      gsap.to(overlay, {
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: bgSection,
+          start: 'top 88%',
+          end: 'bottom 42%',
+          scrub: 0.5,
         },
       });
     });
@@ -1409,6 +1396,44 @@
     }
   }
 
+  function initScrollTopButton() {
+    var btn = document.getElementById('scroll-top-btn');
+    if (!btn) return;
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
+
+    var hero = document.getElementById('hero');
+    var showAfter = hero
+      ? (hero.offsetTop + hero.offsetHeight - 120)
+      : window.innerHeight;
+
+    function setVisible(on) {
+      btn.classList.toggle('is-visible', !!on);
+    }
+
+    function onScroll() {
+      var y = window.scrollY || document.documentElement.scrollTop || 0;
+      setVisible(y > showAfter);
+    }
+
+    btn.addEventListener('click', function () {
+      if (window.PRAVA_LENIS && typeof window.PRAVA_LENIS.scrollTo === 'function') {
+        window.PRAVA_LENIS.scrollTo(0, { duration: 1 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      showAfter = hero
+        ? (hero.offsetTop + hero.offsetHeight - 120)
+        : window.innerHeight;
+      onScroll();
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   initIntroLineReveal();
   initIntroFigureReveal();
   initHeadingStaggeredLetters();
@@ -1418,6 +1443,7 @@
   initSupportFaqAccordion();
   initMiniSearch();
   initHeaderScrollConceal();
+  initScrollTopButton();
   if (lenisInstance && typeof ScrollTrigger !== 'undefined') {
     ScrollTrigger.refresh();
   }

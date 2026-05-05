@@ -44,12 +44,12 @@
         </a>
       {% endif %}
     </div>
-    <div class="px-0 lg:px-8 pb-8 pt-10 md:px-10 md:pb-10 lg:ml-10">
+    <div class="px-0 lg:px-0 py-[30px]">
       <h3 id="{{ title_id }}" class="text-2xl font-normal leading-tight tracking-tight text-neutral-800">
-        <a href="{{ spotlight_product.url }}" class="text-inherit no-underline hover:opacity-80">{{ spotlight_product.title }}</a>
+        <a href="{{ spotlight_product.url }}" class="text-lg font-normal leading-snug tracking-tight text-neutral-900 md:text-xl">{{ spotlight_product.title }}</a>
       </h3>
       {% if spotlight_product.type != blank %}
-        <p class="mt-2 text-base font-light uppercase text-neutral-700">{{ spotlight_product.type }}</p>
+        <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">{{ spotlight_product.type }}</p>
       {% endif %}
       <div class="mt-8 flex items-center justify-between gap-6">
         {% if color_option != blank and color_option.values.size > 0 %}
