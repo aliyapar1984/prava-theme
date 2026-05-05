@@ -1,9 +1,10 @@
 (function () {
   var root = document.getElementById('intro-karaoke-root');
-  var section = document.getElementById('intro-karaoke-section');
-  if (!root || !section || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || typeof SplitText === 'undefined') return;
+  var introSection = document.getElementById('intro-karaoke-section');
+  if (!root || !introSection || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || typeof SplitText === 'undefined') return;
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
 
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -30,7 +31,6 @@
   function setup() {
     if (split && split.revert) split.revert();
     if (karaokeTrigger) karaokeTrigger.kill();
-
     // Kelime bütünlüğü bozulmasın diye words+chars birlikte split ediyoruz.
     split = SplitText.create('#intro-karaoke-root', {
       type: 'words,chars',

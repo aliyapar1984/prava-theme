@@ -1,4 +1,4 @@
-<section class="prava-blog-rail relative bg-[#cad7b9] text-neutral-900 overflow-hidden" aria-label="{{ 'sections.blog.aria_label' | t }}" style="--pbr-pad-x: 40px;">
+<section id="blog-rail-bg-section" class="prava-blog-rail relative bg-[#cad7b9] text-neutral-900 overflow-hidden" aria-label="{{ 'sections.blog.aria_label' | t }}" style="--pbr-pad-x: 40px;">
   <div class="relative mx-auto px-5 lg:px-[var(--pbr-pad-x)] lg:pr-0 py-16 lg:py-28 pr-0">
     {% if section.settings.blog_texture_image != blank %}
       <div class="pointer-events-none absolute inset-0 z-0 bg-no-repeat bg-[position:100px_bottom] bg-[length:800px_auto] opacity-10" style="background-image: url('{{ section.settings.blog_texture_image | image_url: width: 1600 }}');" aria-hidden="true"></div>

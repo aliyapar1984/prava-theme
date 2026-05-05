@@ -958,6 +958,75 @@
     });
   }
 
+  function initSectionBackgroundGradients() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    var bgConfigs = [
+      {
+        selector: '#blog-rail-bg-section',
+        start: 'rgb(242, 239, 234)',
+        stop1: 'rgb(231, 229, 224)',
+        stop2: 'rgb(175, 132, 126)',
+      },
+      {
+        selector: '.site-footer',
+        start: 'rgb(242, 239, 234)',
+        stop1: 'rgb(231, 229, 224)',
+        stop2: 'rgb(213, 200, 52)',
+      },
+      {
+        selector: '#popular-split-bg-section',
+        start: 'rgb(242, 239, 234)',
+        stop1: 'rgb(231, 226, 214)',
+        stop2: 'rgb(215, 212, 185)',
+      },
+    ];
+
+    
+
+    bgConfigs.forEach(function (cfg) {
+      var bgSection = document.querySelector(cfg.selector);
+      if (!bgSection) return;
+      var isFooter = cfg.selector === '.site-footer';
+
+      if (!isFooter) {
+        bgSection.style.backgroundColor = cfg.start;
+        bgSection.style.backgroundImage = 'linear-gradient(135deg, ' + cfg.start + ' 0%, ' + cfg.start + ' 100%)';
+        bgSection.style.backgroundSize = '100% 200%';
+        bgSection.style.backgroundPosition = '0% 100%';
+      } else {
+        bgSection.style.setProperty('--footer-grad-c1', cfg.start);
+        bgSection.style.setProperty('--footer-grad-c2', cfg.start);
+        bgSection.style.setProperty('--footer-grad-y', '100%');
+      }
+
+      ScrollTrigger.create({
+        trigger: bgSection,
+        start: 'top 88%',
+        end: 'bottom 42%',
+        scrub: 0.5,
+        onUpdate: function (self) {
+          var p = gsap.utils.clamp(0, 1, self.progress);
+          if (isFooter) {
+            var fc1 = gsap.utils.interpolate(cfg.start, cfg.stop1, p);
+            var fc2 = gsap.utils.interpolate(cfg.start, cfg.stop2, p);
+            bgSection.style.setProperty('--footer-grad-c1', fc1);
+            bgSection.style.setProperty('--footer-grad-c2', fc2);
+            bgSection.style.setProperty('--footer-grad-y', (100 - p * 100) + '%');
+          } else {
+            var c1 = gsap.utils.interpolate(cfg.start, cfg.stop1, p);
+            var c2 = gsap.utils.interpolate(cfg.start, cfg.stop2, p);
+            bgSection.style.backgroundImage = 'linear-gradient(135deg, ' + c1 + ' 0%, ' + c2 + ' 100%)';
+            bgSection.style.backgroundPosition = '0% ' + (100 - p * 100) + '%';
+          }
+        },
+      });
+    });
+  }
+
   /* Öne çıkan ürün kartı — yalnızca desktop (lg+): scroll scrub, sadece dikey kayma */
   function initProductSpotlightScrollReveal() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
@@ -1222,6 +1291,7 @@
   initIntroLineReveal();
   initIntroFigureReveal();
   initParallaxEffects();
+  initSectionBackgroundGradients();
   initProductSpotlightScrollReveal();
   initSupportFaqAccordion();
   initMiniSearch();

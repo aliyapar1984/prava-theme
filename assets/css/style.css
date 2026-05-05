@@ -72,6 +72,63 @@
   z-index: 10;
 }
 
+#blog-rail-bg-section {
+  will-change: background;
+  background-color: #f2efea;
+  background-image: linear-gradient(135deg, #f2efea 0%, #f2efea 100%);
+  background-size: 100% 200%;
+  background-position: 0% 100%;
+}
+
+.site-footer {
+  will-change: background;
+  --footer-grad-c1: transparent;
+  --footer-grad-c2: transparent;
+  --footer-grad-y: 100%;
+  isolation: isolate;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    135deg,
+    var(--footer-grad-c1) 0%,
+    var(--footer-grad-c2) 100%
+  );
+  background-size: 100% 200%;
+  background-position: 0% var(--footer-grad-y);
+}
+
+.site-footer > :not(.site-footer__watermark) {
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer__watermark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.site-footer__watermark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#popular-split-bg-section {
+  will-change: background;
+  background-size: 100% 200%;
+  background-position: 0% 100%;
+}
+
 /* Site alt bilgisi */
 .site-footer {
   position: relative;
