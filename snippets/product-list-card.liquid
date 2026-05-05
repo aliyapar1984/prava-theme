@@ -1,7 +1,7 @@
 {% liquid
   assign p = product
-  assign current_variant = nil
-  assign main_img = nil
+  assign current_variant = null
+  assign main_img = null
   if p != blank
     assign current_variant = p.selected_or_first_available_variant
     assign main_img = current_variant.featured_image | default: p.featured_image
@@ -17,7 +17,7 @@
 
   assign img_loading = image_loading | default: 'lazy'
 
-  assign color_option = nil
+  assign color_option = null
   if p != blank
     for option in p.options_with_values
       assign opt_name = option.name | downcase
@@ -34,8 +34,20 @@
     assign has_hover_video = true
   endif
 
+  assign effective_hover_image = hover_image
+  if effective_hover_image == blank and p != blank and p.images.size > 1
+    assign effective_hover_image = p.images[1]
+    if main_img != blank and effective_hover_image.id == main_img.id
+      if p.images.size > 2
+        assign effective_hover_image = p.images[2]
+      else
+        assign effective_hover_image = blank
+      endif
+    endif
+  endif
+
   assign has_hover_image = false
-  if hover_image != blank and has_hover_video == false
+  if effective_hover_image != blank and has_hover_video == false
     assign has_hover_image = true
   endif
 
@@ -47,7 +59,9 @@
 {% if p != blank %}
   <article
     class="prava-bestsellers-card flex h-full flex-col bg-product-color{% if use_group %} group{% endif %}"
-    {% if block %}{{ block.shopify_attributes }}{% endif %}
+    {% if block %}
+      {{- block.shopify_attributes -}}
+    {% endif %}
   >
     <a
       href="{{ p.url }}"
@@ -68,11 +82,11 @@
         {% endif %}
         {% if has_hover_image %}
           <img
-            src="{{ hover_image | image_url: width: 1040 }}"
+            src="{{ effective_hover_image | image_url: width: 1040 }}"
             alt=""
             class="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover object-bottom opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
-            width="520"
-            height="640"
+            width="{{ effective_hover_image.width | default: 520 }}"
+            height="{{ effective_hover_image.height | default: 640 }}"
             loading="lazy"
             decoding="async"
             aria-hidden="true"
@@ -102,7 +116,11 @@
         {% endif %}
         <div class="mt-6 flex items-center justify-between gap-4">
           {% if color_option != blank and color_option.values.size > 0 %}
-            <ul class="m-0 flex list-none flex-wrap items-center gap-2 p-0" role="list" aria-label="{{ 'general.accessibility.color_options' | t }}">
+            <ul
+              class="m-0 flex list-none flex-wrap items-center gap-2 p-0"
+              role="list"
+              aria-label="{{ 'general.accessibility.color_options' | t }}"
+            >
               {% for value in color_option.values %}
                 <li class="m-0 p-0">
                   {% liquid
@@ -118,7 +136,11 @@
                         assign swatch_bg = 'bg-[#88acc8]'
                     endcase
                   %}
-                  <span class="inline-block h-5 w-5 shrink-0 rounded-full {{ swatch_bg }} ring-1 ring-black/5" title="{{ value | escape }}" aria-hidden="true"></span>
+                  <span
+                    class="inline-block h-5 w-5 shrink-0 rounded-full {{ swatch_bg }} ring-1 ring-black/5"
+                    title="{{ value | escape }}"
+                    aria-hidden="true"
+                  ></span>
                   <span class="sr-only">{{ value }}</span>
                 </li>
               {% endfor %}
@@ -128,7 +150,9 @@
           {% endif %}
           <p class="shrink-0 text-right text-base leading-none md:text-lg">
             {% if current_variant.compare_at_price > current_variant.price %}
-              <span class="mr-2 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
+              <span class="mr-2 font-light text-neutral-500 line-through">
+                {{- current_variant.compare_at_price | money -}}
+              </span>
             {% endif %}
             <span class="font-medium text-neutral-900">{{ current_variant.price | money }}</span>
           </p>
