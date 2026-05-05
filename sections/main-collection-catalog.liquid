@@ -10,6 +10,19 @@
 >
   <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 lg:pb-24 lg:pt-4">
     {% render 'breadcrumbs', current_title: collection.title %}
+
+    {% if collection.metafields.custom.cover_image.value != blank %}
+      <img
+        src="{{ collection.metafields.custom.cover_image.value | image_url: width: 1040 }}"
+        alt="{{ collection.metafields.custom.cover_image.value.alt | default: collection.title | escape }}"
+        class="w-full h-auto object-cover"
+        width="{{ collection.metafields.custom.cover_image.value.width }}"
+        height="{{ collection.metafields.custom.cover_image.value.height }}"
+        loading="eager"
+        decoding="async"
+      >
+    {% endif %}
+
     <header class="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-10">
       <h1 class="w-full min-w-0 text-3xl font-medium tracking-tight text-neutral-900 md:flex-1 md:text-4xl">
         {{ collection.title | escape }}
@@ -67,39 +80,39 @@
           role="group"
           aria-label="{{ 'templates.collection.grid_view_group_aria' | t }}"
         >
-        <button
-          type="button"
-          class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
-          data-collection-grid-cols="3"
-          aria-pressed="true"
-          aria-label="{{ 'templates.collection.grid_view_3_aria' | t }}"
-        >
-          <img
-            src="{{ 'icons/grid-view-3.svg' | asset_url }}"
-            width="32"
-            height="32"
-            alt=""
-            class=""
-            aria-hidden="true"
+          <button
+            type="button"
+            class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
+            data-collection-grid-cols="3"
+            aria-pressed="true"
+            aria-label="{{ 'templates.collection.grid_view_3_aria' | t }}"
           >
-        </button>
-        <button
-          type="button"
-          class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
-          data-collection-grid-cols="4"
-          aria-pressed="false"
-          aria-label="{{ 'templates.collection.grid_view_4_aria' | t }}"
-        >
-          <img
-            src="{{ 'icons/grid-view-4.svg' | asset_url }}"
-            width="32"
-            height="32"
-            alt=""
-            class=""
-            aria-hidden="true"
+            <img
+              src="{{ 'icons/grid-view-3.svg' | asset_url }}"
+              width="32"
+              height="32"
+              alt=""
+              class=""
+              aria-hidden="true"
+            >
+          </button>
+          <button
+            type="button"
+            class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
+            data-collection-grid-cols="4"
+            aria-pressed="false"
+            aria-label="{{ 'templates.collection.grid_view_4_aria' | t }}"
           >
-        </button>
-      </div>
+            <img
+              src="{{ 'icons/grid-view-4.svg' | asset_url }}"
+              width="32"
+              height="32"
+              alt=""
+              class=""
+              aria-hidden="true"
+            >
+          </button>
+        </div>
       </div>
       <script>
         (function () {
