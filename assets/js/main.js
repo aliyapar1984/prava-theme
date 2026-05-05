@@ -994,12 +994,12 @@
       gsap.to(letterEls, {
         yPercent: 0,
         autoAlpha: 1,
-        duration: 0.76,
+        duration: 1,
         ease: 'power3.out',
         stagger: 0.018,
         scrollTrigger: {
           trigger: heading,
-          start: 'top 85%',
+          start: 'top 75%',
           once: true,
         },
       });
@@ -1396,6 +1396,47 @@
     }
   }
 
+  function initCollectionGridToggle() {
+    var section = document.querySelector('.main-collection-catalog');
+    if (!section) return;
+    var buttons = section.querySelectorAll('[data-collection-grid-cols]');
+    if (!buttons.length) return;
+
+    var STORAGE_KEY = 'prava-collection-grid-cols';
+
+    var grid = section.querySelector('[data-collection-product-grid]');
+
+    function syncAria(is4) {
+      buttons.forEach(function (btn) {
+        var v = btn.getAttribute('data-collection-grid-cols');
+        var active = (is4 && v === '4') || (!is4 && v === '3');
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
+    function syncGridClass(is4) {
+      if (!grid) return;
+      grid.classList.toggle('is-collection-grid-4', is4);
+    }
+
+    function apply(cols) {
+      var is4 = cols === '4';
+      document.documentElement.classList.toggle('prava-collection-grid-4', is4);
+      try {
+        localStorage.setItem(STORAGE_KEY, is4 ? '4' : '3');
+      } catch (e) {}
+      syncGridClass(is4);
+      syncAria(is4);
+    }
+
+    syncGridClass(document.documentElement.classList.contains('prava-collection-grid-4'));
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        apply(btn.getAttribute('data-collection-grid-cols') || '3');
+      });
+    });
+  }
+
   function initScrollTopButton() {
     var btn = document.getElementById('scroll-top-btn');
     if (!btn) return;
@@ -1443,6 +1484,7 @@
   initSupportFaqAccordion();
   initMiniSearch();
   initHeaderScrollConceal();
+  initCollectionGridToggle();
   initScrollTopButton();
   if (lenisInstance && typeof ScrollTrigger !== 'undefined') {
     ScrollTrigger.refresh();

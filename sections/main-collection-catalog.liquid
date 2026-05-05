@@ -1,18 +1,119 @@
 {% comment %}
   Koleksiyon kataloğu — üstte tüm koleksiyonlar (yatay), ortada ürün grid + sayfalama, altta SEO metni (collection.description).
+  Sıralama: Shopify `sort_by` (GET form, collection.sort_options).
   Filtre yok; ürün kartı: snippets/product-list-card.liquid
 {% endcomment %}
 <section
-  class="main-collection-catalog bg-white text-neutral-900"
+  class="main-collection-catalog bg-custom-color text-neutral-900"
   aria-label="{{ 'sections.collection_catalog.aria_label' | t }}"
   data-section-id="{{ section.id }}"
 >
-  <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 md:pb-24 md:pt-16">
+  <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 lg:pb-24 lg:pt-4">
     {% render 'breadcrumbs', current_title: collection.title %}
-    <header class="mb-8 md:mb-10">
-      <h1 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">
+    <header class="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-10">
+      <h1 class="w-full min-w-0 text-3xl font-medium tracking-tight text-neutral-900 md:flex-1 md:text-4xl">
         {{ collection.title | escape }}
       </h1>
+      <div class="flex w-full flex-wrap items-center justify-end gap-3 sm:gap-4 md:w-auto">
+        {% if collection.sort_options.size > 0 %}
+          <form
+            class="collection-sort-form shrink-0"
+            method="get"
+            action="{{ collection.url }}"
+            aria-label="{{ 'templates.collection.sort_by_label' | t }}"
+          >
+            <label class="sr-only" for="CollectionSort-{{ section.id }}">
+              {{- 'templates.collection.sort_by_label' | t -}}
+            </label>
+            <select
+              id="CollectionSort-{{ section.id }}"
+              name="sort_by"
+              class="max-w-[min(100vw-5rem,220px)] cursor-pointer appearance-none bg-transparent py-2 pl-3 pr-3 text-right text-sm font-medium text-neutral-900 [background-image:none] [-webkit-appearance:none] transition-colors focus-visible:outline-none focus-visible:ring-0"
+              onchange="this.form.submit()"
+            >
+              <option value="" disabled selected>
+                {{- 'templates.collection.sort_placeholder' | t -}}
+              </option>
+              {% for option in collection.sort_options %}
+                <option value="{{ option.value | escape }}">
+                  {{ option.name | escape }}
+                </option>
+              {% endfor %}
+            </select>
+            <script>
+              (function () {
+                var el = document.getElementById('CollectionSort-{{ section.id }}');
+                if (!el) return;
+                try {
+                  var sortBy = new URLSearchParams(window.location.search).get('sort_by');
+                  if (sortBy) {
+                    for (var i = 0; i < el.options.length; i++) {
+                      if (el.options[i].value === sortBy) {
+                        el.selectedIndex = i;
+                        break;
+                      }
+                    }
+                  } else {
+                    el.selectedIndex = 0;
+                  }
+                } catch (e) {}
+              })();
+            </script>
+          </form>
+        {% endif %}
+        <div
+          id="collection-grid-toggles-{{ section.id }}"
+          class="flex shrink-0 items-center gap-1"
+          role="group"
+          aria-label="{{ 'templates.collection.grid_view_group_aria' | t }}"
+        >
+        <button
+          type="button"
+          class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
+          data-collection-grid-cols="3"
+          aria-pressed="true"
+          aria-label="{{ 'templates.collection.grid_view_3_aria' | t }}"
+        >
+          <img
+            src="{{ 'icons/grid-view-3.svg' | asset_url }}"
+            width="32"
+            height="32"
+            alt=""
+            class=""
+            aria-hidden="true"
+          >
+        </button>
+        <button
+          type="button"
+          class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
+          data-collection-grid-cols="4"
+          aria-pressed="false"
+          aria-label="{{ 'templates.collection.grid_view_4_aria' | t }}"
+        >
+          <img
+            src="{{ 'icons/grid-view-4.svg' | asset_url }}"
+            width="32"
+            height="32"
+            alt=""
+            class=""
+            aria-hidden="true"
+          >
+        </button>
+      </div>
+      </div>
+      <script>
+        (function () {
+          try {
+            var is4 = document.documentElement.classList.contains('prava-collection-grid-4');
+            var group = document.getElementById('collection-grid-toggles-{{ section.id }}');
+            if (!group || group.getAttribute('role') !== 'group') return;
+            var b3 = group.querySelector('[data-collection-grid-cols="3"]');
+            var b4 = group.querySelector('[data-collection-grid-cols="4"]');
+            if (b3) b3.setAttribute('aria-pressed', is4 ? 'false' : 'true');
+            if (b4) b4.setAttribute('aria-pressed', is4 ? 'true' : 'false');
+          } catch (e) {}
+        })();
+      </script>
     </header>
 
     <nav
@@ -44,8 +145,19 @@
           <p class="text-base text-neutral-600">{{ 'templates.collection.empty' | t }}</p>
         {% else %}
           <div
-            class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 xl:grid-cols-3"
+            class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 xl:grid-cols-3 xl:[&.is-collection-grid-4]:grid-cols-4"
+            data-collection-product-grid
           >
+            <script>
+              (function () {
+                try {
+                  var g = document.currentScript && document.currentScript.parentElement;
+                  if (g && document.documentElement.classList.contains('prava-collection-grid-4')) {
+                    g.classList.add('is-collection-grid-4');
+                  }
+                } catch (e) {}
+              })();
+            </script>
             {% for product in collection.products %}
               {% if forloop.index <= 3 %}
                 {%

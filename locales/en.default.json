@@ -39,7 +39,12 @@
     "collection": {
       "category_nav_aria": "Browse categories",
       "products_region_aria": "Products in this collection",
-      "empty": "No products in this collection."
+      "empty": "No products in this collection.",
+      "sort_by_label": "Sort by",
+      "sort_placeholder": "Choose an option",
+      "grid_view_group_aria": "Product grid columns",
+      "grid_view_3_aria": "Show three columns",
+      "grid_view_4_aria": "Show four columns"
     },
     "blog": {
       "posts_region_aria": "Blog posts",

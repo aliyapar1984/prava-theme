@@ -21,7 +21,7 @@
 {% if post != blank %}
   <a
     href="{{ post.url }}"
-    class="prava-blog-card group flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+    class="prava-blog-card group flex h-full flex-col overflow-hidden bg-white shadow-sm ring-1 ring-black/[0.04] transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
     aria-labelledby="{{ uid }}"
     {% if block %}{{ block.shopify_attributes }}{% endif %}
   >
@@ -51,7 +51,7 @@
   </a>
 {% elsif request.design_mode and block %}
   <div
-    class="flex min-h-[200px] flex-col items-center justify-center rounded-sm border-2 border-dashed border-neutral-300 bg-white p-6 text-center"
+    class="flex min-h-[200px] flex-col items-center justify-center border-2 border-dashed border-neutral-300 bg-white p-6 text-center"
     {{ block.shopify_attributes }}
   >
     <p class="m-0 text-sm text-neutral-500">Blog yazısı seçin</p>

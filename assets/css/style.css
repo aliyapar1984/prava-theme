@@ -859,7 +859,7 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
   .mega-menu__visual-img {
     /* max-height: min(220px, 28vh); */
     object-fit: cover;
-    border-radius: 8px;
+    /* border-radius: 8px; */
   }
 }
 

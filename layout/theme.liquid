@@ -41,6 +41,17 @@
     window.PRAVA_I18N.cart_add_network = {{ 'products.cart_add_network' | t | json }};
     window.PravaCartSections = 'prava-cart-drawer,prava-cart-bubble';
   </script>
+  {% if template.name == 'collection' %}
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem('prava-collection-grid-cols') === '4') {
+            document.documentElement.classList.add('prava-collection-grid-4');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  {% endif %}
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   {{ 'css/style.css' | asset_url | stylesheet_tag }}

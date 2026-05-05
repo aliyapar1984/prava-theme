@@ -39,7 +39,12 @@
     "collection": {
       "category_nav_aria": "Kategorilere göz at",
       "products_region_aria": "Bu koleksiyondaki ürünler",
-      "empty": "Bu koleksiyonda ürün yok."
+      "empty": "Bu koleksiyonda ürün yok.",
+      "sort_by_label": "Sırala",
+      "sort_placeholder": "Sırala",
+      "grid_view_group_aria": "Ürün ızgarası sütun sayısı",
+      "grid_view_3_aria": "Üç sütun göster",
+      "grid_view_4_aria": "Dört sütun göster"
     },
     "blog": {
       "posts_region_aria": "Blog yazıları",

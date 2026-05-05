@@ -36,7 +36,7 @@
           aria-label="{{ 'sections.category_rail.cta_named' | t: title: display_title }}"
         >
       {% endunless %}
-        <div class="prava-category-card__media prava-swiper-card__media aspect-square w-full overflow-hidden rounded-sm bg-product-color flex items-center justify-center">
+        <div class="prava-category-card__media prava-swiper-card__media aspect-square w-full overflow-hidden bg-product-color flex items-center justify-center">
           {% if card_image != blank %}
             <img
               src="{{ card_image | image_url: width: 1040 }}"
