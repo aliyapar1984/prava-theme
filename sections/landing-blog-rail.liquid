@@ -17,7 +17,7 @@
       endif
     %}
     <div class="relative z-[1] flex flex-col gap-6 lg:gap-12 lg:flex-row lg:items-center lg:gap-14 xl:gap-20">
-      <div class="prava-blog-rail__intro relative z-[1] w-full max-w-xl shrink-0 lg:max-w-[min(100%,400px)] xl:max-w-[640px] lg:pl-[40px]">
+      <div class="prava-blog-rail__intro relative z-[1] w-full max-w-xl shrink-0 lg:max-w-[min(100%,400px)] xl:max-w-[600px] lg:pl-[40px]">
         <div class="pointer-events-none absolute -left-4 -right-4 bottom-0 top-8 overflow-hidden opacity-[0.08] lg:left-0 lg:right-auto lg:w-[120%]" aria-hidden="true">
           {% if section.settings.blog_intro_decoration_image != blank %}
             <img
@@ -31,7 +31,7 @@
           {% endif %}
         </div>
         {% if section.settings.heading != blank %}
-          <h2 class="relative font-semibold leading-none text-neutral-900 text-4xl lg:text-[80px]">
+          <h2 class="relative font-semibold leading-none text-neutral-900 text-4xl lg:text-[70px]">
             {{ section.settings.heading | escape }}
           </h2>
         {% endif %}

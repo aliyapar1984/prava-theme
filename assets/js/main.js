@@ -8,6 +8,61 @@
 (function () {
   'use strict';
 
+  function initLenisScroll() {
+    if (window.PRAVA_LENIS) return window.PRAVA_LENIS;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+
+    var LenisCtor =
+      window.Lenis ||
+      (window.lenis && window.lenis.Lenis) ||
+      (typeof Lenis !== 'undefined' ? Lenis : null);
+
+    if (!LenisCtor) return null;
+
+    var lenis = new LenisCtor({
+      duration: 1.15,
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.05,
+      easing: function (t) {
+        return Math.min(1, 1.001 - Math.pow(2, -10 * t));
+      },
+    });
+
+    lenis.on('scroll', function () {
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      window.requestAnimationFrame(raf);
+    }
+    window.requestAnimationFrame(raf);
+
+    window.PRAVA_LENIS = lenis;
+    return lenis;
+  }
+
+  function initLenisWithFallback() {
+    var lenis = initLenisScroll();
+    if (lenis) return lenis;
+
+    var fallbackId = 'prava-lenis-fallback-script';
+    if (!document.getElementById(fallbackId)) {
+      var s = document.createElement('script');
+      s.id = fallbackId;
+      s.src = 'https://unpkg.com/lenis@1.1.16/dist/lenis.min.js';
+      s.defer = true;
+      s.onload = function () {
+        initLenisScroll();
+      };
+      document.head.appendChild(s);
+    }
+    return null;
+  }
+
+  var lenisInstance = initLenisWithFallback();
+
   var interleaveOffset = 0.5;
 
   var mainEl  = document.querySelector('.hero-main');
@@ -155,7 +210,7 @@
 
   /* ── Parallax ──────────────────────────────────────────────────────── */
   function applyParallax(swiper) {
-    var w      = swiper.width || swiper.el.offsetWidth || 1;
+    var w      = swiper.width || swiper.el.offsetWidth || 2;
     var offset = w * interleaveOffset;
     for (var i = 0; i < swiper.slides.length; i++) {
       var slide    = swiper.slides[i];
@@ -885,6 +940,72 @@
     });
   }
 
+  function initHeadingStaggeredLetters() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    var headings = gsap.utils.toArray('main h2').filter(function (el) {
+      if (!el || el.dataset.headingReveal === 'off') return false;
+      if (el.closest('#hero')) return false;
+      if (el.closest('.prava-intro-split__text--line-reveal')) return false;
+      return true;
+    });
+
+    headings.forEach(function (heading) {
+      if (heading.dataset.lettersReady === 'true') return;
+      heading.dataset.lettersReady = 'true';
+
+      var rawText = heading.textContent || '';
+      if (!rawText.trim()) return;
+
+      heading.textContent = '';
+      var letterEls = [];
+      var words = rawText.split(/\s+/).filter(Boolean);
+
+      words.forEach(function (word, wordIndex) {
+        var wordWrap = document.createElement('span');
+        wordWrap.className = 'heading-word-nowrap';
+
+        for (var i = 0; i < word.length; i++) {
+          var wrap = document.createElement('span');
+          wrap.className = 'heading-letter-wrap';
+
+          var inner = document.createElement('span');
+          inner.className = 'heading-letter';
+          inner.textContent = word.charAt(i);
+
+          wrap.appendChild(inner);
+          wordWrap.appendChild(wrap);
+          letterEls.push(inner);
+        }
+
+        heading.appendChild(wordWrap);
+        if (wordIndex < words.length - 1) {
+          heading.appendChild(document.createTextNode(' '));
+        }
+      });
+
+      if (!letterEls.length) return;
+
+      gsap.set(letterEls, { yPercent: 95, autoAlpha: 0 });
+
+      gsap.to(letterEls, {
+        yPercent: 0,
+        autoAlpha: 1,
+        duration: 0.76,
+        ease: 'power3.out',
+        stagger: 0.018,
+        scrollTrigger: {
+          trigger: heading,
+          start: 'top 85%',
+          once: true,
+        },
+      });
+    });
+  }
+
   function initParallaxEffects() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1290,10 +1411,14 @@
 
   initIntroLineReveal();
   initIntroFigureReveal();
+  initHeadingStaggeredLetters();
   initParallaxEffects();
   initSectionBackgroundGradients();
   initProductSpotlightScrollReveal();
   initSupportFaqAccordion();
   initMiniSearch();
   initHeaderScrollConceal();
+  if (lenisInstance && typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.refresh();
+  }
 })();

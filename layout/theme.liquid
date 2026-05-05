@@ -47,25 +47,25 @@
   {{ 'prava-cart-drawer.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'prava-cart-drawer.js' | asset_url }}" defer="defer"></script>
 
+  {% comment %}
+    Tailwind Play CDN: senkron <script src> ile yüklenmeli.
+    createElement/appendChild ile gecikmeli yükleme ilk boyamada FOUC ve düzen sıçramasına yol açıyor.
+    config, CDN yüklendikten hemen sonra ayrı blokta çalışır.
+  {% endcomment %}
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    (function (d) {
-      var s = d.createElement('script');
-      s.src = 'https://cdn.tailwindcss.com';
-      s.onload = function () {
-        tailwind.config = {
-          theme: {
-            extend: {
-              fontFamily: { sans: ['Sen', 'system-ui', 'sans-serif'] },
-              colors: {
-                'custom-color': '#f2efea',
-                'product-color': '#ece7df',
-              },
-            },
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Sen', 'system-ui', 'sans-serif'] },
+          colors: {
+            'custom-color': '#f2efea',
+            'product-color': '#ece7df',
           },
-        };
-      };
-      d.head.appendChild(s);
-    })(document);
+        },
+      },
+    };
   </script>
 </head>
 <body class="bg-black font-sans antialiased text-[14px] text-white min-h-screen flex flex-col">
@@ -87,6 +87,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/SplitText.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js" defer></script>
   <script defer>
     window.PRAVA_I18N = window.PRAVA_I18N || {};
     window.PRAVA_I18N.slide_aria = {{ 'general.pagination.slide' | t | default: 'Slayt' | json }};

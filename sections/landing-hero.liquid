@@ -126,16 +126,16 @@
               aspect_ratio_class: hero_media_aspect_ratio_class,
               wrapper_extra_class: media_wrap
             %}
-            <div class="absolute inset-0 bg-black/15 z-[1] pointer-events-none"></div>
+            <div class="absolute inset-0 bg-[rgba(0,0,0,.02)] z-[1] pointer-events-none"></div>
             <div class="hero-slide-content absolute inset-0 z-[2] flex {{ v_items }} {{ h_outer }} {{ layout_extra }}">
               <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-5 lg:px-10 pt-[88px] {{ text_align_cls }} {{ copy_margin }} will-change-transform">
                 {% if block.settings.title != blank %}
-                  <h2 class="max-w-[16ch] {{ text_align_cls }} text-[clamp(2rem,4.2vw,3.5rem)] font-extrabold leading-[1.12] tracking-tight {{ title_clr }}">
+                  <h2 class="max-w-[16ch] {{ text_align_cls }} text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.12] tracking-tight {{ title_clr }}">
                     {{ block.settings.title | newline_to_br }}
                   </h2>
                 {% endif %}
                 {% if block.settings.subtitle != blank %}
-                  <p class="mt-10 max-w-[36ch] {{ text_align_cls }} text-lg font-normal leading-relaxed {{ sub_clr }} {{ sub_extra }}">
+                  <p class="mt-4 max-w-[36ch] {{ text_align_cls }} text-lg font-normal leading-relaxed {{ sub_clr }} {{ sub_extra }}">
                     {{ block.settings.subtitle | newline_to_br }}
                   </p>
                 {% endif %}

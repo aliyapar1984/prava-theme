@@ -48,7 +48,7 @@
     karaokeTrigger = ScrollTrigger.create({
       trigger: root,
       start: 'top 82%',
-      end: 'bottom 58%',
+      end: 'bottom 40%',
       scrub: 0.45,
       onUpdate: function (self) {
         applyKaraoke(self.progress, chars);

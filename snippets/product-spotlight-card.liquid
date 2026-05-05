@@ -28,7 +28,7 @@
 {% if spotlight_product != blank %}
   <article class="product-spotlight-card {{ article_extra }}"{% if enable_scroll_motion %} data-product-spotlight{% endif %}>
     <div class="product-spotlight-card__motion"{% if enable_scroll_motion %} data-product-spotlight-motion{% endif %}>
-    <div class="aspect-[1/1] w-full bg-product-color">
+    <div class="aspect-[1/1] w-full bg-custom-color">
       {% if card_image != blank %}
         <a href="{{ spotlight_product.url }}" class="block h-full w-full">
           <img

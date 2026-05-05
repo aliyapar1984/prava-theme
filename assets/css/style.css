@@ -54,6 +54,10 @@
     url('../fonts/Sen-ExtraBold.woff') format('woff');
 }
 
+body {
+  font-family: 'Sen', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
 /* Ana vitrin: tam ekran sabit; kaydırınca alttaki bölümler üzerine gelir */
 .hero-scroll-spacer {
   height: 100svh;
@@ -294,6 +298,19 @@
 .hero-slide-copy {
   transform-origin: left center;
   will-change: transform, opacity;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 /* ── Shopify hesap bileşeni (New Customer Accounts) ─────────────────── */
@@ -781,7 +798,7 @@ header#site-header.prava-site-header.is-concealed-by-scroll {
   display: block;
   width: 100%;
   height: auto;
-  max-height: min(520px, 55vh);
+  /* max-height: min(520px, 55vh); */
   object-fit: contain;
 }
 
@@ -1083,9 +1100,36 @@ body.mega-menu-open {
   display: inline-block;
   will-change: opacity, color;
 }
+
+.heading-letter-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-top: 0.08em;
+  padding-bottom: 0.18em;
+  margin-top: -0.08em;
+  margin-bottom: -0.18em;
+}
+
+.heading-word-nowrap {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.heading-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .intro-karaoke .char {
     opacity: 1 !important;
     color: inherit !important;
+  }
+  .heading-letter {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
