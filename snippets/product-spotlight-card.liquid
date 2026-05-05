@@ -2,6 +2,10 @@
   assign spotlight_product = product
   assign title_id = aria_title_id | default: 'product-spotlight-title'
   assign article_extra = article_class | strip
+  assign enable_scroll_motion = true
+  if scroll_motion == false
+    assign enable_scroll_motion = false
+  endif
   assign current_variant = nil
   assign card_image = nil
 
@@ -22,8 +26,9 @@
   endif
 %}
 {% if spotlight_product != blank %}
-  <article class="product-spotlight-card {{ article_extra }}" data-product-spotlight>
-    <div class="aspect-[1/1] w-full bg-[#e7e4df]">
+  <article class="product-spotlight-card {{ article_extra }}"{% if enable_scroll_motion %} data-product-spotlight{% endif %}>
+    <div class="product-spotlight-card__motion"{% if enable_scroll_motion %} data-product-spotlight-motion{% endif %}>
+    <div class="aspect-[1/1] w-full bg-custom-color">
       {% if card_image != blank %}
         <a href="{{ spotlight_product.url }}" class="block h-full w-full">
           <img
@@ -39,12 +44,12 @@
         </a>
       {% endif %}
     </div>
-    <div class="px-0 lg:px-8 pb-8 pt-10 md:px-10 md:pb-10 lg:ml-10">
+    <div class="px-0 lg:px-0 py-[30px]">
       <h3 id="{{ title_id }}" class="text-2xl font-normal leading-tight tracking-tight text-neutral-800">
-        <a href="{{ spotlight_product.url }}" class="text-inherit no-underline hover:opacity-80">{{ spotlight_product.title }}</a>
+        <a href="{{ spotlight_product.url }}" class="text-lg font-normal leading-snug tracking-tight text-neutral-900 md:text-xl">{{ spotlight_product.title }}</a>
       </h3>
       {% if spotlight_product.type != blank %}
-        <p class="mt-2 text-base font-light uppercase text-neutral-700">{{ spotlight_product.type }}</p>
+        <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">{{ spotlight_product.type }}</p>
       {% endif %}
       <div class="mt-8 flex items-center justify-between gap-6">
         {% if color_option != blank and color_option.values.size > 0 %}
@@ -80,9 +85,12 @@
         </div>
       </div>
     </div>
+    </div>
   </article>
 {% elsif request.design_mode %}
-  <article class="product-spotlight-card border border-dashed border-neutral-300 bg-neutral-50 p-8 {{ article_extra }}" data-product-spotlight>
-    <p class="m-0 text-sm text-neutral-500">Ürün seçin (tema ayarları).</p>
+  <article class="product-spotlight-card border border-dashed border-neutral-300 bg-neutral-50 p-8 {{ article_extra }}"{% if enable_scroll_motion %} data-product-spotlight{% endif %}>
+    <div class="product-spotlight-card__motion"{% if enable_scroll_motion %} data-product-spotlight-motion{% endif %}>
+      <p class="m-0 text-sm text-neutral-500">Ürün seçin (tema ayarları).</p>
+    </div>
   </article>
 {% endif %}

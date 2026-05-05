@@ -8,6 +8,61 @@
 (function () {
   'use strict';
 
+  function initLenisScroll() {
+    if (window.PRAVA_LENIS) return window.PRAVA_LENIS;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+
+    var LenisCtor =
+      window.Lenis ||
+      (window.lenis && window.lenis.Lenis) ||
+      (typeof Lenis !== 'undefined' ? Lenis : null);
+
+    if (!LenisCtor) return null;
+
+    var lenis = new LenisCtor({
+      duration: 1.15,
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.05,
+      easing: function (t) {
+        return Math.min(1, 1.001 - Math.pow(2, -10 * t));
+      },
+    });
+
+    lenis.on('scroll', function () {
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      window.requestAnimationFrame(raf);
+    }
+    window.requestAnimationFrame(raf);
+
+    window.PRAVA_LENIS = lenis;
+    return lenis;
+  }
+
+  function initLenisWithFallback() {
+    var lenis = initLenisScroll();
+    if (lenis) return lenis;
+
+    var fallbackId = 'prava-lenis-fallback-script';
+    if (!document.getElementById(fallbackId)) {
+      var s = document.createElement('script');
+      s.id = fallbackId;
+      s.src = 'https://unpkg.com/lenis@1.1.16/dist/lenis.min.js';
+      s.defer = true;
+      s.onload = function () {
+        initLenisScroll();
+      };
+      document.head.appendChild(s);
+    }
+    return null;
+  }
+
+  var lenisInstance = initLenisWithFallback();
+
   var interleaveOffset = 0.5;
 
   var mainEl  = document.querySelector('.hero-main');
@@ -155,7 +210,7 @@
 
   /* ── Parallax ──────────────────────────────────────────────────────── */
   function applyParallax(swiper) {
-    var w      = swiper.width || swiper.el.offsetWidth || 1;
+    var w      = swiper.width || swiper.el.offsetWidth || 2;
     var offset = w * interleaveOffset;
     for (var i = 0; i < swiper.slides.length; i++) {
       var slide    = swiper.slides[i];
@@ -301,11 +356,11 @@
           spaceBetween: 20,
         },
         1024: {
-          slidesPerView: 3.28,
+          slidesPerView: 3.1,
           spaceBetween: 24,
         },
         1440: {
-          slidesPerView: 3.35,
+          slidesPerView: 3.1,
           spaceBetween: 28,
         },
       },
@@ -529,24 +584,90 @@
   var mega = document.getElementById('mega-menu');
   var btnMenu = document.getElementById('btn-menu');
   var btnClose = document.getElementById('mega-menu-close');
+  var megaBackdrop = document.getElementById('mega-menu-backdrop');
   var footerDiscover = document.getElementById('mega-footer-discover');
   var footerCta = document.getElementById('mega-footer-cta');
+  var megaCloseDelayMs = 380;
+  var megaHoverLeaveTimer = null;
 
-  function openMegaMenu() {
+  function isMegaDesktopHover() {
+    return typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 1024px)').matches;
+  }
+
+  function cancelMegaHoverLeaveClose() {
+    if (megaHoverLeaveTimer) {
+      clearTimeout(megaHoverLeaveTimer);
+      megaHoverLeaveTimer = null;
+    }
+  }
+
+  function scheduleMegaHoverLeaveClose() {
+    if (!isMegaDesktopHover()) return;
+    if (!mega || mega.hasAttribute('hidden')) return;
+    cancelMegaHoverLeaveClose();
+    megaHoverLeaveTimer = setTimeout(function () {
+      megaHoverLeaveTimer = null;
+      if (mega && !mega.hasAttribute('hidden')) closeMegaMenu();
+    }, 220);
+  }
+
+  function isMegaHoverOpenLocked() {
+    return mega && mega._megaHoverOpenLockUntil && Date.now() < mega._megaHoverOpenLockUntil;
+  }
+
+  function megaDrawerUsesMotion() {
+    return (
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(min-width: 1024px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+  }
+
+  function openMegaMenu(skipFocus) {
     if (!mega || !btnMenu) return;
+    if (skipFocus && isMegaHoverOpenLocked()) return;
+    cancelMegaHoverLeaveClose();
+    if (mega._megaCloseTimer) {
+      clearTimeout(mega._megaCloseTimer);
+      mega._megaCloseTimer = null;
+    }
     mega.removeAttribute('hidden');
     btnMenu.setAttribute('aria-expanded', 'true');
     document.body.classList.add('mega-menu-open');
+    mega.classList.remove('mega-menu--open');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        mega.classList.add('mega-menu--open');
+      });
+    });
     syncFooterFromPanel(getActivePanelIndex());
-    if (btnClose) btnClose.focus();
+    if (btnClose && !skipFocus) {
+      if (megaDrawerUsesMotion()) {
+        setTimeout(function () {
+          btnClose.focus();
+        }, 60);
+      } else {
+        btnClose.focus();
+      }
+    }
   }
 
   function closeMegaMenu() {
     if (!mega || !btnMenu) return;
-    mega.setAttribute('hidden', '');
-    btnMenu.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('mega-menu-open');
-    btnMenu.focus();
+    if (mega.hasAttribute('hidden')) return;
+    cancelMegaHoverLeaveClose();
+    var delay = megaDrawerUsesMotion() ? megaCloseDelayMs : 0;
+    /* Kapatma + animasyon bitene kadar hover ile yeniden açmayı engelle (imleç hâlâ ikondayken tetiklenen mouseenter) */
+    mega._megaHoverOpenLockUntil = Date.now() + delay + 420;
+    mega.classList.remove('mega-menu--open');
+    if (mega._megaCloseTimer) clearTimeout(mega._megaCloseTimer);
+    mega._megaCloseTimer = setTimeout(function () {
+      mega._megaCloseTimer = null;
+      mega.setAttribute('hidden', '');
+      btnMenu.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('mega-menu-open');
+      btnMenu.focus();
+    }, delay);
   }
 
   function getActivePanelIndex() {
@@ -593,11 +714,35 @@
     }
 
     btnMenu.addEventListener('click', function () {
-      if (mega.hasAttribute('hidden')) openMegaMenu();
+      if (mega.hasAttribute('hidden')) openMegaMenu(false);
       else closeMegaMenu();
     });
 
+    btnMenu.addEventListener('mouseenter', function () {
+      if (!isMegaDesktopHover()) return;
+      cancelMegaHoverLeaveClose();
+      if (mega.hasAttribute('hidden')) openMegaMenu(true);
+    });
+
+    btnMenu.addEventListener('mouseleave', function () {
+      if (!isMegaDesktopHover()) return;
+      if (mega.hasAttribute('hidden')) mega._megaHoverOpenLockUntil = 0;
+      scheduleMegaHoverLeaveClose();
+    });
+
+    mega.addEventListener('mouseenter', function () {
+      if (!isMegaDesktopHover()) return;
+      cancelMegaHoverLeaveClose();
+    });
+
+    mega.addEventListener('mouseleave', function () {
+      if (!isMegaDesktopHover()) return;
+      scheduleMegaHoverLeaveClose();
+    });
+
     if (btnClose) btnClose.addEventListener('click', closeMegaMenu);
+
+    if (megaBackdrop) megaBackdrop.addEventListener('click', closeMegaMenu);
 
     document.querySelectorAll('.mega-menu__tab').forEach(function (tab) {
       tab.addEventListener('click', function () {
@@ -658,7 +803,7 @@
 
     function mustStayVisible() {
       if (document.body.classList.contains('mega-menu-open')) return true;
-      if (miniSearchRoot && !miniSearchRoot.hasAttribute('hidden')) return true;
+      if (miniSearchRoot && miniSearchRoot.classList.contains('mini-search--open')) return true;
       return false;
     }
 
@@ -795,6 +940,72 @@
     });
   }
 
+  function initHeadingStaggeredLetters() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    var headings = gsap.utils.toArray('main h2').filter(function (el) {
+      if (!el || el.dataset.headingReveal === 'off') return false;
+      if (el.closest('#hero')) return false;
+      if (el.closest('.prava-intro-split__text--line-reveal')) return false;
+      return true;
+    });
+
+    headings.forEach(function (heading) {
+      if (heading.dataset.lettersReady === 'true') return;
+      heading.dataset.lettersReady = 'true';
+
+      var rawText = heading.textContent || '';
+      if (!rawText.trim()) return;
+
+      heading.textContent = '';
+      var letterEls = [];
+      var words = rawText.split(/\s+/).filter(Boolean);
+
+      words.forEach(function (word, wordIndex) {
+        var wordWrap = document.createElement('span');
+        wordWrap.className = 'heading-word-nowrap';
+
+        for (var i = 0; i < word.length; i++) {
+          var wrap = document.createElement('span');
+          wrap.className = 'heading-letter-wrap';
+
+          var inner = document.createElement('span');
+          inner.className = 'heading-letter';
+          inner.textContent = word.charAt(i);
+
+          wrap.appendChild(inner);
+          wordWrap.appendChild(wrap);
+          letterEls.push(inner);
+        }
+
+        heading.appendChild(wordWrap);
+        if (wordIndex < words.length - 1) {
+          heading.appendChild(document.createTextNode(' '));
+        }
+      });
+
+      if (!letterEls.length) return;
+
+      gsap.set(letterEls, { yPercent: 95, autoAlpha: 0 });
+
+      gsap.to(letterEls, {
+        yPercent: 0,
+        autoAlpha: 1,
+        duration: 1,
+        ease: 'power3.out',
+        stagger: 0.018,
+        scrollTrigger: {
+          trigger: heading,
+          start: 'top 75%',
+          once: true,
+        },
+      });
+    });
+  }
+
   function initParallaxEffects() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -868,6 +1079,96 @@
     });
   }
 
+  function initSectionBackgroundGradients() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /*
+     * Performans stratejisi:
+     * Her bölüm için statik gradient içeren bir <div.prava-bg-overlay> DOM'a enjekte edilir.
+     * GSAP yalnızca bu elementin `opacity` değerini (0 → 1) animate eder.
+     * opacity animasyonu compositor thread'de çalışır: repaint yok, style recalc yok,
+     * renk interpolasyonu yok. Baz renk sabit backgroundColor ile sağlanır.
+     */
+    var bgConfigs = [
+      {
+        selector: '#blog-rail-bg-section',
+        base: '#f2efea',
+        gradient: 'linear-gradient(135deg, #e7e5e0 0%, #af847e 100%)',
+      },
+      {
+        selector: '.site-footer',
+        base: '#f2efea',
+        gradient: 'linear-gradient(135deg, #e7e5e0 0%, #d5c834 100%)',
+      },
+      {
+        selector: '#popular-split-bg-section',
+        base: '#f2efea',
+        gradient: 'linear-gradient(135deg, #e7e2d6 0%, #d7d4b9 100%)',
+      },
+    ];
+
+    bgConfigs.forEach(function (cfg) {
+      var bgSection = document.querySelector(cfg.selector);
+      if (!bgSection) return;
+
+      bgSection.style.backgroundColor = cfg.base;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'prava-bg-overlay';
+      overlay.style.backgroundImage = cfg.gradient;
+      overlay.setAttribute('aria-hidden', 'true');
+      bgSection.insertBefore(overlay, bgSection.firstChild);
+
+      gsap.to(overlay, {
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: bgSection,
+          start: 'top 88%',
+          end: 'bottom 42%',
+          scrub: 0.5,
+        },
+      });
+    });
+  }
+
+  /* Öne çıkan ürün kartı — yalnızca desktop (lg+): scroll scrub, sadece dikey kayma */
+  function initProductSpotlightScrollReveal() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.matchMedia({
+      '(min-width: 1024px)': function () {
+        document.querySelectorAll('[data-product-spotlight]').forEach(function (card) {
+          var motion = card.querySelector('[data-product-spotlight-motion]');
+          if (!motion) return;
+
+          /* Geniş dikey ofset + kısa scroll aralığı: hareket viewport’a girerken yoğunlaşır, daha belirgin */
+          gsap.fromTo(
+            motion,
+            { yPercent: 36 },
+            {
+              yPercent: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top bottom',
+                end: 'top 38%',
+                scrub: 0.65,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        });
+      },
+    });
+  }
+
   function initSupportFaqAccordion() {
     document.querySelectorAll('.prava-support-faq__list').forEach(function (list) {
       list.querySelectorAll('details.prava-support-faq__item').forEach(function (el) {
@@ -894,6 +1195,7 @@
     var resultsEl = document.getElementById('mini-search-results');
     var form = document.getElementById('mini-search-form');
     var viewAll = document.getElementById('mini-search-view-all');
+    var clearInputBtn = document.getElementById('mini-search-clear-input');
     if (!root || !openBtn || !input || !resultsEl) return;
 
     var debounceMs = 300;
@@ -905,19 +1207,26 @@
     var i18n = window.PRAVA_I18N || {};
 
     function closeMegaIfOpen() {
-      var mega = document.getElementById('mega-menu');
-      var btnMenu = document.getElementById('btn-menu');
-      if (mega && !mega.hasAttribute('hidden')) {
-        mega.setAttribute('hidden', '');
-        if (btnMenu) btnMenu.setAttribute('aria-expanded', 'false');
+      var m = document.getElementById('mega-menu');
+      if (m && !m.hasAttribute('hidden')) closeMegaMenu();
+    }
+
+    function syncClearInputVisibility() {
+      if (!clearInputBtn) return;
+      if (input.value.trim()) {
+        clearInputBtn.removeAttribute('hidden');
+      } else {
+        clearInputBtn.setAttribute('hidden', '');
       }
     }
 
     function openSearch() {
       closeMegaIfOpen();
-      root.removeAttribute('hidden');
+      root.classList.add('mini-search--open');
+      root.setAttribute('aria-hidden', 'false');
       openBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      syncClearInputVisibility();
       setTimeout(function () {
         input.focus();
         try {
@@ -927,7 +1236,8 @@
     }
 
     function closeSearch() {
-      root.setAttribute('hidden', '');
+      root.classList.remove('mini-search--open');
+      root.setAttribute('aria-hidden', 'true');
       openBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
       if (controller) {
@@ -1047,7 +1357,23 @@
       });
     });
 
+    if (clearInputBtn) {
+      clearInputBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        input.value = '';
+        resultsEl.innerHTML = '';
+        if (viewAll) viewAll.hidden = true;
+        if (controller) {
+          controller.abort();
+          controller = null;
+        }
+        syncClearInputVisibility();
+        input.focus();
+      });
+    }
+
     input.addEventListener('input', function () {
+      syncClearInputVisibility();
       var v = input.value;
       clearTimeout(timer);
       timer = setTimeout(function () {
@@ -1056,7 +1382,7 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !root.hasAttribute('hidden')) {
+      if (e.key === 'Escape' && root.classList.contains('mini-search--open')) {
         e.preventDefault();
         closeSearch();
         openBtn.focus();
@@ -1070,10 +1396,97 @@
     }
   }
 
+  function initCollectionGridToggle() {
+    var section = document.querySelector('.main-collection-catalog');
+    if (!section) return;
+    var buttons = section.querySelectorAll('[data-collection-grid-cols]');
+    if (!buttons.length) return;
+
+    var STORAGE_KEY = 'prava-collection-grid-cols';
+
+    var grid = section.querySelector('[data-collection-product-grid]');
+
+    function syncAria(is4) {
+      buttons.forEach(function (btn) {
+        var v = btn.getAttribute('data-collection-grid-cols');
+        var active = (is4 && v === '4') || (!is4 && v === '3');
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
+    function syncGridClass(is4) {
+      if (!grid) return;
+      grid.classList.toggle('is-collection-grid-4', is4);
+    }
+
+    function apply(cols) {
+      var is4 = cols === '4';
+      document.documentElement.classList.toggle('prava-collection-grid-4', is4);
+      try {
+        localStorage.setItem(STORAGE_KEY, is4 ? '4' : '3');
+      } catch (e) {}
+      syncGridClass(is4);
+      syncAria(is4);
+    }
+
+    syncGridClass(document.documentElement.classList.contains('prava-collection-grid-4'));
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        apply(btn.getAttribute('data-collection-grid-cols') || '3');
+      });
+    });
+  }
+
+  function initScrollTopButton() {
+    var btn = document.getElementById('scroll-top-btn');
+    if (!btn) return;
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
+
+    var hero = document.getElementById('hero');
+    var showAfter = hero
+      ? (hero.offsetTop + hero.offsetHeight - 120)
+      : window.innerHeight;
+
+    function setVisible(on) {
+      btn.classList.toggle('is-visible', !!on);
+    }
+
+    function onScroll() {
+      var y = window.scrollY || document.documentElement.scrollTop || 0;
+      setVisible(y > showAfter);
+    }
+
+    btn.addEventListener('click', function () {
+      if (window.PRAVA_LENIS && typeof window.PRAVA_LENIS.scrollTo === 'function') {
+        window.PRAVA_LENIS.scrollTo(0, { duration: 1 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      showAfter = hero
+        ? (hero.offsetTop + hero.offsetHeight - 120)
+        : window.innerHeight;
+      onScroll();
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   initIntroLineReveal();
   initIntroFigureReveal();
+  initHeadingStaggeredLetters();
   initParallaxEffects();
+  initSectionBackgroundGradients();
+  initProductSpotlightScrollReveal();
   initSupportFaqAccordion();
   initMiniSearch();
   initHeaderScrollConceal();
+  initCollectionGridToggle();
+  initScrollTopButton();
+  if (lenisInstance && typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.refresh();
+  }
 })();

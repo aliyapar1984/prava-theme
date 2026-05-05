@@ -2,3 +2,8 @@
 RemoteAsset:
   ignore:
     - layout/theme.liquid
+
+# Tailwind Play CDN: senkron yüklenmeli; defer FOUC üretiyor.
+ParserBlockingScript:
+  ignore:
+    - layout/theme.liquid
