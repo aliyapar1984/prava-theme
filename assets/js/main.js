@@ -1396,6 +1396,18 @@
     }
   }
 
+  /** Grid / layout sonrası ScrollTrigger yeniden ölçsün (footer gradient vb.). */
+  function scheduleScrollTriggerRefresh() {
+    if (typeof ScrollTrigger === 'undefined') return;
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        try {
+          ScrollTrigger.refresh();
+        } catch (e) {}
+      });
+    });
+  }
+
   function initCollectionGridToggle() {
     var section = document.querySelector('.main-collection-catalog');
     if (!section) return;
@@ -1427,6 +1439,7 @@
       } catch (e) {}
       syncGridClass(is4);
       syncAria(is4);
+      scheduleScrollTriggerRefresh();
     }
 
     syncGridClass(document.documentElement.classList.contains('prava-collection-grid-4'));

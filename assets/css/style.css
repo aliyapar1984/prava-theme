@@ -1186,3 +1186,5 @@ body.mega-menu-open {
     transform: none !important;
   }
 }
+
+.list-cover-image #site-header {position: fixed; background: transparent;}
