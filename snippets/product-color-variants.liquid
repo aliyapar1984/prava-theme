@@ -41,7 +41,7 @@
         {% if ref_product != blank %}
           <a
             href="{{ ref_product.url }}"
-            class="color-swatch group relative inline-flex rounded-full p-0.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 {% if is_active %}bg-neutral-200{% else %}hover:bg-neutral-100{% endif %}"
+            class="color-swatch group relative inline-flex items-center justify-center rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 {% unless is_active %}hover:bg-neutral-100{% endunless %}"
             data-title="{{ label | escape }}"
             aria-label="{{ label | escape }}"
             {% if is_active %}
@@ -49,24 +49,47 @@
             {% endif %}
           >
             {% if swatch_image != blank %}
-              <span
-                class="relative block h-5 w-5 shrink-0 overflow-hidden rounded-full border transition duration-200 ease-out group-hover:scale-110 group-hover:shadow-sm group-focus-visible:scale-110 group-focus-visible:shadow-sm {% if is_active %}border-neutral-900{% else %}border-neutral-300{% endif %} bg-white"
-              >
-                <img
-                  src="{{ swatch_image | image_url: width: 40 }}"
-                  alt=""
-                  width="20"
-                  height="20"
-                  class="h-full w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                >
-              </span>
+              {% if is_active %}
+                <span class="rounded-full border border-neutral-900 bg-white p-[2px] transition duration-200 ease-out group-hover:scale-110 group-focus-visible:scale-110">
+                  <span class="relative block h-5 w-5 shrink-0 overflow-hidden rounded-full bg-white">
+                    <img
+                      src="{{ swatch_image | image_url: width: 40 }}"
+                      alt=""
+                      width="20"
+                      height="20"
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  </span>
+                </span>
+              {% else %}
+                <span class="relative block h-5 w-5 shrink-0 overflow-hidden rounded-full bg-white transition duration-200 ease-out group-hover:scale-110 group-hover:shadow-sm group-focus-visible:scale-110 group-focus-visible:shadow-sm">
+                  <img
+                    src="{{ swatch_image | image_url: width: 40 }}"
+                    alt=""
+                    width="20"
+                    height="20"
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                </span>
+              {% endif %}
             {% elsif swatch_color != blank %}
-              <span
-                class="swatch__dot relative block h-5 w-5 shrink-0 rounded-full border transition duration-200 ease-out group-hover:scale-110 group-hover:shadow-sm group-focus-visible:scale-110 group-focus-visible:shadow-sm {% if is_active %}border-neutral-900{% else %}border-neutral-300{% endif %}"
-                style="background-color: {{ swatch_color }};"
-              ></span>
+              {% if is_active %}
+                <span class="rounded-full border border-neutral-900 bg-white p-[2px] transition duration-200 ease-out group-hover:scale-110 group-focus-visible:scale-110">
+                  <span
+                    class="swatch__dot relative block h-5 w-5 shrink-0 rounded-full"
+                    style="background-color: {{ swatch_color }};"
+                  ></span>
+                </span>
+              {% else %}
+                <span
+                  class="swatch__dot relative block h-5 w-5 shrink-0 rounded-full transition duration-200 ease-out group-hover:scale-110 group-hover:shadow-sm group-focus-visible:scale-110 group-focus-visible:shadow-sm"
+                  style="background-color: {{ swatch_color }};"
+                ></span>
+              {% endif %}
             {% endif %}
             {% if label != blank %}
               <span class="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-neutral-900 px-2 py-1 text-[11px] font-medium text-white shadow-sm group-hover:block group-focus-visible:block">

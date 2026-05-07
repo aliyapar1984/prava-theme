@@ -14,9 +14,9 @@
 %}
 
 {% if has_feature_cards %}
-  <section class="product-features mt-16" aria-label="Ürün Detayı">
+  <section class="container product-features mt-48 mx-auto" aria-label="Ürün Detayı">
     <div class="features-header mx-auto max-w-3xl text-center">
-      <h2 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-4xl">Ürün Detayı</h2>
+      <h2 class="text-3xl font-semibold tracking-tight text-neutral-900 md:text-6xl">Ürün Detayı</h2>
       {% if subtitle != blank %}
         <p class="mt-4 text-base leading-relaxed text-neutral-700">
           {{ subtitle }}
@@ -32,9 +32,9 @@
               <article class="swiper-slide !h-auto">
                 <div class="feature-card h-full">
                   {% if feature.image.value != blank %}
-                    <div class="feature-image prava-swiper-card__media aspect-[4/5] overflow-hidden rounded-lg bg-white">
+                    <div class="feature-image prava-swiper-card__media aspect-[4/5] overflow-hidden bg-white">
                       <img
-                        src="{{ feature.image.value | image_url: width: 700 }}"
+                        src="{{ feature.image.value | image_url: width: 1200 }}"
                         alt="{{ feature.title.value | default: product.title | escape }}"
                         width="700"
                         height="875"

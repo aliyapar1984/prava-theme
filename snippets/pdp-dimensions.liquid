@@ -25,37 +25,38 @@
 %}
 
 {% if open_dimensions != blank or folded_dimensions != blank or weight_kg != blank or max_load_kg != blank %}
-  <details class="group py-2" open>
-    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-xl font-medium uppercase tracking-[0.08em] text-neutral-900 marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:text-2xl">
+  <details class="group" open>
+    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-medium uppercase tracking-[0.08em] text-neutral-900 marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
       <span>Boyutlar ve Ağırlık</span>
+      <span class="text-2xl font-light text-neutral-600 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
     </summary>
 
     <div class="product-dimensions border-t border-neutral-300/90 pt-6 pb-2">
       {% if open_dimensions != blank %}
         <div class="dim-row grid grid-cols-2 gap-6 py-2">
-          <span class="dim-label text-lg font-medium text-neutral-900 md:text-2xl md:leading-snug">Açık Ölçüler</span>
-          <span class="dim-value text-lg text-neutral-900 md:text-2xl md:leading-snug">{{ open_dimensions }}</span>
+          <span class="dim-label text-basefont-normaltext-neutral-900 md:leading-snug">Açık Ölçüler</span>
+          <span class="dim-value text-base text-neutral-900 md:leading-snug">{{ open_dimensions }}</span>
         </div>
       {% endif %}
 
       {% if folded_dimensions != blank %}
         <div class="dim-row grid grid-cols-2 gap-6 py-2">
-          <span class="dim-label text-lg font-medium text-neutral-900 md:text-2xl md:leading-snug">Kapalı Ölçüler</span>
-          <span class="dim-value text-lg text-neutral-900 md:text-2xl md:leading-snug">{{ folded_dimensions }}</span>
+          <span class="dim-label text-basefont-normaltext-neutral-900 md:leading-snug">Kapalı Ölçüler</span>
+          <span class="dim-value text-base text-neutral-900 md:leading-snug">{{ folded_dimensions }}</span>
         </div>
       {% endif %}
 
       {% if weight_kg != blank %}
         <div class="dim-row grid grid-cols-2 gap-6 py-2">
-          <span class="dim-label text-lg font-medium text-neutral-900 md:text-2xl md:leading-snug">Ağırlık</span>
-          <span class="dim-value text-lg text-neutral-900 md:text-2xl md:leading-snug">{{ weight_kg }} kg</span>
+          <span class="dim-label text-basefont-normaltext-neutral-900 md:leading-snug">Ağırlık</span>
+          <span class="dim-value text-base text-neutral-900 md:leading-snug">{{ weight_kg }} kg</span>
         </div>
       {% endif %}
 
       {% if max_load_kg != blank %}
         <div class="dim-row grid grid-cols-2 gap-6 py-2">
-          <span class="dim-label text-lg font-medium text-neutral-900 md:text-2xl md:leading-snug">Taşıma Kapasitesi</span>
-          <span class="dim-value text-lg text-neutral-900 md:text-2xl md:leading-snug">{{ max_load_kg }} kg</span>
+          <span class="dim-label text-basefont-normaltext-neutral-900 md:leading-snug">Taşıma Kapasitesi</span>
+          <span class="dim-value text-base text-neutral-900 md:leading-snug">{{ max_load_kg }} kg</span>
         </div>
       {% endif %}
     </div>

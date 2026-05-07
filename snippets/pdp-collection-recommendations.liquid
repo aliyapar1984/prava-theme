@@ -27,6 +27,7 @@
       <ul class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" aria-label="{{ current_collection.title | escape }} ürünleri">
         {% for rec in current_collection.products %}
           {% if rec.id != product.id and shown < rec_limit %}
+            {% assign rec_variant = rec.selected_or_first_available_variant %}
             <li class="overflow-hidden rounded-lg bg-white">
               <a href="{{ rec.url }}" class="group block">
                 {% if rec.featured_image != blank %}
@@ -41,7 +42,9 @@
                 {% endif %}
                 <div class="p-3 md:p-4">
                   <p class="line-clamp-2 text-sm text-neutral-900 md:text-base">{{ rec.title | escape }}</p>
-                  <p class="mt-2 text-sm font-medium text-neutral-800">{{ rec.price | money }}</p>
+                  <p class="mt-2">
+                    {% render 'price-with-compare', variant: rec_variant, style: 'related' %}
+                  </p>
                 </div>
               </a>
             </li>

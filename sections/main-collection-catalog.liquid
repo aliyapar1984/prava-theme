@@ -8,26 +8,66 @@
   aria-label="{{ 'sections.collection_catalog.aria_label' | t }}"
   data-section-id="{{ section.id }}"
 >
+
+  {% if collection.metafields.custom.cover_image.value != blank %}
+    <header class="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-10 relative">
+      <div class="flex w-full flex-col gap-2 absolute bottom-0 left-0 z-[2] px-24 py-10">
+        <h1 class="w-full min-w-0 text-3xl text-white font-medium tracking-tight md:flex-1 md:text-4xl">
+          
+          {{ collection.metafields.custom.cover_image_title | escape }}
+        </h1>
+        <span class="text-base text-white font-light">
+          {{ collection.metafields.custom.cover_image_description }}
+        </span>
+      </div>
+      <div class="w-full h-full">
+        <div class="absolute inset-0 bg-[rgba(0,0,0,.1)] z-[1] pointer-events-none"></div>
+        <img
+          src="{{ collection.metafields.custom.cover_image.value | image_url: width: 2172 }}"
+          alt="{{ collection.metafields.custom.cover_image.value.alt | default: collection.title | escape }}"
+          class="w-full h-auto object-cover"
+          width="{{ collection.metafields.custom.cover_image.value.width }}"
+          height="{{ collection.metafields.custom.cover_image.value.height }}"
+          loading="eager"
+          decoding="async"
+        >
+      </div>
+    </header>
+    <script>
+      document.body.classList.add('list-cover-image');
+    </script>
+  {% endif %}
   <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 lg:pb-24 lg:pt-4">
     {% render 'breadcrumbs', current_title: collection.title %}
-
-    {% if collection.metafields.custom.cover_image.value != blank %}
-      <img
-        src="{{ collection.metafields.custom.cover_image.value | image_url: width: 1040 }}"
-        alt="{{ collection.metafields.custom.cover_image.value.alt | default: collection.title | escape }}"
-        class="w-full h-auto object-cover"
-        width="{{ collection.metafields.custom.cover_image.value.width }}"
-        height="{{ collection.metafields.custom.cover_image.value.height }}"
-        loading="eager"
-        decoding="async"
+    <div class="flex items-center justify-between mb-10">
+      {% assign found_products_count = collection.products_count | default: collection.all_products_count | default: collection.products.size %}
+      <nav
+        class="collection-all-categories overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        aria-label="{{ 'templates.collection.category_nav_aria' | t }}"
       >
-    {% endif %}
+        <ul class="flex min-w-0 flex-nowrap gap-2 pb-1 md:flex-wrap md:gap-3" role="list">
+          {% for col in collections %}
+            {% unless col.handle == 'frontpage' %}
+              <li class="shrink-0">
+                <a
+                  href="{{ col.url }}"
+                  class="inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium transition-colors{% if col.handle == collection.handle %} border-neutral-900 bg-neutral-900 text-white{% else %} border-neutral-200 text-neutral-800 hover:border-neutral-400 hover:opacity-90{% endif %}"
+                  {% if col.handle == collection.handle %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{- col.title | escape -}}
+                </a>
+              </li>
+            {% endunless %}
+          {% endfor %}
+        </ul>
+      </nav>
 
-    <header class="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-10">
-      <h1 class="w-full min-w-0 text-3xl font-medium tracking-tight text-neutral-900 md:flex-1 md:text-4xl">
-        {{ collection.title | escape }}
-      </h1>
       <div class="flex w-full flex-wrap items-center justify-end gap-3 sm:gap-4 md:w-auto">
+        {% comment %} <span class="shrink-0 text-sm font-light text-neutral-700">
+          {{ found_products_count }} ürün bulundu
+        </span> {% endcomment %}
         {% if collection.sort_options.size > 0 %}
           <form
             class="collection-sort-form shrink-0"
@@ -82,7 +122,7 @@
         >
           <button
             type="button"
-            class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
+            class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border !border-transparent hover:!border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
             data-collection-grid-cols="3"
             aria-pressed="true"
             aria-label="{{ 'templates.collection.grid_view_3_aria' | t }}"
@@ -98,7 +138,7 @@
           </button>
           <button
             type="button"
-            class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
+            class="collection-grid-toggle inline-flex h-auto w-auto items-center justify-center rounded-full border !border-transparent hover:!border-[#dbd2c3] bg-transparent transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-[#dbd2c3] aria-[pressed=false]:border-[#dbd2c3] aria-[pressed=false]:bg-transparent"
             data-collection-grid-cols="4"
             aria-pressed="false"
             aria-label="{{ 'templates.collection.grid_view_4_aria' | t }}"
@@ -127,35 +167,27 @@
           } catch (e) {}
         })();
       </script>
-    </header>
-
-    <nav
-      class="collection-all-categories mb-10 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      aria-label="{{ 'templates.collection.category_nav_aria' | t }}"
-    >
-      <ul class="flex min-w-0 flex-nowrap gap-2 pb-1 md:flex-wrap md:gap-3" role="list">
-        {% for col in collections %}
-          {% unless col.handle == 'frontpage' %}
-            <li class="shrink-0">
-              <a
-                href="{{ col.url }}"
-                class="inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium transition-colors{% if col.handle == collection.handle %} border-neutral-900 bg-neutral-900 text-white{% else %} border-neutral-200 text-neutral-800 hover:border-neutral-400 hover:opacity-90{% endif %}"
-                {% if col.handle == collection.handle %}
-                  aria-current="page"
-                {% endif %}
-              >
-                {{- col.title | escape -}}
-              </a>
-            </li>
-          {% endunless %}
-        {% endfor %}
-      </ul>
-    </nav>
+  </div>
 
     <div aria-label="{{ 'templates.collection.products_region_aria' | t }}">
       {% paginate collection.products by section.settings.products_per_page %}
         {% if collection.products.size == 0 %}
-          <p class="text-base text-neutral-600">{{ 'templates.collection.empty' | t }}</p>
+          {% assign collection_empty_image_url = 'not-found.png' | file_url %}
+          <div class="flex flex-col items-center justify-center py-10 md:py-14">
+            {% if collection_empty_image_url != blank %}
+              <img
+                src="{{ collection_empty_image_url }}"
+                alt="{{ 'templates.collection.empty' | t | escape }}"
+                class="w-full max-w-[360px] h-auto object-contain"
+                width="360"
+                height="360"
+                loading="lazy"
+                decoding="async"
+              >
+            <p class="text-xl mt-10 text-neutral-600">{{ 'templates.collection.empty' | t }}</p>
+              
+            {% endif %}
+          </div>
         {% else %}
           <div
             class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 xl:grid-cols-3 xl:[&.is-collection-grid-4]:grid-cols-4"

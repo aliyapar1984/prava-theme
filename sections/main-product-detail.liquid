@@ -20,27 +20,28 @@
   assign installment_form_id = 'ProductInstallment-' | append: section.id
 %}
 
+{% comment %} PDP çevirileri (paylaş / favori); product-detail.js bunları okur {% endcomment %}
+<script>
+  window.PRAVA_I18N = window.PRAVA_I18N || {};
+  Object.assign(window.PRAVA_I18N, {
+    pdp_share_copied: {{ 'products.share_copied' | t | json }},
+    pdp_share_failed: {{ 'products.share_failed' | t | json }},
+    pdp_wishlist_added: {{ 'products.wishlist_added_alert' | t | json }},
+    pdp_wishlist_removed: {{ 'products.wishlist_removed_alert' | t | json }}
+  });
+</script>
 {% comment %} Ajax sepete ekleme (product-detail.js) {% endcomment %}
 <script src="{{ 'product-detail.js' | asset_url }}" defer="defer"></script>
 
 <section
-  class="prava-pdp bg-[#f5f5f3] text-neutral-900"
+  class="prava-pdp bg-custom-color text-neutral-900"
   data-prava-pdp
   data-section-id="{{ section.id }}"
   aria-label="{{ 'sections.product_detail.aria_label' | t }}"
 >
-  <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-8 md:pb-24 md:pt-12">
-    {% if parent_col != blank %}
-      {% render 'breadcrumbs',
-        current_title: product.title,
-        parent_title: parent_col.title,
-        parent_url: parent_col.url
-      %}
-    {% else %}
-      {% render 'breadcrumbs', current_title: product.title %}
-    {% endif %}
+  <div class="mx-auto">
 
-    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-14 xl:gap-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 lg:items-start">
       {% comment %}
         Sol sütun — Tek Swiper iskeleti: mobilde swipe (slidesPerView auto, boyutlar CSS);
         md+ breakpoint’te JS devre dışı, wrapper CSS grid (1 + 2 sütun).
@@ -50,14 +51,14 @@
         data-prava-pdp-gallery
       >
         {% if product.media.size == 0 %}
-          <div class="overflow-hidden rounded-lg bg-white">
+          <div class="overflow-hidden bg-white">
             <div class="flex aspect-square items-center justify-center bg-neutral-100 text-neutral-500">
               {{ 'products.no_image' | t }}
             </div>
           </div>
         {% else %}
           <div
-            class="swiper prava-pdp__gallery-swiper w-full overflow-hidden rounded-lg md:overflow-visible"
+            class="swiper prava-pdp__gallery-swiper w-full overflow-hidden md:overflow-visible"
             id="PdpGallerySwiper-{{ section.id }}"
             data-prava-pdp-gallery-swiper
             role="region"
@@ -77,7 +78,7 @@
                   data-media-id="{{ media.id }}"
                 >
                   <div
-                    class="prava-swiper-card__media overflow-hidden rounded-lg bg-white"
+                    class="prava-swiper-card__media overflow-hidden bg-product-color"
                     data-prava-pdp-media
                     data-media-id="{{ media.id }}"
                   >
@@ -97,18 +98,61 @@
         Sağ sütun — Başlık (SEO: sayfada tek h1), isteğe bağlı satıcı, ürün açıklaması (RTE),
         ayrı taksit formu, ana sepet formu (gizli varyant id + miktar + fiyat + ATC).
       {% endcomment %}
-      <div class="prava-pdp__info flex min-w-0 flex-col lg:sticky lg:top-24 lg:self-start">
-        <header class="border-b border-neutral-200/80 pb-6">
-          <h1 class="text-3xl font-medium tracking-tight text-neutral-900 md:text-[34px] md:leading-tight">
-            {{ product.title | escape }}
-          </h1>
+      <div class="prava-pdp__info flex min-w-0 flex-col lg:sticky lg:top-24 lg:self-start max-w-[650px] lg:px-[50px] mx-auto">
+        {% if parent_col != blank %}
+          {% render 'breadcrumbs',
+            current_title: product.title,
+            parent_title: parent_col.title,
+            parent_url: parent_col.url
+          %}
+        {% else %}
+          {% render 'breadcrumbs', current_title: product.title %}
+        {% endif %}
+        <header class="pb-6">
+          <div class="flex items-start justify-between gap-4">
+            <h1
+              class="min-w-0 flex-1 text-4xl font-semibold tracking-tight text-neutral-900 md:text-[34px] md:leading-tight"
+            >
+              {{ product.title | escape }}
+            </h1>
+            <div class="flex shrink-0 items-center gap-1 pt-0.5" role="group" aria-label="{{ 'products.pdp_actions_aria' | t }}">
+              {% render 'pdp-share-dropdown', product: product, section_id: section.id %}
+              {% if section.settings.browser_wishlist_enabled %}
+                <button
+                  type="button"
+                  class="inline-flex h-10 w-10 items-center justify-center rounded-md text-neutral-600 transition-colors hover:bg-neutral-200/50 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+                  data-prava-pdp-wishlist
+                  data-product-handle="{{ product.handle | escape }}"
+                  data-label-add="{{ 'products.wishlist_add' | t | escape }}"
+                  data-label-remove="{{ 'products.wishlist_remove' | t | escape }}"
+                  aria-pressed="false"
+                  aria-label="{{ 'products.wishlist_add' | t }}"
+                >
+                  <span class="sr-only">{{ 'products.wishlist_add' | t }}</span>
+                  <img
+                    src="{{ 'icons/pdp-wishlist-heart.svg' | asset_url }}"
+                    data-src-off="{{ 'icons/pdp-wishlist-heart.svg' | asset_url }}"
+                    data-src-on="{{ 'icons/pdp-wishlist-heart-on.svg' | asset_url }}"
+                    data-prava-wishlist-icon
+                    alt=""
+                    class="pointer-events-none h-8 w-8 shrink-0"
+                    width="32"
+                    height="32"
+                    loading="lazy"
+                    decoding="async"
+                    aria-hidden="true"
+                  >
+                </button>
+              {% endif %}
+            </div>
+          </div>
           {% if section.settings.show_vendor and product.vendor != blank %}
             <p class="mt-2 text-sm font-light text-neutral-600">{{ product.vendor | escape }}</p>
           {% endif %}
         </header>
 
         {% if product.description != blank %}
-          <div class="product-description rte mt-6 text-base leading-relaxed text-neutral-700">
+          <div class="product-description rte mb-6 text-base font-light leading-relaxed text-neutral-700">
             {{ product.description }}
           </div>
         {% endif %}
@@ -142,28 +186,25 @@
             </div>
           {% endif %}
 
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <div class="flex items-center justify-between">
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
 
-          {% render 'product-color-variants', product: product, section_id: section.id %}
+            {% render 'product-color-variants', product: product, section_id: section.id %}
 
-          <input type="hidden" name="quantity" value="1">
+            <input type="hidden" name="quantity" value="1">
 
-          <div id="PdpPrice-{{ section.id }}" class="price-display" role="status">
-            <p class="m-0 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
-              {% if current_variant.compare_at_price > current_variant.price %}
-                <span class="mr-2 text-xl font-light text-neutral-500 line-through">
-                  {{- current_variant.compare_at_price | money -}}
-                </span>
-              {% endif %}
-              <span>{{ current_variant.price | money }}</span>
-            </p>
+            <div id="PdpPrice-{{ section.id }}" class="price-display" role="status">
+              <p class="flex flex-col m-0 text-xl text-right font-semibold tracking-tight text-neutral-900">
+                {% render 'price-with-compare', variant: current_variant, style: 'detail' %}
+              </p>
+            </div>
           </div>
 
           <button
             type="submit"
             name="add"
             id="PdpSubmit-{{ section.id }}"
-            class="w-full max-w-md border-0 bg-neutral-800 py-4 text-center text-base font-semibold uppercase tracking-widest text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+            class="w-full rounded-xl border-0 bg-neutral-800 py-4 text-center text-base font-semibold uppercase tracking-widest text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
             {% unless current_variant.available %}
               disabled
             {% endunless %}
@@ -177,7 +218,7 @@
         {% endform %}
 
         {% comment %} Tema ayarlarından gelen kısa güven metinleri (kargo / iade / güvenli ödeme). {% endcomment %}
-        <ul class="mt-8 flex flex-wrap gap-6 text-sm text-neutral-600" role="list">
+        <ul class="mt-8 flex flex-wrap gap-6 text-sm text-neutral-600 justify-center" role="list">
           {% if section.settings.trust_shipping != blank %}
             <li class="flex max-w-[200px] items-start gap-2">
               <span class="mt-0.5 shrink-0 text-neutral-800" aria-hidden="true">✓</span>
@@ -228,6 +269,13 @@
       "id": "show_vendor",
       "label": "Satıcı adını göster",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "browser_wishlist_enabled",
+      "label": "Üründe tarayıcı favori düğmesi",
+      "default": true,
+      "info": "Shopify’da müşteri hesabına bağlı yerel ürün favori listesi bulunmaz; kalıcı favori için App Store’daki wishlist uygulamaları kullanılır. Bu seçenek yalnızca ziyaretçinin tarayıcısında liste tutar. Uygulama snippet’leri için bu düğmeyi kapatıp uygulama belgesine göre yerleştirme yapılabilir."
     },
     {
       "type": "header",

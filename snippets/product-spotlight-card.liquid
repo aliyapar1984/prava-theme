@@ -78,10 +78,7 @@
           <span class="min-w-0 flex-1" aria-hidden="true"></span>
         {% endif %}
         <div class="shrink-0 text-right text-lg leading-none">
-          {% if current_variant.compare_at_price > current_variant.price %}
-            <span class="mr-4 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
-          {% endif %}
-          <span class="font-medium text-neutral-900">{{ current_variant.price | money }}</span>
+          {% render 'price-with-compare', variant: current_variant, style: 'spotlight' %}
         </div>
       </div>
     </div>

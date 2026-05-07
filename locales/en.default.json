@@ -33,7 +33,21 @@
     "gallery_thumbnails": "Product images",
     "view_360": "360° view",
     "cart_add_error": "Could not add to cart. Refresh the page and try again.",
-    "cart_add_network": "Network error. Check your connection and try again."
+    "cart_add_network": "Network error. Check your connection and try again.",
+    "share": "Share",
+    "share_aria": "Share this product",
+    "share_copied": "Product link copied to clipboard.",
+    "share_failed": "Could not copy the link. Try copying from the address bar.",
+    "share_nav_aria": "Share this product",
+    "share_whatsapp": "WhatsApp",
+    "share_facebook": "Facebook",
+    "share_x": "X",
+    "share_copy": "Copy link",
+    "pdp_actions_aria": "Product actions",
+    "wishlist_add": "Add to favorites",
+    "wishlist_remove": "Remove from favorites",
+    "wishlist_added_alert": "Added to favorites.",
+    "wishlist_removed_alert": "Removed from favorites."
   },
   "templates": {
     "collection": {

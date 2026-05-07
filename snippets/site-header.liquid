@@ -2,25 +2,33 @@
   assign main_menu = linklists['main-menu']
   assign nav_items = shop.metaobjects.navigation_item.values
   assign header_transparent = false
+  assign has_list_cover_image = false
+  assign header_is_transparent = false
   if template.name == 'index'
     assign header_transparent = true
   endif
+  if template.name == 'collection' and collection and collection.metafields.custom.cover_image.value != blank
+    assign has_list_cover_image = true
+  endif
+  if header_transparent or has_list_cover_image
+    assign header_is_transparent = true
+  endif
 %}
-{% if header_transparent %}
+{% if header_is_transparent %}
   <div id="site-header-gradient" class="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[120px] bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true"></div>
 {% endif %}
 
   <header
     id="site-header"
-    class="prava-site-header z-[100] flex h-[64px] lg:h-[88px] shrink-0 items-center justify-between px-4 lg:px-10 transition-[background-color,box-shadow] duration-200{% if header_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full bg-custom-color{% endif %}"
+    class="prava-site-header z-[100] flex h-[64px] lg:h-[88px] shrink-0 items-center justify-between px-4 lg:px-10 transition-[background-color,box-shadow] duration-200{% if header_is_transparent %} fixed left-0 right-0 top-0 bg-transparent{% else %} sticky top-0 w-full bg-custom-color{% endif %}{% if has_list_cover_image %} list-cover-image{% endif %}"
     style="--header-pad-x: 40px;"
     role="banner"
-    data-header-theme="{% if header_transparent %}transparent{% else %}solid{% endif %}"
+    data-header-theme="{% if header_is_transparent %}transparent{% else %}solid{% endif %}"
   >
     <button
       type="button"
       id="btn-menu"
-      class="flex items-center gap-3 text-base font-semibold tracking-wide transition-opacity hover:opacity-80{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}"
+      class="flex items-center gap-3 text-base font-semibold tracking-wide transition-opacity hover:opacity-80{% if header_is_transparent %} text-white{% else %} text-neutral-900{% endif %}"
       aria-expanded="false"
       aria-controls="mega-menu"
       aria-haspopup="dialog"
@@ -31,7 +39,7 @@
         width="32"
         height="32"
         alt=""
-        class="shrink-0{% unless header_transparent %} brightness-0{% endunless %}"
+        class="shrink-0{% unless header_is_transparent %} brightness-0{% endunless %}"
         aria-hidden="true"
       >
       <span class="hidden lg:block" aria-hidden="true">{{ 'header.menu_visible' | t }}</span>
@@ -42,14 +50,14 @@
         width="120"
         height="22"
         alt="{{ shop.name | escape }}"
-        class="h-[22px] w-auto{% unless header_transparent %} brightness-0{% endunless %}"
+        class="h-[22px] w-auto{% unless header_is_transparent %} brightness-0{% endunless %}"
       >
     </a>
-    <nav class="flex items-center gap-1 text-[15px] font-semibold tracking-wide lg:gap-10{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}" aria-label="{{ 'header.utility_nav' | t }}">
+    <nav class="flex items-center gap-1 text-[15px] font-semibold tracking-wide lg:gap-10{% if header_is_transparent %} text-white{% else %} text-neutral-900{% endif %}" aria-label="{{ 'header.utility_nav' | t }}">
       <button
         type="button"
         id="mini-search-open"
-        class="inline-flex items-center gap-2 py-1 font-light transition-opacity hover:opacity-80{% if header_transparent %} lg:border-b border-white/40 text-white{% else %} border-b border-neutral-300 text-neutral-900{% endif %}"
+        class="inline-flex items-center gap-2 py-1 font-light transition-opacity hover:opacity-80{% if header_is_transparent %} lg:border-b border-white/40 text-white{% else %} border-b border-neutral-300 text-neutral-900{% endif %}"
         aria-expanded="false"
         aria-controls="mini-search-dialog"
         aria-haspopup="dialog"
@@ -60,7 +68,7 @@
           width="20"
           height="19"
           alt=""
-          class="h-[19px] w-5 shrink-0 lg:h-[17px] lg:w-[18px]{% unless header_transparent %} brightness-0{% endunless %}"
+          class="h-[19px] w-5 shrink-0 lg:h-[17px] lg:w-[18px]{% unless header_is_transparent %} brightness-0{% endunless %}"
           aria-hidden="true"
         >
         <span class="hidden lg:block">{{ 'header.search' | t }}</span>
@@ -79,14 +87,14 @@
           <shopify-account menu="customer-account-main-menu">
             <div
               slot="signed-out-avatar"
-              class="inline-flex items-center gap-2 py-1 text-[15px] font-light tracking-wide transition-opacity hover:opacity-80{% if header_transparent %} border-white/40 text-white{% else %} border-neutral-300 text-neutral-900{% endif %}"
+              class="inline-flex items-center gap-2 py-1 text-[15px] font-light tracking-wide transition-opacity hover:opacity-80{% if header_is_transparent %} border-white/40 text-white{% else %} border-neutral-300 text-neutral-900{% endif %}"
             >
               <img
                 src="{{ 'icons/account.svg' | asset_url }}"
                 width="32"
                 height="32"
                 alt=""
-                class="h-8 w-8 shrink-0 lg:hidden{% if header_transparent %} {% endif %}{% unless header_transparent %} brightness-0{% endunless %}"
+                class="h-8 w-8 shrink-0 lg:hidden{% unless header_is_transparent %} brightness-0{% endunless %}"
                 aria-hidden="true"
                 data-test-id="header_account"
               >
@@ -98,10 +106,10 @@
       <a
         href="{{ routes.cart_url }}"
         id="cart-icon-bubble"
-        class="flex items-center gap-2 font-light transition-opacity hover:opacity-80{% if header_transparent %} text-white{% else %} text-neutral-900{% endif %}"
+        class="flex items-center gap-2 font-light transition-opacity hover:opacity-80{% if header_is_transparent %} text-white{% else %} text-neutral-900{% endif %}"
         aria-label="{{ 'header.cart' | t }}"
       >
-        {% render 'prava-cart-icon-inner', transparent_header: header_transparent %}
+        {% render 'prava-cart-icon-inner', transparent_header: header_is_transparent %}
       </a>
     </nav>
   </header>

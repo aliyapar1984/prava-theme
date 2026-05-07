@@ -65,7 +65,7 @@
   >
     <a
       href="{{ p.url }}"
-      class="flex h-full flex-col text-left text-inherit no-underline outline-none transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+      class="flex h-full flex-col text-left text-inherit no-underline outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
       aria-labelledby="{{ uid }}"
     >
       <div class="prava-swiper-card__media relative flex aspect-[1/1] w-full items-center justify-center overflow-hidden">
@@ -114,7 +114,7 @@
         {% if p.type != blank %}
           <p class="mt-2 text-xs font-light uppercase tracking-wide text-neutral-500 md:text-sm">{{ p.type }}</p>
         {% endif %}
-        <div class="mt-6 flex items-center justify-between gap-4">
+        <div class="mt-auto flex items-center justify-between gap-4">
           {% if color_option != blank and color_option.values.size > 0 %}
             <ul
               class="m-0 flex list-none flex-wrap items-center gap-2 p-0"
@@ -149,12 +149,7 @@
             <span class="min-w-0 flex-1" aria-hidden="true"></span>
           {% endif %}
           <p class="shrink-0 text-right text-base leading-none md:text-lg">
-            {% if current_variant.compare_at_price > current_variant.price %}
-              <span class="mr-2 font-light text-neutral-500 line-through">
-                {{- current_variant.compare_at_price | money -}}
-              </span>
-            {% endif %}
-            <span class="font-medium text-neutral-900">{{ current_variant.price | money }}</span>
+            {% render 'price-with-compare', variant: current_variant, style: 'card' %}
           </p>
         </div>
       </div>

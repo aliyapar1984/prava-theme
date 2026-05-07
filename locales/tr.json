@@ -8,7 +8,7 @@
   "general": {
     "accessibility": {
       "skip_to_content": "İçeriğe atla",
-      "color_options": "Mevcut renkler"
+      "color_options": "Renk"
     },
     "meta": {
       "tags": "\"{{ tags }}\" etiketi",
@@ -33,7 +33,21 @@
     "gallery_thumbnails": "Ürün görselleri",
     "view_360": "360° Görünüm",
     "cart_add_error": "Ürün sepete eklenemedi. Sayfayı yenileyip tekrar deneyin.",
-    "cart_add_network": "Bağlantı hatası. İnternetinizi kontrol edip tekrar deneyin."
+    "cart_add_network": "Bağlantı hatası. İnternetinizi kontrol edip tekrar deneyin.",
+    "share": "Paylaş",
+    "share_aria": "Bu ürünü paylaş",
+    "share_copied": "Ürün linki panoya kopyalandı.",
+    "share_failed": "Link kopyalanamadı. Adres çubuğundan kopyalamayı deneyin.",
+    "share_nav_aria": "Ürün paylaşım seçenekleri",
+    "share_whatsapp": "WhatsApp",
+    "share_facebook": "Facebook",
+    "share_x": "X",
+    "share_copy": "Bağlantıyı kopyala",
+    "pdp_actions_aria": "Ürün işlemleri",
+    "wishlist_add": "Favorilere ekle",
+    "wishlist_remove": "Favorilerden çıkar",
+    "wishlist_added_alert": "Favorilere eklendi.",
+    "wishlist_removed_alert": "Favorilerden çıkarıldı."
   },
   "templates": {
     "collection": {

@@ -376,9 +376,9 @@
       /* Genişlik ve aralık CSS’te; JS ile slide boyutu hesaplanmaz */
       spaceBetween: 0,
       speed: 400,
-      grabCursor: true,
+      /* Diğer ray swiper’lardan farklı: ürün görsellerinde özel kaydırma imleci yok */
+      grabCursor: false,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         768: {
           enabled: false,
@@ -1396,6 +1396,18 @@
     }
   }
 
+  /** Grid / layout sonrası ScrollTrigger yeniden ölçsün (footer gradient vb.). */
+  function scheduleScrollTriggerRefresh() {
+    if (typeof ScrollTrigger === 'undefined') return;
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        try {
+          ScrollTrigger.refresh();
+        } catch (e) {}
+      });
+    });
+  }
+
   function initCollectionGridToggle() {
     var section = document.querySelector('.main-collection-catalog');
     if (!section) return;
@@ -1427,6 +1439,7 @@
       } catch (e) {}
       syncGridClass(is4);
       syncAria(is4);
+      scheduleScrollTriggerRefresh();
     }
 
     syncGridClass(document.documentElement.classList.contains('prava-collection-grid-4'));
