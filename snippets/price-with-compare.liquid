@@ -1,0 +1,52 @@
+{% comment %}
+  Vitrinte indirimli fiyat (çizili liste + satış fiyatı) — Shopify Liquid önerisi:
+  https://shopify.dev/docs/api/liquid/objects/variant#variant-compare_at_price
+  Koşul: variant.compare_at_price dolu ve variant.price değerinden büyük (presentment para birimi, alt birim).
+
+  Parametreler:
+  - variant: zorunlu (collection/öneri için product.selected_or_first_available_variant kullanın)
+  - style: optional — detail | card | spotlight | related (varsayılan: card)
+
+  Admin’de “İndirimler” koduyla verilen otomatik indirim vitrin Liquid fiyatına yansımaz;
+  görsel çizgi için üründe Karşılaştırma fiyatı + Satış fiyatı ayarlanmalıdır.
+{% endcomment %}
+{% liquid
+  assign _v = variant
+  assign _style = style | default: 'card'
+  assign strike_class = ''
+  assign price_extra = ''
+
+  case _style
+    when 'detail'
+      assign strike_class = 'mr-2 text-base font-light text-neutral-400 line-through'
+      assign price_extra = ''
+    when 'spotlight'
+      assign strike_class = 'mr-4 font-light text-neutral-500 line-through'
+      assign price_extra = 'font-medium text-neutral-900'
+    when 'related'
+      assign strike_class = 'mr-1.5 text-sm font-light text-neutral-500 line-through'
+      assign price_extra = 'text-sm font-medium text-neutral-800'
+    else
+      assign strike_class = 'mr-2 font-light text-neutral-500 line-through'
+      assign price_extra = 'font-medium text-neutral-900'
+  endcase
+
+  assign show_sale = false
+  if _v != blank
+    assign v_price = _v.price
+    assign v_compare = _v.compare_at_price
+    if v_compare != blank and v_compare > v_price
+      assign show_sale = true
+    endif
+  endif
+%}
+{% if _v != blank %}
+  {% if show_sale %}
+    <span class="{{ strike_class }}">{{ v_compare | money }}</span>
+  {% endif %}
+  {% if price_extra != blank %}
+    <span class="{{ price_extra }}">{{ v_price | money }}</span>
+  {% else %}
+    <span>{{ v_price | money }}</span>
+  {% endif %}
+{% endif %}

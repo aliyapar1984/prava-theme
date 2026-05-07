@@ -13,7 +13,7 @@
       alt="{{ alt | escape }}"
       width="{{ media.width | default: 1200 }}"
       height="{{ media.height | default: 1200 }}"
-      class="aspect-square w-full object-contain p-3 md:p-6"
+      class="aspect-square w-full object-cover"
       loading="{{ load }}"
       decoding="async"
     >
@@ -21,18 +21,18 @@
     {{
       media
       | video_tag:
-        image_size: '1400x',
+        image_size: '1400px',
         autoplay: true,
         loop: true,
         muted: true,
         controls: true,
         playsinline: true,
-        class: 'aspect-square w-full object-contain'
+        class: 'aspect-square w-full object-cover'
     }}
   {% when 'external_video' %}
-    {{ media | media_tag: image_size: '1400x', class: 'aspect-square w-full object-contain' }}
+    {{ media | media_tag: image_size: '1400px', class: 'aspect-square w-full object-cover' }}
   {% when 'model' %}
-    {{ media | media_tag: image_size: '1400x', class: 'aspect-square w-full object-contain' }}
+    {{ media | media_tag: image_size: '1400px', class: 'aspect-square w-full object-cover' }}
   {% else %}
-    {{ media | media_tag: image_size: '1400x', class: 'aspect-square w-full object-contain' }}
+    {{ media | media_tag: image_size: '1400px', class: 'aspect-square w-full object-cover' }}
 {% endcase %}

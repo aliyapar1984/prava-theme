@@ -13,15 +13,15 @@
 
 {% if has_frames %}
   <section
-    class="prava-pdp-360 mt-20"
+    class="prava-pdp-360 mt-28"
     data-prava-pdp-360
     aria-label="{{ 'products.view_360' | t }}"
   >
-    <h2 class="text-center text-2xl font-medium text-neutral-900 md:text-3xl">
+    <h2 class="text-center text-2xl font-medium text-neutral-900 md:text-4xl">
       {{ 'products.view_360' | t }}
     </h2>
 
-    <div class="relative mx-auto mt-10 max-w-4xl bg-white px-2">
+    <div class="relative mx-auto mt-10 !max-w-[720px]">
       {% comment %} Zemin elipsi (tasarım ipucu) {% endcomment %}
       <div
         class="pointer-events-none absolute bottom-[8%] left-1/2 z-0 h-[18%] w-[72%] -translate-x-1/2 rounded-[50%] border border-neutral-300/80 bg-neutral-200/30 md:bottom-[6%] md:h-[20%] md:w-[68%]"
@@ -30,7 +30,7 @@
 
       <div
         id="Pdp360Viewer-{{ section_id }}"
-        class="cloudimage-360 prava-ci360 relative z-[1] mx-auto w-full max-w-[720px] overflow-hidden bg-white"
+        class="cloudimage-360 prava-ci360 relative z-[1] mx-auto w-full max-w-[720px] overflow-hidden"
         data-prava-pdp-360-root
         style="aspect-ratio: 3 / 4;"
       ></div>

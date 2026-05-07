@@ -944,7 +944,8 @@ body.mega-menu-open {
 
 /*
  * Ortak kaydırmalı imleç: main.js tetiklemesi ile .prava-swiper--scrollable
- * (watchOverflow ile kilit yoksa). PDP galerisi, çok satanlar, blog, kategori, özellik şeridi…
+ * (watchOverflow ile kilit yoksa). PDP galeri Swiper’ı bu sınıfı kullanmaz (varsayılan imleç).
+ * Çok satanlar, blog, kategori, özellik şeridi…
  */
 .prava-swiper--scrollable.swiper {
   cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, grab !important;
@@ -976,8 +977,6 @@ body.mega-menu-open {
 .prava-swiper--scrollable a .prava-category-card__media *,
 .prava-swiper--scrollable a.prava-blog-card .prava-swiper-card__media,
 .prava-swiper--scrollable a.prava-blog-card .prava-swiper-card__media *,
-.prava-swiper--scrollable .prava-pdp__gallery-slide .prava-swiper-card__media,
-.prava-swiper--scrollable .prava-pdp__gallery-slide .prava-swiper-card__media *,
 .prava-swiper--scrollable .feature-card .prava-swiper-card__media,
 .prava-swiper--scrollable .feature-card .prava-swiper-card__media * {
   cursor: url('../icons/prava-category-rail-cursor.svg') 40 40, pointer !important;
@@ -1057,7 +1056,7 @@ body.mega-menu-open {
   .prava-pdp__gallery-swiper .swiper-wrapper.prava-pdp__gallery-wrapper {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem 0.75rem;
+    gap: 0.2rem 0.2rem;
     transform: none !important;
     translate: none !important;
     width: 100% !important;
@@ -1076,6 +1075,7 @@ body.mega-menu-open {
 }
 
 .prava-pdp__gallery-pagination.swiper-pagination-bullets .swiper-pagination-bullet {
+  cursor: pointer;
   background: rgb(38 38 38 / 0.35);
   opacity: 1;
 }
@@ -1184,6 +1184,46 @@ body.mega-menu-open {
   .heading-letter {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* PDP — favori / bildirim (product-detail.js) */
+.prava-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  z-index: 2147483647;
+  max-width: min(92vw, 22rem);
+  padding: 0.75rem 1.125rem;
+  margin: 0;
+  transform: translate3d(-50%, 140%, 0);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 0.5rem;
+  background: rgb(23 23 23);
+  color: rgb(250 250 250);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 4px 6px rgb(0 0 0 / 0.08),
+    0 12px 32px rgb(0 0 0 / 0.18);
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease;
+}
+
+.prava-toast.prava-toast--visible {
+  transform: translate3d(-50%, 0, 0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prava-toast {
+    transition-duration: 0.01ms;
+    transform: translate3d(-50%, 0, 0);
   }
 }
 

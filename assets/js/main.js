@@ -376,9 +376,9 @@
       /* Genişlik ve aralık CSS’te; JS ile slide boyutu hesaplanmaz */
       spaceBetween: 0,
       speed: 400,
-      grabCursor: true,
+      /* Diğer ray swiper’lardan farklı: ürün görsellerinde özel kaydırma imleci yok */
+      grabCursor: false,
       watchOverflow: true,
-      on: Object.assign({}, PRAVA_SWIPER_SCROLLABLE_ON),
       breakpoints: {
         768: {
           enabled: false,

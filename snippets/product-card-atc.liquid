@@ -86,11 +86,8 @@
           </ul>
         {% endif %}
         <div class="mt-auto flex flex-col pb-5">
-          <p class="m-0 text-right text-base font-medium leading-none text-neutral-900 md:text-lg">
-            {% if current_variant.compare_at_price > current_variant.price %}
-              <span class="mr-2 font-light text-neutral-500 line-through">{{ current_variant.compare_at_price | money }}</span>
-            {% endif %}
-            <span>{{ current_variant.price | money }}</span>
+          <p class="m-0 text-right text-base leading-none text-neutral-900 md:text-lg">
+            {% render 'price-with-compare', variant: current_variant, style: 'card' %}
           </p>
         </div>
       </div>

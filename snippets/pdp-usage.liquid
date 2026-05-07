@@ -39,10 +39,10 @@
 %}
 
 {% if has_safety or has_maintenance or has_warranty or has_manual %}
-  <details class="group py-2">
-    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-xl font-medium uppercase tracking-[0.08em] text-neutral-900 marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 md:text-2xl">
+  <details class="group">
+    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-medium uppercase tracking-[0.08em] text-neutral-900 marker:content-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2">
       <span>Güvenlik ve Bakım</span>
-      <span class="text-xl font-light text-neutral-600 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+      <span class="text-2xl font-light text-neutral-600 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
     </summary>
 
     <div class="product-usage border-t border-neutral-300/90 pt-6 pb-2">
@@ -55,20 +55,20 @@
             <tbody>
               {% if us.safety_standard and us.safety_standard.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Güvenlik Standardı</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.safety_standard.value }}</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Güvenlik Standardı</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.safety_standard.value }}</td>
                 </tr>
               {% endif %}
               {% if us.certification_number and us.certification_number.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Sertifika No</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.certification_number.value }}</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Sertifika No</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.certification_number.value }}</td>
                 </tr>
               {% endif %}
               {% if us.age_warning and us.age_warning.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Yaş Uyarısı</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.age_warning.value }}</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Yaş Uyarısı</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.age_warning.value }}</td>
                 </tr>
               {% endif %}
             </tbody>
@@ -85,20 +85,20 @@
             <tbody>
               {% if us.fabric_washable != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Kumaş Yıkanabilir</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{% if us.fabric_washable.value %}✓ Evet{% else %}— Hayır{% endif %}</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Kumaş Yıkanabilir</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{% if us.fabric_washable.value %}✓ Evet{% else %}— Hayır{% endif %}</td>
                 </tr>
               {% endif %}
               {% if us.washing_temp_c and us.washing_temp_c.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Yıkama Sıcaklığı</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.washing_temp_c.value }}°C</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Yıkama Sıcaklığı</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.washing_temp_c.value }}°C</td>
                 </tr>
               {% endif %}
               {% if us.cleaning_instructions and us.cleaning_instructions.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Temizlik Talimatı</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.cleaning_instructions.value }}</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Temizlik Talimatı</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.cleaning_instructions.value }}</td>
                 </tr>
               {% endif %}
             </tbody>
@@ -115,14 +115,14 @@
             <tbody>
               {% if us.warranty_years and us.warranty_years.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Garanti Süresi</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.warranty_years.value }} Yıl</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Garanti Süresi</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.warranty_years.value }} Yıl</td>
                 </tr>
               {% endif %}
               {% if us.warranty_description and us.warranty_description.value != blank %}
                 <tr class="border-b border-neutral-300/70">
-                  <td class="py-3 pr-6 text-base font-medium text-neutral-900 md:text-lg">Garanti Kapsamı</td>
-                  <td class="py-3 text-right text-base text-neutral-900 md:text-lg">{{ us.warranty_description.value }}</td>
+                  <td class="py-3 pr-6 text-sm font-normal text-neutral-900">Garanti Kapsamı</td>
+                  <td class="py-3 text-right text-sm text-neutral-900">{{ us.warranty_description.value }}</td>
                 </tr>
               {% endif %}
             </tbody>
@@ -136,7 +136,7 @@
             href="{{ us.manual_url.value }}"
             target="_blank"
             rel="noopener noreferrer"
-            class="manual-link inline-flex items-center gap-2 text-base font-medium text-neutral-900 underline-offset-2 hover:underline"
+            class="manual-link inline-flex items-center gap-2 text-sm font-normal text-neutral-900 underline-offset-2 hover:underline"
           >
             <span aria-hidden="true">📄</span>
             <span>Kullanım Kılavuzunu İndir</span>

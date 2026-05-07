@@ -9,11 +9,13 @@
 {% endcapture %}
 
 {% if dimensions_item != blank or features_item != blank or usage_item != blank %}
-  <div class="mt-16 rounded-xl bg-[#ebe9e6] px-6 py-8 md:px-10 md:py-12">
-    <div class="divide-y divide-neutral-300/90 border-y border-neutral-300/90">
+  <div class="contioner px-[100px]">
+    <div class="lg:border max-w-[1400px] mx-auto mt-16 lg:rounded-xl border border-neutral-200/80 bg-product-bg px-5 py-6 shadow-[0_12px_40px_rgba(25,25,25,0.08)] md:px-10 md:py-4">
+      <div class="divide-y divide-neutral-300/80">
       {{ dimensions_item }}
       {{ features_item }}
       {{ usage_item }}
+      </div>
     </div>
   </div>
 {% endif %}
