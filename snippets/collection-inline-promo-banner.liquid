@@ -1,0 +1,154 @@
+{% comment %}
+  Promo ürün kartı hücresinde tam yükseklik yayılır (alt içerik yok); medya object-cover + object-center.
+  Parametre: banner — collection metafields.custom.collection_banner
+  Parametre: media_loading — varsayılan lazy
+{% endcomment %}
+{% liquid
+  assign b = banner
+  assign img_load = media_loading | default: 'lazy'
+%}
+{% if b != blank %}
+  {% liquid
+    assign promo_href = b.link.value | default: b.link
+    assign media = b.media.value | default: b.media | default: b.image.value | default: b.image
+    assign media_kind = ''
+    if media != blank
+      assign media_kind = media.mediaContentType | default: '' | upcase
+    endif
+  %}
+  {% if media != blank %}
+    {% liquid
+      assign promo_a11y_label = b.short_title | default: '' | strip
+      assign promo_native_video = false
+      if media_kind == 'VIDEO' or media_kind == 'EXTERNAL_VIDEO'
+        assign promo_native_video = true
+      endif
+      if media.sources != blank and media.sources.size > 0
+        assign promo_native_video = true
+      endif
+      assign promo_uploaded_video = false
+      assign promo_mime = media.mime_type | default: '' | downcase
+      if promo_mime contains 'video' or promo_mime contains 'mpeg' or promo_mime contains 'mp4' or promo_mime contains 'webm'
+        assign promo_uploaded_video = true
+      endif
+      if promo_uploaded_video == false
+        assign promo_file_url_try = media | file_url | default: ''
+        assign promo_file_url_lc = promo_file_url_try | downcase
+        if promo_file_url_lc contains '.mp4' or promo_file_url_lc contains '.webm' or promo_file_url_lc contains '.mov'
+          assign promo_uploaded_video = true
+        endif
+      endif
+    %}
+    <article class="collection-inline-promo prava-bestsellers-card flex h-full min-h-0 flex-col overflow-hidden bg-product-color" role="region">
+      {% if promo_href != blank %}
+        <a
+          href="{{ promo_href }}"
+          class="flex flex-1 min-h-0 flex-col text-left text-inherit no-underline outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          {% if promo_a11y_label != blank %}
+            aria-label="{{ promo_a11y_label | escape }}"
+          {% endif %}
+        >
+      {% else %}
+        <div class="flex flex-1 min-h-0 flex-col">
+      {% endif %}
+
+      <div class="relative flex flex-1 min-h-0 w-full overflow-hidden bg-product-color">
+        {% if promo_native_video %}
+          {% liquid
+            assign promo_poster = ''
+            if media.preview_image != blank
+              assign promo_poster = media.preview_image | image_url: width: 1040
+            endif
+          %}
+          <video
+            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            data-collection-promo-video
+            playsinline
+            {% if promo_poster != blank %}
+              poster="{{ promo_poster }}"
+            {% endif %}
+            loop
+            muted
+            preload="metadata"
+          >
+            {% if media.sources != blank and media.sources.size > 0 %}
+              {% for source in media.sources %}
+                <source src="{{ source.url }}" type="{{ source.mimeType }}">
+              {% endfor %}
+            {% elsif promo_uploaded_video %}
+              {% assign promo_direct_type = promo_mime | default: '' %}
+              {% if promo_direct_type == '' %}
+                {% assign promo_direct_type = 'video/mp4' %}
+              {% endif %}
+              <source src="{{ media | file_url }}" type="{{ promo_direct_type | escape }}">
+            {% endif %}
+          </video>
+        {% elsif promo_uploaded_video %}
+          {% liquid
+            assign promo_vid_type = promo_mime | default: ''
+            if promo_vid_type == ''
+              assign promo_vid_type = 'video/mp4'
+            endif
+          %}
+          {% if media.preview_image != blank %}
+            {% assign promo_up_poster = media.preview_image | image_url: width: 1040 %}
+          {% else %}
+            {% assign promo_up_poster = '' %}
+          {% endif %}
+          <video
+            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            data-collection-promo-video
+            playsinline
+            {% if promo_up_poster != blank %}
+              poster="{{ promo_up_poster }}"
+            {% endif %}
+            loop
+            muted
+            preload="metadata"
+          >
+            <source src="{{ media | file_url }}" type="{{ promo_vid_type | escape }}">
+          </video>
+        {% elsif media_kind == 'IMAGE' and media.image %}
+          <img
+            src="{{ media.image | image_url: width: 1040 }}"
+            alt="{{ media.image.alt | default: promo_a11y_label | escape }}"
+            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            width="{{ media.image.width }}"
+            height="{{ media.image.height }}"
+            loading="{{ img_load }}"
+            decoding="async"
+          >
+        {% elsif media.preview_image != blank %}
+          {% comment %}
+            Videoların JPG kapağı; yalnızca video olarak işaretlenmediyse metin olarak gösterilir.
+          {% endcomment %}
+          <img
+            src="{{ media.preview_image | image_url: width: 1040 }}"
+            alt="{{ media.preview_image.alt | default: promo_a11y_label | escape }}"
+            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            width="{{ media.preview_image.width }}"
+            height="{{ media.preview_image.height }}"
+            loading="{{ img_load }}"
+            decoding="async"
+          >
+        {% else %}
+          <img
+            src="{{ media | image_url: width: 1040 }}"
+            alt="{{ media.alt | default: promo_a11y_label | escape }}"
+            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            width="{{ media.width }}"
+            height="{{ media.height }}"
+            loading="{{ img_load }}"
+            decoding="async"
+          >
+        {% endif %}
+      </div>
+
+      {% if promo_href != blank %}
+        </a>
+      {% else %}
+        </div>
+      {% endif %}
+    </article>
+  {% endif %}
+{% endif %}
