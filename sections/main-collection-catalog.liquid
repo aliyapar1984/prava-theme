@@ -8,12 +8,10 @@
   aria-label="{{ 'sections.collection_catalog.aria_label' | t }}"
   data-section-id="{{ section.id }}"
 >
-
   {% if collection.metafields.custom.cover_image.value != blank %}
     <header class="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-10 relative">
       <div class="flex w-full flex-col gap-2 absolute bottom-0 left-0 z-[2] px-24 py-10">
         <h1 class="w-full min-w-0 text-3xl text-white font-medium tracking-tight md:flex-1 md:text-4xl">
-          
           {{ collection.metafields.custom.cover_image_title | escape }}
         </h1>
         <span class="text-base text-white font-light">
@@ -40,7 +38,10 @@
   <div class="mx-auto max-w-[1680px] px-10 pb-16 pt-12 lg:pb-24 lg:pt-4">
     {% render 'breadcrumbs', current_title: collection.title %}
     <div class="flex items-center justify-between mb-10">
-      {% assign found_products_count = collection.products_count | default: collection.all_products_count | default: collection.products.size %}
+      {% assign found_products_count = collection.products_count
+        | default: collection.all_products_count
+        | default: collection.products.size
+      %}
       <nav
         class="collection-all-categories overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="{{ 'templates.collection.category_nav_aria' | t }}"
@@ -65,9 +66,11 @@
       </nav>
 
       <div class="flex w-full flex-wrap items-center justify-end gap-3 sm:gap-4 md:w-auto">
-        {% comment %} <span class="shrink-0 text-sm font-light text-neutral-700">
-          {{ found_products_count }} ürün bulundu
-        </span> {% endcomment %}
+        {% comment %}
+          <span class="shrink-0 text-sm font-light text-neutral-700">
+            {{ found_products_count }} ürün bulundu
+          </span>
+        {% endcomment %}
         {% if collection.sort_options.size > 0 %}
           <form
             class="collection-sort-form shrink-0"
@@ -167,7 +170,7 @@
           } catch (e) {}
         })();
       </script>
-  </div>
+    </div>
 
     <div aria-label="{{ 'templates.collection.products_region_aria' | t }}">
       {% paginate collection.products by section.settings.products_per_page %}
@@ -184,11 +187,11 @@
                 loading="lazy"
                 decoding="async"
               >
-            <p class="text-xl mt-10 text-neutral-600">{{ 'templates.collection.empty' | t }}</p>
-              
+              <p class="text-xl mt-10 text-neutral-600">{{ 'templates.collection.empty' | t }}</p>
             {% endif %}
           </div>
         {% else %}
+          {% assign banner = collection.metafields.custom.collection_banner.value %}
           <div
             class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 xl:grid-cols-3 xl:[&.is-collection-grid-4]:grid-cols-4"
             data-collection-product-grid
@@ -218,6 +221,18 @@
                   title_id: 'col-prod-' | append: product.id,
                   image_loading: 'lazy'
                 %}
+              {% endif %}
+
+              {% if banner != blank and paginate.current_page == 1 %}
+                {% liquid
+                  assign promo_after_index = 5
+                  if collection.products.size < 5
+                    assign promo_after_index = collection.products.size
+                  endif
+                %}
+                {% if forloop.index == promo_after_index %}
+                  {% render 'collection-inline-promo-banner', banner: banner %}
+                {% endif %}
               {% endif %}
             {% endfor %}
           </div>

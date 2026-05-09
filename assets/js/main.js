@@ -1450,6 +1450,55 @@
     });
   }
 
+  /** Koleksiyon promo videoları: viewport’ta görünürken oynat, çıkınca duraklat */
+  function initCollectionPromoVideos() {
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    try {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    } catch (e) {}
+
+    var section = document.querySelector('.main-collection-catalog');
+    if (!section) return;
+
+    var videos = section.querySelectorAll('.collection-inline-promo video[data-collection-promo-video]');
+    if (!videos.length) return;
+
+    var opts = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0,
+    };
+
+    function tryPlay(video) {
+      var p = video.play();
+      if (p !== undefined && p && typeof p.catch === 'function') {
+        p.catch(function () {});
+      }
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var video = entry.target;
+        if (!(video instanceof HTMLVideoElement)) return;
+        if (entry.isIntersecting) {
+          tryPlay(video);
+        } else {
+          try {
+            video.pause();
+          } catch (e2) {}
+        }
+      });
+    }, opts);
+
+    videos.forEach(function (video) {
+      try {
+        video.pause();
+      } catch (e) {}
+      observer.observe(video);
+    });
+  }
+
   function initScrollTopButton() {
     var btn = document.getElementById('scroll-top-btn');
     if (!btn) return;
@@ -1498,6 +1547,7 @@
   initMiniSearch();
   initHeaderScrollConceal();
   initCollectionGridToggle();
+  initCollectionPromoVideos();
   initScrollTopButton();
   if (lenisInstance && typeof ScrollTrigger !== 'undefined') {
     ScrollTrigger.refresh();
