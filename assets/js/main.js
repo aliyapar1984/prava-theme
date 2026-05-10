@@ -20,12 +20,12 @@
     if (!LenisCtor) return null;
 
     var lenis = new LenisCtor({
-      duration: 1.15,
+      duration: 0.65,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.05,
+      wheelMultiplier: 1.15,
+      touchMultiplier: 1.1,
       easing: function (t) {
-        return Math.min(1, 1.001 - Math.pow(2, -10 * t));
+        return 1 - Math.pow(1 - t, 3);
       },
     });
 
@@ -379,6 +379,7 @@
       /* Diğer ray swiper’lardan farklı: ürün görsellerinde özel kaydırma imleci yok */
       grabCursor: false,
       watchOverflow: true,
+      loop: true,
       breakpoints: {
         768: {
           enabled: false,
@@ -386,7 +387,10 @@
       },
     };
     if (pag) {
-      opts.pagination = { el: pag, clickable: true };
+      opts.pagination = {
+        el: pag,
+        type: 'progressbar',
+      };
     }
     new Swiper(el, opts);
   });
@@ -588,32 +592,6 @@
   var footerDiscover = document.getElementById('mega-footer-discover');
   var footerCta = document.getElementById('mega-footer-cta');
   var megaCloseDelayMs = 380;
-  var megaHoverLeaveTimer = null;
-
-  function isMegaDesktopHover() {
-    return typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 1024px)').matches;
-  }
-
-  function cancelMegaHoverLeaveClose() {
-    if (megaHoverLeaveTimer) {
-      clearTimeout(megaHoverLeaveTimer);
-      megaHoverLeaveTimer = null;
-    }
-  }
-
-  function scheduleMegaHoverLeaveClose() {
-    if (!isMegaDesktopHover()) return;
-    if (!mega || mega.hasAttribute('hidden')) return;
-    cancelMegaHoverLeaveClose();
-    megaHoverLeaveTimer = setTimeout(function () {
-      megaHoverLeaveTimer = null;
-      if (mega && !mega.hasAttribute('hidden')) closeMegaMenu();
-    }, 220);
-  }
-
-  function isMegaHoverOpenLocked() {
-    return mega && mega._megaHoverOpenLockUntil && Date.now() < mega._megaHoverOpenLockUntil;
-  }
 
   function megaDrawerUsesMotion() {
     return (
@@ -623,10 +601,8 @@
     );
   }
 
-  function openMegaMenu(skipFocus) {
+  function openMegaMenu() {
     if (!mega || !btnMenu) return;
-    if (skipFocus && isMegaHoverOpenLocked()) return;
-    cancelMegaHoverLeaveClose();
     if (mega._megaCloseTimer) {
       clearTimeout(mega._megaCloseTimer);
       mega._megaCloseTimer = null;
@@ -641,7 +617,7 @@
       });
     });
     syncFooterFromPanel(getActivePanelIndex());
-    if (btnClose && !skipFocus) {
+    if (btnClose) {
       if (megaDrawerUsesMotion()) {
         setTimeout(function () {
           btnClose.focus();
@@ -655,10 +631,7 @@
   function closeMegaMenu() {
     if (!mega || !btnMenu) return;
     if (mega.hasAttribute('hidden')) return;
-    cancelMegaHoverLeaveClose();
     var delay = megaDrawerUsesMotion() ? megaCloseDelayMs : 0;
-    /* Kapatma + animasyon bitene kadar hover ile yeniden açmayı engelle (imleç hâlâ ikondayken tetiklenen mouseenter) */
-    mega._megaHoverOpenLockUntil = Date.now() + delay + 420;
     mega.classList.remove('mega-menu--open');
     if (mega._megaCloseTimer) clearTimeout(mega._megaCloseTimer);
     mega._megaCloseTimer = setTimeout(function () {
@@ -714,30 +687,8 @@
     }
 
     btnMenu.addEventListener('click', function () {
-      if (mega.hasAttribute('hidden')) openMegaMenu(false);
+      if (mega.hasAttribute('hidden')) openMegaMenu();
       else closeMegaMenu();
-    });
-
-    btnMenu.addEventListener('mouseenter', function () {
-      if (!isMegaDesktopHover()) return;
-      cancelMegaHoverLeaveClose();
-      if (mega.hasAttribute('hidden')) openMegaMenu(true);
-    });
-
-    btnMenu.addEventListener('mouseleave', function () {
-      if (!isMegaDesktopHover()) return;
-      if (mega.hasAttribute('hidden')) mega._megaHoverOpenLockUntil = 0;
-      scheduleMegaHoverLeaveClose();
-    });
-
-    mega.addEventListener('mouseenter', function () {
-      if (!isMegaDesktopHover()) return;
-      cancelMegaHoverLeaveClose();
-    });
-
-    mega.addEventListener('mouseleave', function () {
-      if (!isMegaDesktopHover()) return;
-      scheduleMegaHoverLeaveClose();
     });
 
     if (btnClose) btnClose.addEventListener('click', closeMegaMenu);

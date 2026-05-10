@@ -182,6 +182,39 @@ body {
   border-radius: 2px;
 }
 
+.site-footer__language-switcher form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.site-footer__language-switcher .language-switcher__btn {
+  margin: 0;
+  cursor: pointer;
+  border: 1px solid rgb(51 51 51 / 0.28);
+  border-radius: 9999px;
+  background: transparent;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(51 51 51 / 0.92);
+  transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.site-footer__language-switcher .language-switcher__btn:hover {
+  opacity: 0.75;
+  border-color: rgb(51 51 51 / 0.45);
+}
+
+.site-footer__language-switcher .language-switcher__btn:focus-visible {
+  outline: 2px solid rgb(26 26 26 / 0.35);
+  outline-offset: 3px;
+}
+
 /* Intro: CodePen benzeri satır mask + scaleX reveal (SplitText yok) */
 .prava-intro-split__text--line-reveal .prava-intro-line {
   position: relative;
@@ -1017,6 +1050,10 @@ body.mega-menu-open {
     box-sizing: border-box;
   }
 
+  .prava-blog-rail__swiper .swiper-slide {
+    width: 300px;
+  }
+
   .mega-menu__col--list {
     padding: 20px 20px 20px 20px;
   }
@@ -1074,10 +1111,25 @@ body.mega-menu-open {
   }
 }
 
-.prava-pdp__gallery-pagination.swiper-pagination-bullets .swiper-pagination-bullet {
-  cursor: pointer;
-  background: rgb(38 38 38 / 0.35);
-  opacity: 1;
+/* PDP galeri — mobil: pagination load bar (Swiper type: progressbar) */
+@media (max-width: 767px) {
+  .prava-pdp__gallery-pagination.swiper-pagination-progressbar {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: 0 !important;
+    width: 100%;
+    height: 1px;
+    margin-top: 0px;
+    background: rgb(38 38 38 / 0.12);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .prava-pdp__gallery-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+    background: rgb(23 23 23);
+    border-radius: 9999px;
+  }
 }
 
 /* PDP 360° görsel (Cloudimage 360 View) */
@@ -1096,10 +1148,6 @@ body.mega-menu-open {
   display: block;
   max-width: 100%;
   height: auto;
-}
-
-.prava-pdp__gallery-pagination.swiper-pagination-bullets .swiper-pagination-bullet-active {
-  background: rgb(23 23 23);
 }
 
 .prava-blog-card p.line-clamp-3 {

@@ -88,7 +88,7 @@
               {% endfor %}
             </div>
             <div
-              class="prava-pdp__gallery-pagination swiper-pagination !relative !mt-3 md:!hidden"
+              class="prava-pdp__gallery-pagination swiper-pagination !relative md:!hidden"
             ></div>
           </div>
         {% endif %}
@@ -98,7 +98,7 @@
         Sağ sütun — Başlık (SEO: sayfada tek h1), isteğe bağlı satıcı, ürün açıklaması (RTE),
         ayrı taksit formu, ana sepet formu (gizli varyant id + miktar + fiyat + ATC).
       {% endcomment %}
-      <div class="prava-pdp__info flex min-w-0 flex-col lg:sticky lg:top-24 lg:self-start max-w-[650px] lg:px-[50px] mx-auto">
+      <div class="prava-pdp__info flex min-w-0 flex-col lg:sticky lg:top-24 lg:self-start max-w-[650px] py-5 lg:py-0 px-5 lg:px-[50px] mx-auto">
         {% if parent_col != blank %}
           {% render 'breadcrumbs',
             current_title: product.title,
@@ -109,13 +109,13 @@
           {% render 'breadcrumbs', current_title: product.title %}
         {% endif %}
         <header class="pb-6">
-          <div class="flex items-start justify-between gap-4">
+          <div class="flex flex-col lg:flex-row items-start justify-between gap-4">
             <h1
-              class="min-w-0 flex-1 text-4xl font-semibold tracking-tight text-neutral-900 md:text-[34px] md:leading-tight"
+              class="min-w-0 flex-1 text-2xl font-semibold tracking-tight text-neutral-900 md:text-[34px] md:leading-tight"
             >
               {{ product.title | escape }}
             </h1>
-            <div class="flex shrink-0 items-center gap-1 pt-0.5" role="group" aria-label="{{ 'products.pdp_actions_aria' | t }}">
+            <div class="flex flex-col-reverse lg:flex-row shrink-0 items-center gap-1 pt-0.5 absolute right-3 top-[70px] lg:static z-10" role="group" aria-label="{{ 'products.pdp_actions_aria' | t }}">
               {% render 'pdp-share-dropdown', product: product, section_id: section.id %}
               {% if section.settings.browser_wishlist_enabled %}
                 <button

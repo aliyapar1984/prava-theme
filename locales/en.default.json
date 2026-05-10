@@ -52,6 +52,7 @@
   "templates": {
     "collection": {
       "category_nav_aria": "Browse categories",
+      "category_dropdown_label": "Choose category",
       "products_region_aria": "Products in this collection",
       "empty": "No products in this collection.",
       "sort_by_label": "Sort by",
@@ -99,7 +100,8 @@
     "social_youtube": "YouTube",
     "social_accounts_caption": "Follow us on social media",
     "tagline_since": "Since {{ year }}",
-    "copyright": "© {{ year }} {{ shop_name }} — All rights reserved."
+    "copyright": "© {{ year }} {{ shop_name }} — All rights reserved.",
+    "language_switcher_aria": "Choose site language"
   },
   "header": {
     "menu_visible": "Menu",
