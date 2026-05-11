@@ -57,7 +57,7 @@
             endif
 
             if h_outer contains 'text-right'
-              assign text_align_cls = 'text-right'
+              assign text_align_cls = 'text-right items-end'
             elsif h_outer contains 'text-center'
               assign text_align_cls = 'text-center'
             else
@@ -129,7 +129,7 @@
             %}
             <div class="absolute inset-0 bg-[rgba(0,0,0,.02)] z-[1] pointer-events-none"></div>
             <div class="hero-slide-content absolute inset-0 z-[2] flex {{ v_items }} {{ h_outer }} {{ layout_extra }}">
-              <div class="hero-slide-copy w-full max-w-[min(100%,560px)] px-5 lg:px-10 pt-0 lg:pt-[88px] {{ text_align_cls }} {{ copy_margin }} will-change-transform">
+              <div class="hero-slide-copy w-full flex flex-col max-w-[min(100%,560px)] px-5 lg:px-10 pt-0 lg:pt-[88px] {{ text_align_cls }} {{ copy_margin }} will-change-transform">
                 {% if block.settings.title != blank %}
                   <h2 class="max-w-[16ch] {{ text_align_cls }} text-[clamp(1.5rem,3vw,3.2rem)] font-bold leading-[1.12] tracking-tight {{ title_clr }}">
                     {{ block.settings.title | newline_to_br }}

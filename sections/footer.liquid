@@ -24,7 +24,7 @@
   style="--footer-pad-x: 40px;"
 >
   {% if settings.footer_watermark_image != blank %}
-    <div class="site-footer__watermark" aria-hidden="true">
+    <div class="lg:px-16 mx-auto site-footer__watermark" aria-hidden="true">
       <img
         src="{{ settings.footer_watermark_image | image_url: width: 2400 }}"
         alt=""

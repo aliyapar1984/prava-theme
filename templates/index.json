@@ -12,11 +12,26 @@
     "landing_hero": {
       "type": "landing-hero",
       "blocks": {
-        "hero_slide_2": {
+        "slide_Xq9NeQ": {
           "type": "slide",
           "settings": {
             "title": "Yeni Sezon Geldi %30'a Varan İndirimle",
             "subtitle": "En yeni bebek arabası modelleri şimdi avantajlı fiyatlarla.",
+            "slide_media": "rahatlikla-buyuyen-mutlu-adimlar",
+            "slide_buttons": [
+              "satin-al"
+            ],
+            "theme": "dark",
+            "class_name": "",
+            "vertical_position": "items-center",
+            "horizontal_position": "justify-end text-right|ml-auto mr-0|ml-auto"
+          }
+        },
+        "hero_slide_2": {
+          "type": "slide",
+          "settings": {
+            "title": "Aileniz İçin Özel Kampanya Fırsatları",
+            "subtitle": "Kaliteli ve fonksiyonel bebek arabaları avantajlı seçeneklerle sizlerle.",
             "slide_media": "rahatlik-buyuyen-mutluluklar",
             "slide_buttons": [],
             "theme": "dark",
@@ -40,6 +55,7 @@
         }
       },
       "block_order": [
+        "slide_Xq9NeQ",
         "hero_slide_2",
         "hero_slide_1"
       ],
@@ -48,6 +64,15 @@
     "landing_category_rail": {
       "type": "landing-category-rail",
       "blocks": {
+        "collection_card_GK7z4n": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "baston-bebek-arabasi-1",
+            "custom_title": "Kabin Boy Bebek Arabası",
+            "custom_image": "shopify://shop_images/prava-pars-luks-baston-bebek-arabasi-p09-gold-kahverengi-01_02_bd05983f-57c9-45ae-be98-f50dd26da7b0.png",
+            "cta_label": ""
+          }
+        },
         "collection_card_ppLYrY": {
           "type": "collection_card",
           "settings": {
@@ -76,6 +101,7 @@
         }
       },
       "block_order": [
+        "collection_card_GK7z4n",
         "collection_card_ppLYrY",
         "collection_card_mVaiW6",
         "collection_card_VMUX4Y"
@@ -149,6 +175,18 @@
     "landing_blog_rail": {
       "type": "landing-blog-rail",
       "blocks": {
+        "post_7PngwK": {
+          "type": "post",
+          "settings": {
+            "article": "stroller-guides/moduler-bebek-arabasi-nasil-secilir-2026"
+          }
+        },
+        "post_Xr9aKT": {
+          "type": "post",
+          "settings": {
+            "article": "stroller-guides/moduler-bebek-arabasi-nasil-secilir-2026"
+          }
+        },
         "post_zRUtm4": {
           "type": "post",
           "settings": {
@@ -163,6 +201,8 @@
         }
       },
       "block_order": [
+        "post_7PngwK",
+        "post_Xr9aKT",
         "post_zRUtm4",
         "RailPost1"
       ],

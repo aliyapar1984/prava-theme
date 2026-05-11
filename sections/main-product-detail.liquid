@@ -27,7 +27,11 @@
     pdp_share_copied: {{ 'products.share_copied' | t | json }},
     pdp_share_failed: {{ 'products.share_failed' | t | json }},
     pdp_wishlist_added: {{ 'products.wishlist_added_alert' | t | json }},
-    pdp_wishlist_removed: {{ 'products.wishlist_removed_alert' | t | json }}
+    pdp_wishlist_removed: {{ 'products.wishlist_removed_alert' | t | json }},
+    pdp_gallery_modal_title: {{ 'products.gallery_modal_title' | t | json }},
+    pdp_gallery_modal_close: {{ 'products.gallery_modal_close' | t | json }},
+    pdp_gallery_modal_prev: {{ 'products.gallery_modal_prev' | t | json }},
+    pdp_gallery_modal_next: {{ 'products.gallery_modal_next' | t | json }}
   });
 </script>
 {% comment %} Ajax sepete ekleme (product-detail.js) {% endcomment %}
@@ -65,6 +69,15 @@
             aria-label="{{ 'products.gallery_thumbnails' | t }}"
           >
             <div class="swiper-wrapper prava-pdp__gallery-wrapper">
+              {% liquid
+                assign gallery_image_total = 0
+                for m in product.media
+                  if m.media_type == 'image'
+                    assign gallery_image_total = gallery_image_total | plus: 1
+                  endif
+                endfor
+                assign gallery_image_idx = 0
+              %}
               {% for media in product.media %}
                 {% liquid
                   if forloop.first
@@ -82,7 +95,18 @@
                     data-prava-pdp-media
                     data-media-id="{{ media.id }}"
                   >
-                    {% render 'pdp-gallery-media', media: media, product: product, loading: media_loading %}
+                    {% if media.media_type == 'image' %}
+                      {% render 'pdp-gallery-media',
+                        media: media,
+                        product: product,
+                        loading: media_loading,
+                        gallery_modal_index: gallery_image_idx,
+                        gallery_image_total: gallery_image_total
+                      %}
+                      {% assign gallery_image_idx = gallery_image_idx | plus: 1 %}
+                    {% else %}
+                      {% render 'pdp-gallery-media', media: media, product: product, loading: media_loading %}
+                    {% endif %}
                   </div>
                 </div>
               {% endfor %}
@@ -204,16 +228,19 @@
             type="submit"
             name="add"
             id="PdpSubmit-{{ section.id }}"
-            class="w-full rounded-xl border-0 bg-neutral-800 py-4 text-center text-base font-semibold uppercase tracking-widest text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+            class="prava-pdp-atc-btn w-full rounded-xl border-0 py-4 text-center text-base font-semibold uppercase tracking-widest text-white transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label="{% if current_variant.available %}{{ 'products.add_to_cart' | t | escape }}{% else %}{{ 'products.sold_out' | t | escape }}{% endif %}"
             {% unless current_variant.available %}
               disabled
             {% endunless %}
           >
-            {% if current_variant.available %}
-              {{ 'products.add_to_cart' | t }}
-            {% else %}
-              {{ 'products.sold_out' | t }}
-            {% endif %}
+            <span class="prava-pdp-atc-btn__label" aria-hidden="true">
+              {%- if current_variant.available -%}
+                {{- 'products.add_to_cart' | t -}}
+              {%- else -%}
+                {{- 'products.sold_out' | t -}}
+              {%- endif -%}
+            </span>
           </button>
         {% endform %}
 

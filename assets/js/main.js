@@ -335,10 +335,59 @@
     },
   };
 
+  /** Kart/widget rayları: .prava-swiper-widget içindeki okları bağlar */
+  function getPravaSwiperWidgetNav(swiperEl) {
+    var wrap = swiperEl.closest('.prava-swiper-widget');
+    if (!wrap) return null;
+    var prev = wrap.querySelector('.prava-swiper-widget__btn--prev');
+    var next = wrap.querySelector('.prava-swiper-widget__btn--next');
+    if (!prev || !next) return null;
+    return { prevEl: prev, nextEl: next };
+  }
+
+  function wirePravaSwiperWidgetChrome(swiper) {
+    var wrap = swiper.el.closest('.prava-swiper-widget');
+    if (!wrap) return;
+    wrap.classList.toggle('prava-swiper-widget--locked', !!swiper.isLocked);
+  }
+
+  /** Scrollable + kilit sınıfı; userOn ile çakışmayı önlemek için aynı fn iki kez çağrılmaz */
+  function mergePravaSwiperWidgetChromeIntoOpts(opts) {
+    var userOn = opts.on || {};
+    opts.on = {};
+    ['init', 'resize', 'breakpoint', 'lock', 'unlock'].forEach(function (ev) {
+      opts.on[ev] = function () {
+        var base = PRAVA_SWIPER_SCROLLABLE_ON[ev];
+        var user = userOn[ev];
+        if (typeof base === 'function') base.call(this);
+        if (typeof user === 'function' && user !== base) user.call(this);
+        wirePravaSwiperWidgetChrome(this);
+      };
+    });
+    Object.keys(userOn).forEach(function (key) {
+      if (opts.on[key] !== undefined) return;
+      opts.on[key] = userOn[key];
+    });
+  }
+
+  /** Sağ alt pill + progressbar */
+  function applyPravaSwiperWidgetChrome(el, opts) {
+    var wrap = el.closest('.prava-swiper-widget');
+    if (!wrap) return;
+    var pag = wrap.querySelector('.prava-swiper-widget__pagination');
+    if (pag) {
+      opts.pagination = {
+        el: pag,
+        type: 'progressbar',
+      };
+    }
+    mergePravaSwiperWidgetChromeIntoOpts(opts);
+  }
+
   /* ── Kategori rayı (hero altı; ~3 tam + 4. kısmi) ───────────────────── */
   document.querySelectorAll('.prava-category-rail__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
-    new Swiper(el, {
+    var opts = {
       slidesPerView: 1.12,
       spaceBetween: 14,
       speed: 450,
@@ -364,7 +413,11 @@
           spaceBetween: 28,
         },
       },
-    });
+    };
+    applyPravaSwiperWidgetChrome(el, opts);
+    var widgetNav = getPravaSwiperWidgetNav(el);
+    if (widgetNav) opts.navigation = widgetNav;
+    new Swiper(el, opts);
   });
 
   /* ── Ürün detay: ana galeri — mobilde Swiper (slidesPerView auto, genişlikler CSS); md+ enabled:false + grid CSS ── */
@@ -398,7 +451,7 @@
   /* ── Ürün detay: benzer ürünler (sections/main-product-detail — product-card-atc) ── */
   document.querySelectorAll('.prava-pdp-related__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
-    new Swiper(el, {
+    var opts = {
       slidesPerView: 1.12,
       spaceBetween: 16,
       speed: 450,
@@ -423,13 +476,17 @@
           spaceBetween: 28,
         },
       },
-    });
+    };
+    applyPravaSwiperWidgetChrome(el, opts);
+    var widgetNav = getPravaSwiperWidgetNav(el);
+    if (widgetNav) opts.navigation = widgetNav;
+    new Swiper(el, opts);
   });
 
   /* ── Ürün detay: özellik kartları (metaobject list) ───────────────────── */
   document.querySelectorAll('[data-prava-pdp-features-swiper]').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
-    new Swiper(el, {
+    var opts = {
       slidesPerView: 1.12,
       spaceBetween: 16,
       speed: 450,
@@ -454,7 +511,11 @@
           spaceBetween: 28,
         },
       },
-    });
+    };
+    applyPravaSwiperWidgetChrome(el, opts);
+    var widgetNav = getPravaSwiperWidgetNav(el);
+    if (widgetNav) opts.navigation = widgetNav;
+    new Swiper(el, opts);
   });
 
   /* ── Ürün detay: 360° görsel (Cloudimage 360 View; metafield images_360) ── */
@@ -502,7 +563,7 @@
   /* ── En çok satılanlar (yatay Swiper; masaüstünde ~3 kart) ──────────── */
   document.querySelectorAll('.prava-bestsellers__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
-    var swiper = new Swiper(el, {
+    var bestsellerOpts = {
       slidesPerView: 1.12,
       spaceBetween: 16,
       speed: 450,
@@ -527,7 +588,11 @@
           spaceBetween: 28,
         },
       },
-    });
+    };
+    applyPravaSwiperWidgetChrome(el, bestsellerOpts);
+    var bestsellerNav = getPravaSwiperWidgetNav(el);
+    if (bestsellerNav) bestsellerOpts.navigation = bestsellerNav;
+    var swiper = new Swiper(el, bestsellerOpts);
 
     /* Hover’da başlayan ve her hover’da başa saran kart videoları */
     el.querySelectorAll('.prava-bestsellers-card').forEach(function (card) {
@@ -557,7 +622,7 @@
   /* ── Blog rayı: slidesPerView 'auto' + slayt genişliği CSS (300px) ───── */
   document.querySelectorAll('.prava-blog-rail__swiper').forEach(function (el) {
     if (!el.querySelector('.swiper-slide')) return;
-    new Swiper(el, {
+    var opts = {
       slidesPerView: 'auto',
       spaceBetween: 14,
       speed: 450,
@@ -581,7 +646,11 @@
           spaceBetween: 24,
         },
       },
-    });
+    };
+    applyPravaSwiperWidgetChrome(el, opts);
+    var widgetNav = getPravaSwiperWidgetNav(el);
+    if (widgetNav) opts.navigation = widgetNav;
+    new Swiper(el, opts);
   });
 
   /* ── Mega menü ─────────────────────────────────────────────────────── */
