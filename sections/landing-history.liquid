@@ -48,8 +48,6 @@
   assign gallery_json = '[' | append: gallery_parts | append: ']'
 -%}
 
-{{ 'landing-history.css' | asset_url | stylesheet_tag }}
-
 <section
   id="landing-history-{{ section.id }}"
   class="landing-history"
