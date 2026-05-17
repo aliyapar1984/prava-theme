@@ -969,6 +969,7 @@
     var headings = gsap.utils.toArray('main h2').filter(function (el) {
       if (!el || el.dataset.headingReveal === 'off') return false;
       if (el.closest('#hero')) return false;
+      if (el.closest('.landing-history')) return false;
       if (el.closest('.prava-intro-split__text--line-reveal')) return false;
       return true;
     });
@@ -1110,23 +1111,37 @@
      * Her bölüm için statik gradient içeren bir <div.prava-bg-overlay> DOM'a enjekte edilir.
      * GSAP yalnızca bu elementin `opacity` değerini (0 → 1) animate eder.
      * opacity animasyonu compositor thread'de çalışır: repaint yok, style recalc yok,
-     * renk interpolasyonu yok. Baz renk sabit backgroundColor ile sağlanır.
+     * renk interpolasyonu yok. Baz renk bg-custom-color (#f5f5f3) ile aynıdır; geçiş
+     * bölüm girerken uzun süre düz renk, ortaya doğru gradient belirginleşir.
      */
+    var PRAVA_BG_BASE = '#f5f5f3';
     var bgConfigs = [
       {
         selector: '#blog-rail-bg-section',
-        base: '#f2efea',
-        gradient: 'linear-gradient(135deg, #e7e5e0 0%, #af847e 100%)',
+        base: PRAVA_BG_BASE,
+        gradient: 'linear-gradient(135deg, #fff2ec 0%, #ecc8bc 50%, #d49888 100%)',
+        scrollStart: 'top bottom',
+        scrollEnd: 'center center',
+        scrub: 0.7,
+        ease: 'power2.in',
       },
       {
         selector: '.site-footer',
-        base: '#f2efea',
-        gradient: 'linear-gradient(135deg, #e7e5e0 0%, #d5c834 100%)',
+        base: PRAVA_BG_BASE,
+        gradient: 'linear-gradient(135deg, #e9f0eb 0%, #e2c8cf 50%, #c4d8e8 100%)',
+        scrollStart: 'top 92%',
+        scrollEnd: 'center 58%',
+        scrub: 0.7,
+        ease: 'power2.in',
       },
       {
         selector: '#popular-split-bg-section',
-        base: '#f2efea',
+        base: PRAVA_BG_BASE,
         gradient: 'linear-gradient(135deg, #e7e2d6 0%, #d7d4b9 100%)',
+        scrollStart: 'top bottom',
+        scrollEnd: 'center center',
+        scrub: 0.75,
+        ease: 'power2.in',
       },
     ];
 
@@ -1142,16 +1157,21 @@
       overlay.setAttribute('aria-hidden', 'true');
       bgSection.insertBefore(overlay, bgSection.firstChild);
 
-      gsap.to(overlay, {
-        opacity: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: bgSection,
-          start: 'top 88%',
-          end: 'bottom 42%',
-          scrub: 0.5,
-        },
-      });
+      gsap.fromTo(
+        overlay,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          ease: cfg.ease || 'power2.in',
+          scrollTrigger: {
+            trigger: bgSection,
+            start: cfg.scrollStart || 'top bottom',
+            end: cfg.scrollEnd || 'center center',
+            scrub: cfg.scrub != null ? cfg.scrub : 0.7,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
     });
   }
 

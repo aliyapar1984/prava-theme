@@ -61,6 +61,39 @@
       ],
       "settings": {}
     },
+    "landing_history": {
+      "type": "landing-history",
+      "blocks": {
+        "gallery_1": { "type": "gallery_image", "settings": {} },
+        "gallery_2": { "type": "gallery_image", "settings": {} },
+        "gallery_3": { "type": "gallery_image", "settings": {} },
+        "gallery_4": { "type": "gallery_image", "settings": {} },
+        "gallery_5": { "type": "gallery_image", "settings": {} },
+        "gallery_6": { "type": "gallery_image", "settings": {} },
+        "gallery_7": { "type": "gallery_image", "settings": {} },
+        "gallery_8": { "type": "gallery_image", "settings": {} }
+      },
+      "block_order": [
+        "gallery_1",
+        "gallery_2",
+        "gallery_3",
+        "gallery_4",
+        "gallery_5",
+        "gallery_6",
+        "gallery_7",
+        "gallery_8"
+      ],
+      "settings": {
+        "background_color": "#ffffff",
+        "eyebrow": "PRAVA’nın Hikayesine Git",
+        "headline": "1983’ten Günümüze Prava",
+        "selection_tag": "Choose your style",
+        "selection_heading": "What will you create?",
+        "selection_text": "Pick a visual style, then describe your vision",
+        "prompt_placeholder": "Describe what you want to create… e.g. 'A misty mountain range at dawn with warm golden light'",
+        "button_label": "Generate Images →"
+      }
+    },
     "landing_category_rail": {
       "type": "landing-category-rail",
       "blocks": {
@@ -254,6 +287,7 @@
   },
   "order": [
     "landing_hero",
+    "landing_history",
     "landing_category_rail",
     "landing_intro_split",
     "landing_popular_split",
