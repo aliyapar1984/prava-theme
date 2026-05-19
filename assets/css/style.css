@@ -2377,6 +2377,10 @@ body.prava-preloader-active {
   text-wrap: nowrap;
 }
 
+html.prava-preloader-pending .prava-preloader__char {
+  transform: translateY(-100%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .prava-preloader {
     display: none !important;
